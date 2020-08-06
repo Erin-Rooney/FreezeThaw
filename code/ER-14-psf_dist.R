@@ -2,8 +2,6 @@
 # August 3 2020
 # Pore throat statistics
 
-setwd("~/R/R/R Datasets/introductoryR-master")
-
 psfdata = read.csv("processed/ftc_poreshapefactor_july312020_2.csv") 
 plot(psfdata_csv)
 rep_1 = psfdata[psfdata$sample=="40_50_16",]
