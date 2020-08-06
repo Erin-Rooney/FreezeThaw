@@ -1,0 +1,140 @@
+# Erin Rooney
+# Aug 5 2020
+# conn vs unconn pore volumes
+
+setwd("~/R/R/R Datasets/introductoryR-master")
+
+conn_csv = read.csv("processed/conn_unconn_aug52020.csv") 
+level_order <- c('before', 'after')
+
+plot(conn_csv)
+
+rep_1 = conn_csv[conn_csv$sample=="40_50_16",]
+rep_2 = conn_csv[conn_csv$sample=="41_50_28",]
+rep_3 = conn_csv[conn_csv$sample=="40_50_28",]
+rep_4 = conn_csv[conn_csv$sample=="28_38_28",]
+rep_5 = conn_csv[conn_csv$sample=="28_38_12",]
+rep_6 = conn_csv[conn_csv$sample=="41_50_16",]
+
+tool = conn_csv[conn_csv$site=="tool",]
+low = conn_csv[conn_csv$water=="low",]
+high = conn_csv[conn_csv$water=="high",]
+
+
+p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=trmt)) + geom_boxplot() + geom_jitter() +
+  labs (title = "Impact of Freeze/Thaw Cycles on Connected Pore Volume",
+        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "Figure 8",
+        x = expression (bold ("freeze/thaw treatment")),
+        y = expression (bold ("connected pore content, %")))
+p + scale_fill_manual(values=c("#00FFFF", "#996633"))
+
+p<-ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_pore_perc, fill=trmt)) + geom_boxplot() + geom_jitter() +
+  labs (title = "Impact of Freeze/Thaw Cycles on Unconnected Pore Volume",
+        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "Figure 9",
+        x = expression (bold ("freeze/thaw treatment")),
+        y = expression (bold ("unconnected pore content, %")))
+
+p + scale_fill_manual(values=c("#00FFFF", "#996633"))
+
+p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt)) + geom_boxplot() + geom_jitter() +
+  labs (title = "Impact of Freeze/Thaw Cycles on Connected Water Volume",
+        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "Figure 10",
+        x = expression (bold ("freeze/thaw treatment")),
+        y = expression (bold ("connected water content, %")))
+
+p + scale_fill_manual(values=c("#00FFFF", "#996633"))
+
+p<-ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_water_perc, fill=trmt)) + geom_boxplot() + geom_jitter() +
+  labs (title = "Impact of Freeze/Thaw Cycles on Unconnected Water Volume",
+        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "Figure 11",
+        x = expression (bold ("freeze/thaw treatment")),
+        y = expression (bold ("unconnected water content, %")))
+
+p + scale_fill_manual(values=c("#00FFFF", "#996633"))
+
+p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=water)) + geom_boxplot() + geom_jitter() +
+  labs (title = "Impact of Freeze/Thaw Cycles and Water Content on Connected Pore Volume",
+        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "Figure X",
+        x = expression (bold ("freeze/thaw treatment")),
+        y = expression (bold ("connected pore content, %"))) 
+        
+p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
+
+
+###############
+
+
+p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=water)) + geom_boxplot() + geom_jitter() +
+  labs (title = "Impact of Freeze/Thaw Cycles and Water Content on Connected Pore Volume",
+        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "Figure X",
+        x = expression (bold ("freeze/thaw treatment")),
+        y = expression (bold ("connected pore content, %"))) 
+
+p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
+
+
+
+p<-ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_pore_perc, fill=water)) + geom_boxplot() + geom_jitter() +
+  labs (title = "Impact of Freeze/Thaw Cycles and Water Content on Unconnected Pore Volume",
+        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "Figure X",
+        x = expression (bold ("freeze/thaw treatment")),
+        y = expression (bold ("unconnected pore content, %"))) 
+
+p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
+
+
+p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=water)) + geom_boxplot() + geom_jitter() +
+  labs (title = "Impact of Freeze/Thaw Cycles and Water Content on Connected Water Volume",
+        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "Figure X",
+        x = expression (bold ("freeze/thaw treatment")),
+        y = expression (bold ("connected water content, %"))) 
+
+p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
+
+
+
+p<-ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_water_perc, fill=water)) + geom_boxplot() + geom_jitter() +
+  labs (title = "Impact of Freeze/Thaw Cycles and Water Content on Unconnected Water Volume",
+        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "Figure X",
+        x = expression (bold ("freeze/thaw treatment")),
+        y = expression (bold ("unconnected water content, %"))) 
+
+p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
+
+
+
+
+#################
+
+conn_aov1 = aov(data = tool, conn_pore_perc ~ trmt)
+summary(conn_aov1)
+
+conn_aov2 = aov(data = tool, unconn_pore_perc ~ trmt)
+summary(conn_aov2)
+
+conn_aov3 = aov(data = tool, conn_water_perc ~ trmt)
+summary(conn_aov3)
+
+conn_aov4 = aov(data = tool, unconn_water_perc ~ trmt)
+summary(conn_aov4)
+
+conn_aov1 = aov(data = tool, conn_pore_perc ~ trmt*water)
+summary(conn_aov1)
+
+conn_aov2 = aov(data = tool, unconn_pore_perc ~ trmt*water)
+summary(conn_aov2)
+
+conn_aov3 = aov(data = tool, conn_water_perc ~ trmt*water)
+summary(conn_aov3)
+
+conn_aov4 = aov(data = tool, unconn_water_perc ~ trmt*water)
+summary(conn_aov4)
