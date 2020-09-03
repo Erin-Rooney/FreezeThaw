@@ -28,16 +28,18 @@ summary(coornum_aov3)
 library(ggplot2)
 
 p <- ggplot(tool, aes(x=co_num, fill=trmt)) + 
-  geom_histogram(aes(y = stat(count) / sum (count)), binwidth=0.5) +
+  geom_histogram(aes(y = stat(count) / sum (count)), color = "black", binwidth=0.5) +
   scale_y_continuous(labels = scales::percent) +
-  labs (title = "Pore Coordination Number Frequency Before and After Freeze/Thaw",
+  labs (title = "Change in Pore Coordination Number Frequency following Freeze/Thaw",
         #caption = "Caption",
-        tag = "Figure X",
-        x = expression (bold ("pore coordination number")),
-        y = expression (bold ("frequency, %")))
+       # tag = "Figure X",
+        x = expression (bold ("Pore Coordination Number")),
+        y = expression (bold ("Frequency, %")))
+
 
 p + scale_fill_manual(values=c("Black", "White")) +
-  annotate("text", x = 12, y = 0.18, label = "P value < 0.05")
+  annotate("text", x = 12, y = 0.18, label = "P value < 0.05") +
+  guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
 
 
 p<-ggplot(tool, aes(x=co_num, color=trmt, fill=trmt)) + 

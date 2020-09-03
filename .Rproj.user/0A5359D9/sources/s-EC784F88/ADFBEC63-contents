@@ -3,7 +3,7 @@
 # Pore throat statistics
 
 psfdata = read.csv("processed/ftc_poreshapefactor_july312020_2.csv") 
-plot(psfdata_csv)
+plot(psfdata)
 rep_1 = psfdata[psfdata$sample=="40_50_16",]
 psf ="psf"
 psf_dist = "psf_dist"
@@ -14,6 +14,19 @@ library(ggplot2)
 dotchart(rep_1, aes(x=psf, y=psf_dist)) 
 
 ##############
+
+print.data.frame(psfdata)
+
+rmarkdown::paged_table(psfdata)
+
+library(gt)
+library(kableExtra)
+library(tidyverse)
+
+fit <- lm(psf_dist ~ )
+
+
+#############
 
 tool = psfdata[psfdata$site=="tool",]
 
