@@ -23,7 +23,7 @@ library(gt)
 library(kableExtra)
 library(tidyverse)
 
-fit <- lm(psf_dist ~ )
+# fit <- lm(psf_dist ~ )
 
 
 #############
