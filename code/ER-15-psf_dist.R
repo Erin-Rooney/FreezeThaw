@@ -2,13 +2,20 @@
 # August 3 2020
 # Pore throat statistics
 
-setwd("~/R/R/R Datasets/introductoryR-master")
-
 breadthdata_csv = read.csv("processed/ftc_porethroatdist_july312020_2.csv") 
 plot(breadthdata_csv)
 rep_1 = breadthdata_csv[breadthdata_csv$sample=="40_50_16",]
 
 tool = breadthdata_csv[breadthdata_csv$site=="tool,"]
+
+################
+
+breadth_aov1 = aov("breadth_dist" ~ "trmt" * "bin", data = tool)
+summary(breadth_aov1)
+
+
+
+################
 
 library(ggplot2)
 
@@ -27,6 +34,19 @@ p = ggplot(rep_1, aes(x = breadth_um, y=breadth_dist, color = trmt ))+
         y = expression (bold ("Distribution, %")))
 
 p + scale_color_manual(values=c("#00FFFF", "#996633"))
+
+###################
+
+library(tidyr)
+
+bindat_aov1 = aov(data = tool, "breadth_dist" ~ "trmt")
+summary(bindat_aov1)
+
+bindat_aov1 = aov("breadth_dist" ~ "trmt", data = tool)
+summary(bindat_aov1)
+
+aov()
+
 
 ###############
 

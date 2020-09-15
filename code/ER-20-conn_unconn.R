@@ -131,7 +131,7 @@ p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
 
 #################
 
-conn_aov1 = aov(data = tool, conn_pore_perc ~ trmt)
+conn_aov1 = aov(tool, conn_pore_perc ~ trmt)
 summary(conn_aov1)
 
 conn_aov2 = aov(data = tool, unconn_pore_perc ~ trmt)
