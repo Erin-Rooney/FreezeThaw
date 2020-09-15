@@ -6,6 +6,11 @@ conn_csv = read.csv("processed/conn_unconn_aug52020.csv")
 level_order <- c('before', 'after')
 
 plot(conn_csv)
+library(ggplot2)
+library(dplyr)
+library(stats)
+library(base)
+
 
 rep_1 = conn_csv[conn_csv$sample=="40_50_16",]
 rep_2 = conn_csv[conn_csv$sample=="41_50_28",]
@@ -131,8 +136,12 @@ p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
 
 #################
 
-conn_aov1 = aov(tool, conn_pore_perc ~ trmt)
+conn_aov1 = aov(tool, conn_water_perc ~ trmt)
 summary(conn_aov1)
+
+#correct anova
+conn.aov <- aov(conn_water_perc ~ trmt, data = tool)
+summary.aov(conn.aov)
 
 conn_aov2 = aov(data = tool, unconn_pore_perc ~ trmt)
 summary(conn_aov2)
