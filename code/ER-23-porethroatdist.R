@@ -9,7 +9,7 @@ rep_1 = breadthdata_csv[breadthdata_csv$sample=="40_50_16",]
 tool = breadthdata_csv[breadthdata_csv$site=="tool,"]
 breadth_freq = breadthdata_csv$"breadth_freq"
 trmt = breadthdata_csv$"trmt"
-bin = breadthdata_csv$"bin"
+bindat = breadthdata_csv$"bin"
 sample = breadthdata_csv$"sample"
 
 
@@ -56,16 +56,27 @@ p -> ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
 ################
 
 p = ggplot(tool, aes(x = trmt, y=breadth_freq, fill = bin))+
-  geom_boxplot()
+  geom_boxplot() +
+  ylim(0, 100)
 
-p + guides(fill = guide_legend(reverse = TRUE, title = NULL))
+p + guides(fill = guide_legend(reverse = FALSE, title = "Bins"))
+
+###############
+
+p = ggplot(tool, aes(x = bin, y=breadth_freq, fill = trmt))+
+  geom_boxplot() +
+  ylim(0, 100)
+
+p + guides(fill = guide_legend(reverse = FALSE, title = "Bins"))
 
 
+###############
 
+#bp = ggplot() +
+ # geom_line(data = tool, aes(y=breadth_freq, x = trmt, color = sample)) 
+  
 
-
-
-
+#bp + facet_grid(. ~ sample)
 
 
 
