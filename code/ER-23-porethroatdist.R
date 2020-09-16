@@ -9,9 +9,10 @@ rep_1 = breadthdata_csv[breadthdata_csv$sample=="40_50_16",]
 tool = breadthdata_csv[breadthdata_csv$site=="tool,"]
 breadth_freq = breadthdata_csv$"breadth_freq"
 trmt = breadthdata_csv$"trmt"
-bindat = breadthdata_csv$"bin"
+bin = breadthdata_csv$"bin"
 sample = breadthdata_csv$"sample"
-
+before = breadthdata_csv[breadthdata_csv$trmt=="before",]
+after = breadthdata_csv[breadthdata_csv$trmt=="after",]
 
 ################
 
@@ -35,11 +36,12 @@ summary.aov(breadth.aov4)
 ################
 
 library(ggplot2)
+library(soilpalettes)
 
 ################
 
 p -> ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
-  geom_boxplot()+
+  geom_boxplot()
   #geom_density(adjust=0.5)+
   
   # labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
@@ -59,7 +61,7 @@ p = ggplot(tool, aes(x = trmt, y=breadth_freq, fill = bin))+
   geom_boxplot() +
   ylim(0, 100)
 
-p + guides(fill = guide_legend(reverse = FALSE, title = "Bins"))
+p + theme_er() + guides(fill = guide_legend(reverse = FALSE, title = "Bins"))
 
 ###############
 
@@ -93,7 +95,7 @@ p = ggplot(tool, aes(x = bin, y=breadth_dist, color = trmt ))+
         x = expression (bold ("Pore Throat Diameter, um")),
         y = expression (bold ("Distribution, %")))
 
-p + scale_color_manual(values=c("#00FFFF", "#996633"))
+
 
 
 
@@ -106,12 +108,15 @@ p = ggplot(rep_1, aes(x = breadth_um, y=breadth_dist, color = trmt ))+
   
   labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
         subtitle = "40-50 cm, 16% moisture",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure 1",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 1",
         x = expression (bold ("Pore Throat Diameter, um")),
         y = expression (bold ("Distribution, %")))
 
-p + scale_color_manual(values=c("#00FFFF", "#996633"))
+p + theme_er() + 
+  scale_color_manual(values = soil_palette("redox",2)) +   
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))
+
 
 ###################
 
@@ -136,13 +141,14 @@ p = ggplot(rep_2, aes(x = breadth_um, y=breadth_dist, color = trmt ))+
   
   labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
         subtitle = "40-50 cm, 28% moisture",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure 2",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 2",
         x = expression (bold ("Pore Throat Diameter, um")),
         y = expression (bold ("Distribution, %")))
 
-p + scale_color_manual(values=c("#00FFFF", "#996633"))
-
+p + theme_er() + 
+  scale_color_manual(values = soil_palette("redox",2)) +   
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 ###############
 
@@ -154,13 +160,15 @@ p = ggplot(rep_3, aes(x = breadth_um, y=breadth_dist, color = trmt ))+
   
   labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
         subtitle = "28-38 cm, 28% moisture",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure 3",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 3",
         x = expression (bold ("Pore Throat Diameter, um")),
         y = expression (bold ("Distribution, %")))
 
 
-p + scale_color_manual(values=c("#00FFFF", "#996633"))
+p + theme_er() + 
+  scale_color_manual(values = soil_palette("redox", 3)) +   
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 ###################
 
@@ -172,12 +180,14 @@ p = ggplot(rep_4, aes(x = breadth_um, y=breadth_dist, color = trmt ))+
   
   labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
         subtitle = "28-38 cm, 16% moisture",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure 4",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 4",
         x = expression (bold ("Pore Throat Diameter, um")),
         y = expression (bold ("Distribution, %")))
 
-p + scale_color_manual(values=c("#00FFFF", "#996633"))
+p + theme_er() + 
+  scale_color_manual(values = soil_palette("podzol", 2)) +   
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 
 ###################
@@ -214,4 +224,41 @@ p = ggplot(rep_6, aes(x = breadth_um, y=breadth_dist, color = trmt))+
         y = expression (bold ("Distribution, %")))
 
 p + scale_color_manual(values=c("#00FFFF", "#996633"))
+
+
+#########################
+
+
+p = ggplot(before, aes(x = breadth_um, y=breadth_dist, color = sample))+
+  geom_line(size = 1)+
+  #geom_density(adjust=0.5)+
+  
+  labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+        subtitle = "Before Freeze/Thaw",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 6",
+        x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Distribution, %")))
+
+p + theme_er() + 
+  scale_color_manual(values = soil_palette("podzol", 6)) +   
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))
+
+#############
+
+p = ggplot(after, aes(x = breadth_um, y=breadth_dist, color = sample))+
+  geom_line(size = 1)+
+  #geom_density(adjust=0.5)+
+  
+  labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+        subtitle = "After Freeze/Thaw",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 6",
+        x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Distribution, %")))
+
+p + theme_er() + 
+  scale_color_manual(values = soil_palette("podzol", 6)) +   
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))
+
 
