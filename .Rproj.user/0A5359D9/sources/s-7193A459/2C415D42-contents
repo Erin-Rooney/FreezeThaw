@@ -37,7 +37,8 @@ p <- ggplot(tool, aes(x=co_num, fill=trmt)) +
         y = expression (bold ("Frequency, %")))
 
 
-p + scale_fill_manual(values=c("Black", "White")) +
+p + theme_er() +
+  scale_fill_manual(values=c("Black", "White")) +
   annotate("text", x = 12, y = 0.18, label = "P value < 0.05") +
   guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
 
