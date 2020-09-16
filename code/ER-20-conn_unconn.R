@@ -30,7 +30,9 @@ p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=trmt)) + 
        # tag = "Figure 8",
         x = expression (bold ("Freeze/Thaw Treatment")),
         y = expression (bold ("Connected Air-Filled Pore Volume")))
-p + scale_fill_manual(values=c("Black", "White")) +
+
+p + theme_er() +
+  scale_fill_manual(values=c("Black", "White")) +
   # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
@@ -43,7 +45,10 @@ p<-ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_pore_perc, fill=trmt)) 
         y = expression (bold ("Unconnected Air-Filled Pore Volume")))
 
 #p + scale_fill_manual(values=c("#00FFFF", "#996633"))
-p + scale_fill_manual(values=c("Black", "White"))
+p + theme_er() +
+  scale_fill_manual(values=c("Black", "White")) +
+  # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 
 ###########
@@ -60,9 +65,11 @@ p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt)) +
         x = expression (bold ("Freeze/Thaw Treatment")),
         y = expression (bold ("Connected Water-Filled Pore Volume")))
 
-p + scale_fill_manual(values=c("Black", "White")) +
-  annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
-  guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
+p + theme_er() +
+  scale_fill_manual(values=c("Black", "White")) +
+  annotate("text", x = 1.5, y = 0.077, label = "P value < 0.5") +
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))
+
 
 p<-ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_water_perc, fill=trmt)) + geom_boxplot() +
   labs (title = "Change in Unconnected Water-Filled Pore Volume following Freeze/Thaw",
@@ -71,9 +78,12 @@ p<-ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_water_perc, fill=trmt))
         x = expression (bold ("Freeze/Thaw Treatment")),
         y = expression (bold ("Unconnected Water-Filled Pore Volume")))
 
-p + scale_fill_manual(values=c("Black", "White")) +
+p + theme_er() +
+  scale_fill_manual(values=c("Black", "White")) +
   # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
+
+
 
 p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=water)) + geom_boxplot() + geom_jitter() +
   labs (title = "Impact of Freeze/Thaw Cycles and Water Content on Connected Pore Volume",
