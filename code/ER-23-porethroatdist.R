@@ -229,7 +229,7 @@ p + scale_color_manual(values=c("#00FFFF", "#996633"))
 #########################
 
 
-p = ggplot(before, aes(x = breadth_um, y=breadth_dist, color = sample))+
+p1 = ggplot(before, aes(x = breadth_um, y=breadth_dist, color = sample))+
   geom_line(size = 1)+
   #geom_density(adjust=0.5)+
   
@@ -240,13 +240,13 @@ p = ggplot(before, aes(x = breadth_um, y=breadth_dist, color = sample))+
         x = expression (bold ("Pore Throat Diameter, um")),
         y = expression (bold ("Distribution, %")))
 
-p + theme_er() + 
+p1 + theme_er() + 
   scale_color_manual(values = soil_palette("podzol", 6)) +   
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 #############
 
-p = ggplot(after, aes(x = breadth_um, y=breadth_dist, color = sample))+
+p2 = ggplot(after, aes(x = breadth_um, y=breadth_dist, color = sample))+
   geom_line(size = 1)+
   #geom_density(adjust=0.5)+
   
@@ -257,8 +257,43 @@ p = ggplot(after, aes(x = breadth_um, y=breadth_dist, color = sample))+
         x = expression (bold ("Pore Throat Diameter, um")),
         y = expression (bold ("Distribution, %")))
 
-p + theme_er() + 
+p2 + theme_er() + 
   scale_color_manual(values = soil_palette("podzol", 6)) +   
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
+
+#############
+
+#attempting/failing to bind the two graphs together into one figure
+
+library(gtable)
+library(gridExtra)
+library(grid)
+
+g <- rbind(p1, p2, size = "first")
+g$widths <- unit.pmax(p1$widths, p2$widths)
+grid.newpage()
+grid.draw(g)
+
+
+
+##############
+
+#trying to create a two panel figure featuring two rows for before/after.
+
+p = ggplot(tool, aes(x = breadth_um, y=breadth_dist, color = sample))+
+  geom_line(size = 1)+
+  #geom_density(adjust=0.5)+
+  
+  labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+        #subtitle = "After Freeze/Thaw",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 6",
+        x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Distribution, %")))
+
+p + theme_er() + 
+  scale_color_manual(values = soil_palette("podzol", 6)) +   
+  guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
+  facet_wrap(~trmt, nrow = 2)
 
