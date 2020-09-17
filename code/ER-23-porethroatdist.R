@@ -137,13 +137,8 @@ p + theme_er() +
 
 library(tidyr)
 
-bindat_aov1 = aov(data = tool, "breadth_dist" ~ "trmt")
+bindat_aov1 = aov(breadth_dist ~ trmt, data = tool)
 summary(bindat_aov1)
-
-bindat_aov1 = aov("breadth_dist" ~ "trmt", data = tool)
-summary(bindat_aov1)
-
-aov()
 
 
 ###############
