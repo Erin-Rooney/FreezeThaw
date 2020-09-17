@@ -46,6 +46,14 @@ before = breadthdata_csv[breadthdata_csv$trmt=="before",]
 after = breadthdata_csv[breadthdata_csv$trmt=="after",]
 
 ################
+## KP: the above sectioning attempt does the job, but I suggest including section headings in there,
+## so you know what's inside even when the sections are collapsed
+## try this instead:
+## go to code/insert section...
+
+# AOV ---------------------------------------------------------------------
+
+
 
 #breadth_aov1 = aov("breadth_dist" ~ "trmt" * "bin", data = tool)
 #summary(breadth_aov1)
@@ -66,12 +74,19 @@ summary.aov(breadth.aov4)
 
 ################
 
+# ggplot setup ------------------------------------------------------------
+
+
 library(ggplot2)
 library(soilpalettes)
 
 theme_er = function(){
   theme_bw()}
 ################
+
+
+# ggplots -----------------------------------------------------------------
+
 
 p_bin <- ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
   geom_boxplot()
