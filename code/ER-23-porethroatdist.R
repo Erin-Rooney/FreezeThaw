@@ -6,7 +6,7 @@ breadthdata_csv = read.csv("processed/ftc_porethroatdist_july312020_2.csv")
 plot(breadthdata_csv)
 rep_1 = breadthdata_csv[breadthdata_csv$sample=="40_50_16",]
 
-tool = breadthdata_csv[breadthdata_csv$site=="tool,"]
+tool = breadthdata_csv[breadthdata_csv$site=="tool",]
 breadth_freq = breadthdata_csv$"breadth_freq"
 trmt = breadthdata_csv$"trmt"
 bin = breadthdata_csv$"bin"
