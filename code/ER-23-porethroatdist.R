@@ -40,7 +40,7 @@ library(soilpalettes)
 
 ################
 
-p -> ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
+p-bin <- ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
   geom_boxplot()
   #geom_density(adjust=0.5)+
   
@@ -51,7 +51,7 @@ p -> ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
   #x = expression (bold ("Pore Throat Diameter, um")),
   #y = expression (bold ("Distribution, %")))
   
-  p + #scale_fill_manual(values=c("Black", "White")) +
+  p_bin + #scale_fill_manual(values=c("Black", "White")) +
   #annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
   guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
 
