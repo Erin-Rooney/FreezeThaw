@@ -295,5 +295,5 @@ p = ggplot(tool, aes(x = breadth_um, y=breadth_dist, color = sample))+
 p + theme_er() + 
   scale_color_manual(values = soil_palette("podzol", 6)) +   
   guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
-  facet_wrap(~trmt, nrow = 2)
+  facet_grid(trmt~.)
 
