@@ -3,6 +3,19 @@
 # Pore throat statistics
 
 breadthdata_csv = read.csv("processed/ftc_porethroatdist_july312020_2.csv") 
+plot(breadthdata_csv)
+
+## KP: you should see from the `plot` output that you have three levels for `trmt`.
+## investigate by looking at the levels
+
+str(breadthdata_csv)
+## this tells you that `trmt` is a character varriable, and you can't look up levels for that
+## you can only look up levels for a factor variable, 
+## so first convert from char to factor, and then look at the levels
+
+levels(as.factor(breadthdata_csv$trmt))
+
+## then use `recode` to fix it
 
 library(dplyr)
 breadthdata_csv = 
@@ -13,10 +26,22 @@ plot(breadthdata_csv)
 rep_1 = breadthdata_csv[breadthdata_csv$sample=="40_50_16",]
 
 tool = breadthdata_csv[breadthdata_csv$site=="tool",]
-breadth_freq = breadthdata_csv$"breadth_freq"
-trmt = breadthdata_csv$"trmt"
-bin = breadthdata_csv$"bin"
-sample = breadthdata_csv$"sample"
+
+## KP: dplyr/tidyverse suggestion
+tool = breadthdata_csv %>% 
+  filter(site=="tool")
+
+## KP: not sure why you're creating separate files for breadth_freq, trmt, bin.
+## not needed, and it could cause confusion because you now have a file named `trmt`, 
+## but you also have a column in a different file that has the same name.
+
+# breadth_freq = breadthdata_csv$"breadth_freq"
+# trmt = breadthdata_csv$"trmt"
+# bin = breadthdata_csv$"bin"
+# sample = breadthdata_csv$"sample"
+
+## KP:  I see below (ggplots) why you created separate files for `before` and `after`,
+## but since facet_grid is working now, I'd use that instead of creating separate plots and then combining.
 before = breadthdata_csv[breadthdata_csv$trmt=="before",]
 after = breadthdata_csv[breadthdata_csv$trmt=="after",]
 
