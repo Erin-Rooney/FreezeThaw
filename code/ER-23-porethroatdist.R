@@ -44,6 +44,7 @@ summary.aov(breadth.aov4)
 library(ggplot2)
 library(soilpalettes)
 
+theme_er = theme_bw()
 ################
 
 p_bin <- ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
@@ -67,11 +68,7 @@ p_bin <- ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
 ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
     geom_boxplot()+
     guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
-  
-  
-  
-  
-  
+
 ################
 
 p = ggplot(tool, aes(x = trmt, y=breadth_freq, fill = bin))+
