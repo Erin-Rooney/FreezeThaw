@@ -44,7 +44,8 @@ summary.aov(breadth.aov4)
 library(ggplot2)
 library(soilpalettes)
 
-theme_er = theme_bw()
+theme_er = function(){
+  theme_bw()}
 ################
 
 p_bin <- ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
