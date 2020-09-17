@@ -59,8 +59,19 @@ p_bin <- ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
   
   p_bin + #scale_fill_manual(values=c("Black", "White")) +
   #annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
-  guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
+  
+# KP: if you don't need to recall the figures later, 
+# you could even just plot the figures directly without saving them to an object.  
+ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
+    geom_boxplot()+
+    guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
+  
+  
+  
+  
+  
 ################
 
 p = ggplot(tool, aes(x = trmt, y=breadth_freq, fill = bin))+
