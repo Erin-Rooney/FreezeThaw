@@ -173,6 +173,27 @@ p + theme_er() +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 
+## KP: suggestion to streamline these multiple plots
+## instead of creating new files rep1, rep2, etc. just to plot the graphs,
+## consider incorporating it directly into the ggplot code
+## example:
+
+# rep1 ggplot
+breadthdata_csv %>% 
+  filter(sample=="40_50_16") %>% #created the subset and jumped directly into ggplot
+  ggplot(aes(x = breadth_um, y=breadth_dist, color = trmt))+
+  geom_line(size = 1)+
+  labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+        subtitle = "40-50 cm, 16% moisture",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 1",
+        x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Distribution, %")))+
+  scale_color_manual(values = soil_palette("redox",2)) +   
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))+
+  theme_er()
+
+
 ###################
 
 bindat_aov1 = aov(breadth_dist ~ trmt, data = tool)
