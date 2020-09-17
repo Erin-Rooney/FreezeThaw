@@ -175,8 +175,6 @@ p + theme_er() +
 
 ###################
 
-library(tidyr)
-
 bindat_aov1 = aov(breadth_dist ~ trmt, data = tool)
 summary(bindat_aov1)
 
