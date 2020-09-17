@@ -3,6 +3,12 @@
 # Pore throat statistics
 
 breadthdata_csv = read.csv("processed/ftc_porethroatdist_july312020_2.csv") 
+
+library(dplyr)
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(trmt = recode(trmt, "before " = "before"))
+
 plot(breadthdata_csv)
 rep_1 = breadthdata_csv[breadthdata_csv$sample=="40_50_16",]
 
@@ -40,7 +46,7 @@ library(soilpalettes)
 
 ################
 
-p-bin <- ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
+p_bin <- ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
   geom_boxplot()
   #geom_density(adjust=0.5)+
   
