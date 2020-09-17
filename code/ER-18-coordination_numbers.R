@@ -1,11 +1,15 @@
 # Erin Rooney
 # Aug 3 2020
 
-
+# load data---------------------------------------------------------------------
 coornum_dat = read.csv("processed/coordination_number_aug32020.csv") 
+
+# set data frames---------------------------------------------------------------
 tool = coornum_dat[coornum_dat$site=="tool",]
 low = coornum_dat[coornum_dat$water=="low",]
 high = coornum_dat[coornum_dat$water=="high",]
+
+# aov---------------------------------------------------------------------------
 
 coornum_aov1 = aov(data = tool, co_num ~ trmt)
 summary(coornum_aov1)
@@ -24,6 +28,8 @@ summary(coornum_aov2)
 
 coornum_aov3 = aov(data = tool, co_num ~ water)
 summary(coornum_aov3)
+
+#ggplots-----------------------------------------------------------------------
 
 library(ggplot2)
 
@@ -54,7 +60,7 @@ p<-ggplot(tool, aes(x=co_num, color=trmt, fill=trmt)) +
 
 p
 
-#######################
+
 
 p<-ggplot(low, aes(x=co_num, fill=trmt)) + 
   geom_histogram(aes(y = stat(count) / sum (count)), binwidth=0.5) +
@@ -82,8 +88,8 @@ p<-ggplot(high, aes(x=co_num, fill=trmt)) +
 p + scale_fill_manual(values=c("#00FFFF", "#996633"))
 
 
-##############
 
+###
 
 p<-ggplot(tool, aes(x=co_num, fill=water)) + 
   geom_histogram(aes(y = stat(count) / sum (count)), binwidth=0.5) +
@@ -97,7 +103,7 @@ p<-ggplot(tool, aes(x=co_num, fill=water)) +
 p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
 
 
-##############
+###
 
 before = coornum_dat[coornum_dat$trmt=="before",]
 after = coornum_dat[coornum_dat$trmt=="after",]

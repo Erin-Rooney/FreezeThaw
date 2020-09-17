@@ -2,14 +2,21 @@
 # Aug 5 2020
 # conn vs unconn pore volumes
 
+# Load CSV ---------------------------------------------------------------------
+
 conn_csv = read.csv("processed/conn_unconn_aug52020.csv") 
 level_order <- c('before', 'after')
-
 plot(conn_csv)
+
+# Load packages ---------------------------------------------------------------------
+
+
 library(ggplot2)
 library(dplyr)
 library(stats)
 library(base)
+
+# Create Rep and Site Data frames ---------------------------------------------------------------------
 
 
 rep_1 = conn_csv[conn_csv$sample=="40_50_16",]
@@ -23,66 +30,90 @@ tool = conn_csv[conn_csv$site=="tool",]
 low = conn_csv[conn_csv$water=="low",]
 high = conn_csv[conn_csv$water=="high",]
 
+# ggplot set up----------------------------------------------------------------
+theme_er <- function() {  # this for all the elements common across plots
+  theme_bw() %+replace%
+    theme(legend.position = "top",
+          legend.key=element_blank(),
+          legend.title = element_blank(),
+          legend.text = element_text(size = 12),
+          legend.key.size = unit(1.5, 'lines'),
+          panel.border = element_rect(color="black",size=2, fill = NA),
+          
+          plot.title = element_text(hjust = 0.5, size = 14),
+          plot.subtitle = element_text(hjust = 0.5, size = 12, lineheight = 1.5),
+          axis.text = element_text(size = 12, color = "black"),
+          axis.title = element_text(size = 12, face = "bold", color = "black"),
+          
+          # formatting for facets
+          panel.background = element_blank(),
+          strip.background = element_rect(colour="white", fill="white"), #facet formatting
+          panel.spacing.x = unit(1.5, "lines"), #facet spacing for x axis
+          panel.spacing.y = unit(1.5, "lines"), #facet spacing for x axis
+          strip.text.x = element_text(size=12, face="bold"), #facet labels
+          strip.text.y = element_text(size=12, face="bold", angle = 270) #facet labels
+    )
+}
+# ggplots ---------------------------------------------------------------------
 
-p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=trmt)) + geom_boxplot() +
-  labs (title = "Change in Connected Air-Filled Pore Volume following Freeze/Thaw",
+b1 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=trmt)) + geom_boxplot() +
+  labs (title = "Connected Air-Filled Pore Volume",
         # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-       # tag = "Figure 8",
-        x = expression (bold ("Freeze/Thaw Treatment")),
-        y = expression (bold ("Connected Air-Filled Pore Volume")))
-
-p + theme_er() +
+        tag = "A",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) + 
+  theme_er() +
   scale_fill_manual(values=c("Black", "White")) +
   # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 
-p<-ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_pore_perc, fill=trmt)) + geom_boxplot() +
-  labs (title = "Change in Unconnected Air-Filled Pore Volume following Freeze/Thaw",
+b2 = ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_pore_perc, fill=trmt)) + geom_boxplot() +
+  labs (title = "Unconnected Air-Filled Pore Volume",
         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-       # tag = "Figure 9",
-        x = expression (bold ("Freeze/Thaw Treatment")),
-        y = expression (bold ("Unconnected Air-Filled Pore Volume")))
+        tag = "B",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) +
+        theme_er() +
+        scale_fill_manual(values=c("Black", "White")) +
+        # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
+        guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
-#p + scale_fill_manual(values=c("#00FFFF", "#996633"))
-p + theme_er() +
-  scale_fill_manual(values=c("Black", "White")) +
-  # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
-  guides(fill = guide_legend(reverse = TRUE, title = NULL))
-
-
-###########
-
-
-
-
-##########
-
-p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt)) + geom_boxplot() +
-  labs (title = "Change in Connected Water-Filled Pore Volume following Freeze/Thaw",
-       # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-      #  tag = "Figure 10",
-        x = expression (bold ("Freeze/Thaw Treatment")),
-        y = expression (bold ("Connected Water-Filled Pore Volume")))
-
-p + theme_er() +
+b3 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt)) + geom_boxplot() +
+  labs (title = "Connected Water-Filled Pore Volume",
+        # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "C",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) + 
+  theme_er() +
   scale_fill_manual(values=c("Black", "White")) +
   annotate("text", x = 1.5, y = 0.077, label = "P value < 0.5") +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 
-p<-ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_water_perc, fill=trmt)) + geom_boxplot() +
-  labs (title = "Change in Unconnected Water-Filled Pore Volume following Freeze/Thaw",
+b4 = ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_water_perc, fill=trmt)) + geom_boxplot() +
+  labs (title = "Unconnected Water-Filled Pore Volume",
         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        #tag = "Figure 11",
-        x = expression (bold ("Freeze/Thaw Treatment")),
-        y = expression (bold ("Unconnected Water-Filled Pore Volume")))
-
-p + theme_er() +
+        tag = "D",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) + 
+  theme_er() +
   scale_fill_manual(values=c("Black", "White")) +
   # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
+
+library(patchwork)
+b1+b3+b2+b4+ #combines the two plots
+  plot_layout(guides = "collect") # sets a common legend
+
+
+
+
+
+
+
+# Older ggplots ---------------------------------------------------------------------
 
 
 p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=water)) + geom_boxplot() + geom_jitter() +
@@ -95,7 +126,7 @@ p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=water)) +
 p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
 
 
-###############
+
 
 
 p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=water)) + geom_boxplot() + geom_jitter() +
@@ -144,7 +175,7 @@ p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
 
 
 
-#################
+# AOV ---------------------------------------------------------------------
 
 conn_aov1 = aov(tool, conn_water_perc ~ trmt)
 summary(conn_aov1)
@@ -173,3 +204,7 @@ summary(conn_aov3)
 
 conn_aov4 = aov(data = tool, unconn_water_perc ~ trmt*water)
 summary(conn_aov4)
+
+# Stray Code ---------------------------------------------------------------------
+
+#p + scale_fill_manual(values=c("#00FFFF", "#996633"))

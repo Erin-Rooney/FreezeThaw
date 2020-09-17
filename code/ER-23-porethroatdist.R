@@ -2,9 +2,12 @@
 # August 3 2020
 # Pore throat statistics
 
+# Load Data ---------------------------------------------------------------------
+
 breadthdata_csv = read.csv("processed/ftc_porethroatdist_july312020_2.csv") 
 plot(breadthdata_csv)
 
+# Fix Data and Set Levels ---------------------------------------------------------------------
 ## KP: you should see from the `plot` output that you have three levels for `trmt`.
 ## investigate by looking at the levels
 
@@ -26,9 +29,9 @@ breadthdata_csv =
 ## ^^^KP: when you make the rep1, rep2, etc. ggplots, it arranges the after vs. before legend alphabetically
 ## set the order beforehand, so the legend will show `before` and then `after`
 
-
-
 plot(breadthdata_csv)
+
+# Create Data Frames ---------------------------------------------------------------------
 rep_1 = breadthdata_csv[breadthdata_csv$sample=="40_50_16",]
 
 tool = breadthdata_csv[breadthdata_csv$site=="tool",]
@@ -51,7 +54,7 @@ tool = breadthdata_csv %>%
 before = breadthdata_csv[breadthdata_csv$trmt=="before",]
 after = breadthdata_csv[breadthdata_csv$trmt=="after",]
 
-################
+# KP tips ---------------------------------------------------------------------
 ## KP: the above sectioning attempt does the job, but I suggest including section headings in there,
 ## so you know what's inside even when the sections are collapsed
 ## try this instead:
@@ -78,7 +81,9 @@ summary.aov(breadth.aov3)
 breadth.aov4 <- aov(breadth_freq ~ bin * sample, data = tool)
 summary.aov(breadth.aov4)
 
-################
+bindat_aov1 = aov(breadth_dist ~ trmt, data = tool)
+summary(bindat_aov1)
+
 
 # ggplot setup ------------------------------------------------------------
 
@@ -86,12 +91,31 @@ summary.aov(breadth.aov4)
 library(ggplot2)
 library(soilpalettes)
 
-theme_er = function(){
-  theme_bw()}
-################
+theme_er <- function() {  # this for all the elements common across plots
+  theme_bw() %+replace%
+    theme(legend.position = "top",
+          legend.key=element_blank(),
+          legend.title = element_blank(),
+          legend.text = element_text(size = 12),
+          legend.key.size = unit(1.5, 'lines'),
+          panel.border = element_rect(color="black",size=2, fill = NA),
+          
+          plot.title = element_text(hjust = 0.5, size = 14),
+          plot.subtitle = element_text(hjust = 0.5, size = 12, lineheight = 1.5),
+          axis.text = element_text(size = 12, color = "black"),
+          axis.title = element_text(size = 12, face = "bold", color = "black"),
+          
+          # formatting for facets
+          panel.background = element_blank(),
+          strip.background = element_rect(colour="white", fill="white"), #facet formatting
+          panel.spacing.x = unit(1.5, "lines"), #facet spacing for x axis
+          panel.spacing.y = unit(1.5, "lines"), #facet spacing for x axis
+          strip.text.x = element_text(size=12, face="bold"), #facet labels
+          strip.text.y = element_text(size=12, face="bold", angle = 270) #facet labels
+    )
+}
 
-
-# ggplots -----------------------------------------------------------------
+# older bin ggplots -----------------------------------------------------------------
 
 
 p_bin <- ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
@@ -116,52 +140,7 @@ ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
     geom_boxplot()+
     guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
 
-################
-
-p = ggplot(tool, aes(x = trmt, y=breadth_freq, fill = bin))+
-  geom_boxplot() +
-  ylim(0, 100)
-
-p + theme_er() + guides(fill = guide_legend(reverse = FALSE, title = "Bins"))
-
-###############
-
-p = ggplot(tool, aes(x = bin, y=breadth_freq, fill = trmt))+
-  geom_boxplot() +
-  ylim(0, 100)
-
-p + guides(fill = guide_legend(reverse = FALSE, title = "Bins"))
-
-
-###############
-
-#bp = ggplot() +
- # geom_line(data = tool, aes(y=breadth_freq, x = trmt, color = sample)) 
-  
-
-#bp + facet_grid(. ~ sample)
-
-
-
-###############3
-
-p = ggplot(tool, aes(x = bin, y=breadth_dist, color = trmt ))+
-  geom_line(size = 1)+
-  #geom_density(adjust=0.5)+
-  
-  labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
-        subtitle = "40-50 cm, 16% moisture",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure 1",
-        x = expression (bold ("Pore Throat Diameter, um")),
-        y = expression (bold ("Distribution, %")))
-
-
-
-
-
-
-##############
+###
 
 p = ggplot(rep_1, aes(x = breadth_um, y=breadth_dist, color = trmt ))+
   geom_line(size = 1)+
@@ -178,18 +157,20 @@ p + theme_er() +
   scale_color_manual(values = soil_palette("redox",2)) +   
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
-
 ## KP: suggestion to streamline these multiple plots
 ## instead of creating new files rep1, rep2, etc. just to plot the graphs,
 ## consider incorporating it directly into the ggplot code
 ## example:
 
+# g1-g5 combo dist ggplots -----------------------------------------------------------------
+
+
 # rep1 ggplot
-breadthdata_csv %>% 
+g1 = breadthdata_csv %>% 
   filter(sample=="40_50_16") %>% #created the subset and jumped directly into ggplot
   ggplot(aes(x = breadth_um, y=breadth_dist, color = trmt))+
   geom_line(size = 1)+
-  labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+  labs (#title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
         subtitle = "40-50 cm, 16% moisture",
         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
         #tag = "Figure 1",
@@ -200,13 +181,115 @@ breadthdata_csv %>%
   theme_er()
 
 
-###################
+g2 = breadthdata_csv %>% 
+  filter(sample=="40_50_28") %>% #created the subset and jumped directly into ggplot
+  ggplot(aes(x = breadth_um, y=breadth_dist, color = trmt))+
+  geom_line(size = 1)+
+  labs (#title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+        subtitle = "40-50 cm, 28% moisture",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 1",
+        x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Distribution, %")))+
+  scale_color_manual(values = soil_palette("redox",2)) +   
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))+
+  theme_er()
 
-bindat_aov1 = aov(breadth_dist ~ trmt, data = tool)
-summary(bindat_aov1)
+
+g3 = breadthdata_csv %>% 
+  filter(sample=="28_38_12") %>% #created the subset and jumped directly into ggplot
+  ggplot(aes(x = breadth_um, y=breadth_dist, color = trmt))+
+  geom_line(size = 1)+
+  labs (#title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+        subtitle = "28-38 cm, 12% moisture",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 1",
+        x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Distribution, %")))+
+  scale_color_manual(values = soil_palette("redox",2)) +   
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))+
+  theme_er()
+
+g4 = breadthdata_csv %>% 
+  filter(sample=="28_38_28") %>% #created the subset and jumped directly into ggplot
+  ggplot(aes(x = breadth_um, y=breadth_dist, color = trmt))+
+  geom_line(size = 1)+
+  labs (#title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+        subtitle = "28-38 cm, 28% moisture",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 1",
+        x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Distribution, %")))+
+  scale_color_manual(values = soil_palette("redox",2)) +   
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))+
+  theme_er()
+
+g5 = breadthdata_csv %>% 
+  filter(sample=="41_50_16") %>% #created the subset and jumped directly into ggplot
+  ggplot(aes(x = breadth_um, y=breadth_dist, color = trmt))+
+  geom_line(size = 1)+
+  labs (#title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+        subtitle = "41-50 cm, 16% moisture",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 1",
+        x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Distribution, %")))+
+  scale_color_manual(values = soil_palette("redox",2)) +   
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))+
+  theme_er()
+
+g6 = breadthdata_csv %>% 
+  filter(sample=="41_50_28") %>% #created the subset and jumped directly into ggplot
+  ggplot(aes(x = breadth_um, y=breadth_dist, color = trmt))+
+  geom_line(size = 1)+
+  labs (#title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+        subtitle = "41-50 cm, 28% moisture",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 1",
+        x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Distribution, %")))+
+  scale_color_manual(values = soil_palette("redox",2)) +   
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))+
+  theme_er()
+
+#####combine
+
+library(patchwork)
+g1+g2+g3+g4+g5+g6+ #combines the two plots
+  plot_layout(guides = "collect") # sets a common legend
 
 
-###############
+###
+
+#trying to create a two panel figure featuring two rows for before/after.
+
+g = ggplot(tool, aes(x = breadth_um, y=breadth_dist, color = trmt))+
+  geom_line(size = 1)+
+  #geom_density(adjust=0.5)+
+  
+  labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+        #subtitle = "After Freeze/Thaw",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 6",
+        x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Distribution, %")))
+
+g
+
+g + theme_er() + 
+  scale_color_manual(values = soil_palette("redox", 2)) +   
+  guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
+  facet_wrap(sample~.)
+
+
+
+
+
+
+
+
+
+# older distribution ggplots----------------------------------------------
 
 rep_2 = breadthdata_csv[breadthdata_csv$sample=="40_50_28",]
 
@@ -225,7 +308,7 @@ p + theme_er() +
   scale_color_manual(values = soil_palette("redox",2)) +   
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
-###############
+###
 
 rep_3 = breadthdata_csv[breadthdata_csv$sample=="28_38_28",]
 
@@ -245,7 +328,7 @@ p + theme_er() +
   scale_color_manual(values = soil_palette("redox", 3)) +   
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
-###################
+###
 
 rep_4 = breadthdata_csv[breadthdata_csv$sample=="28_38_12",]
 
@@ -265,7 +348,7 @@ p + theme_er() +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 
-###################
+###
 
 rep_5 = breadthdata_csv[breadthdata_csv$sample=="41_50_16",]
 
@@ -283,7 +366,7 @@ p = ggplot(rep_5, aes(x = breadth_um, y=breadth_dist, color = trmt))+
 p + scale_color_manual(values=c("#00FFFF", "#996633"))
 
 
-####################
+###
 
 rep_6 = breadthdata_csv[breadthdata_csv$sample=="41_50_28",]
 
@@ -300,8 +383,7 @@ p = ggplot(rep_6, aes(x = breadth_um, y=breadth_dist, color = trmt))+
 
 p + scale_color_manual(values=c("#00FFFF", "#996633"))
 
-
-#########################
+# p1-p2 combo ggplots -----------------------------------------------------------------
 
 
 p1 = ggplot(before, aes(x = breadth_um, y=breadth_dist, color = sample))+
@@ -319,7 +401,7 @@ p1 + theme_er() +
   scale_color_manual(values = soil_palette("podzol", 6)) +   
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
-#############
+###
 
 p2 = ggplot(after, aes(x = breadth_um, y=breadth_dist, color = sample))+
   geom_line(size = 1)+
@@ -337,7 +419,7 @@ p2 + theme_er() +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 
-#############
+###
 
 ##KP
 # combine p1 and p2
@@ -346,7 +428,7 @@ library(patchwork)
 p1+p2+ #combines the two plots
  plot_layout(guides = "collect") # sets a common legend
 
-##############
+###
 
 #trying to create a two panel figure featuring two rows for before/after.
 

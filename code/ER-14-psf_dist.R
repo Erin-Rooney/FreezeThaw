@@ -2,18 +2,24 @@
 # August 3 2020
 # Pore throat statistics
 
+# load data--------------------------------------------------------------------
+
 psfdata = read.csv("processed/ftc_poreshapefactor_july312020_2.csv") 
 plot(psfdata)
+
+# create data frames----------------------------------------------------------
 rep_1 = psfdata[psfdata$sample=="40_50_16",]
 psf ="psf"
 psf_dist = "psf_dist"
 tool = "tool"
 
+# ggplot-----------------------------------------------------------------------
+
 library(ggplot2)
 
 dotchart(rep_1, aes(x=psf, y=psf_dist)) 
 
-##############
+# failing at creating a table--------------------------------------------------
 
 print.data.frame(psfdata)
 
@@ -26,7 +32,7 @@ library(tidyverse)
 # fit <- lm(psf_dist ~ )
 
 
-#############
+# creating more data frames----------------------------------------------------
 
 tool = psfdata[psfdata$site=="tool",]
 
@@ -36,6 +42,7 @@ before = psfdata[psfdata$trmt=="before",]
 
 after = psfdata[psfdata$trmt=="after",]
 
+# more aov---------------------------------------------------------------------
 
 psf_aov = aov(data = tool, psf ~ trmt)
 summary(psf_aov)
@@ -44,8 +51,7 @@ psf_aov = aov(data = tool, psf ~ sample)
 summary(psf_aov)
 
 
-##############
-
+# more gg plots---------------------------------------------------------------
 ggplot(rep_1, aes(x = psf, y=psf_dist, color = trmt ))+
   geom_dotplot(binaxis='y', dotsize=0.5)+
   scale_color_brewer(palette = "Set2")+
@@ -60,8 +66,7 @@ ggplot(rep_1, aes(x = psf, y=psf_dist, color = trmt ))+
 
 pl + theme_bw() 
 
-###############
-
+###
 
 p = plot(as.numeric(before$psf), as.numeric(before$psf_dist), ylim=c(0,0.07), main = "PORE SHAPE FACTOR: BEFORE", xlab = "Pore Shape Factor", ylab = "Dist, %", col="#996633")
 
@@ -70,7 +75,7 @@ p
 p = plot(as.numeric(after$psf), as.numeric(after$psf_dist), main = "PORE SHAPE FACTOR: AFTER", xlab = "Pore Shape Factor", ylab = "Dist, %", col="#00FFFF")
 
 
-###############
+###
 
 ggplot(before, aes(x = sample, y=psf, fill = sample))+
   geom_boxplot()+
@@ -102,9 +107,7 @@ ggplot(after, aes(x = sample, y=psf, fill = sample))+
 
 
 
-######################
-
-###############
+###
 
 ggplot(before, aes(x = sample, y=psf, fill = sample))+
   geom_boxplot()+
@@ -135,11 +138,7 @@ ggplot(after, aes(x = sample, y=psf, fill = sample))+
 pl + theme_bw() 
 
 
-
-
-
-
-###############
+###
 
 rep_2 = psfdata[psfdata$sample=="40_50_28",]
 
@@ -156,7 +155,7 @@ ggplot(rep_2, aes(x = psf, y=psf_dist, color = trmt ))+
         y = expression (bold ("distribution, %")))
 
 
-###############
+###
 
 rep_3 = psfdata_csv[psfdata_csv$sample=="28_38_28",]
 
@@ -172,7 +171,7 @@ ggplot(rep_3, aes(x = psf, y=psf_dist, color = trmt ))+
         x = expression (bold ("pore shape factor")),
         y = expression (bold ("distribution, %")))
 
-###################
+###
 
 rep_4 = psfdata_csv[psfdata_csv$sample=="28_38_12",]
 
@@ -188,7 +187,7 @@ ggplot(rep_4, aes(x = psf, y=psf_dist, color = trmt ))+
         x = expression (bold ("pore shape factor")),
         y = expression (bold ("distribution, %")))
 
-###################
+###
 
 rep_5 = psfdata_csv[psfdata_csv$sample=="41_50_16",]
 
@@ -204,9 +203,9 @@ ggplot(rep_5, aes(x = psf, y = psf_dist, color = trmt ))+
         x = expression (bold ("pore shape factor")),
         y = expression (bold ("distribution, %")))
 
-######################
+###
 
-#Not working
+# Old code/consider deleting----------------------------------------------------
 
 low = psfdata_csv["psfdata_csv$moist"=="low"]
 
@@ -225,7 +224,7 @@ ggplot(low, aes(x = psf, y = psf_dist, color = "trmt" ))+
         x = expression (bold ("pore shape factor")),
         y = expression (bold ("distribution, %")))
 
-######################
+###
 
 #Not working
 
