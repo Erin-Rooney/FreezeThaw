@@ -274,18 +274,12 @@ p2 + theme_er() +
 
 #############
 
-#attempting/failing to bind the two graphs together into one figure
+##KP
+# combine p1 and p2
 
-library(gtable)
-library(gridExtra)
-library(grid)
-
-g <- rbind(p1, p2, size = "first")
-g$widths <- unit.pmax(p1$widths, p2$widths)
-grid.newpage()
-grid.draw(g)
-
-
+library(patchwork)
+p1+p2+ #combines the two plots
+ plot_layout(guides = "collect") # sets a common legend
 
 ##############
 
