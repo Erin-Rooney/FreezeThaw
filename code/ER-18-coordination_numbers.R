@@ -82,7 +82,7 @@ library(soilpalettes)
 ggplot(tool, aes(x = pore_coor, y = freq, fill = trmt)) +
   geom_boxplot() + 
   theme_er() +
-  scale_color_manual(values = soil_palette("redox2", 2))
+  scale_color_manual(values = soil_palette("redox", 2))
 
 
 
