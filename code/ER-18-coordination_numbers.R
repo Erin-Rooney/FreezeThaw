@@ -3,15 +3,35 @@
 
 # load data---------------------------------------------------------------------
 coornum_dat = read.csv("processed/coordination_number_aug32020.csv") 
+coornum_dat2 = read.csv("processed/porecoor_fixed.csv")
 
-# set data frames---------------------------------------------------------------
-tool = coornum_dat[coornum_dat$site=="tool",]
-low = coornum_dat[coornum_dat$water=="low",]
-high = coornum_dat[coornum_dat$water=="high",]
+# set data frames, factor, level order------------------------------------------
+
+str(coornum_dat2)
+levels(as.factor(coornum_dat2$trmt))
+library(dplyr)
+coornum_dat2 = 
+  coornum_dat2 %>% 
+  mutate(trmt = factor(trmt, levels = c("before", "after")))
+  
+levels(as.factor(coornum_dat2$pore_coor))
+coornum_dat2 = 
+  coornum_dat2 %>% 
+mutate(pore_coor = factor(pore_coor, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16")))
+
+## this tells you that `trmt` is a character varriable, and you can't look up levels for that
+## you can only look up levels for a factor variable, 
+## so first convert from char to factor, and then look at the levels
+
+
+tool = coornum_dat2[coornum_dat2$site=="tool",]
+
+#low = coornum_dat[coornum_dat$water=="low",]
+#high = coornum_dat[coornum_dat$water=="high",]
 
 # aov---------------------------------------------------------------------------
-
-coornum_aov1 = aov(data = tool, co_num ~ trmt)
+# NONE OF THESE WORK OR MAKE SENSE, STATISTiCALLY
+coornum_aov1 = aov(data = tool, number * freq ~ trmt)
 summary(coornum_aov1)
 
 coornum_aov2 = aov(data = tool, co_num ~ sample)
@@ -29,24 +49,74 @@ summary(coornum_aov2)
 coornum_aov3 = aov(data = tool, co_num ~ water)
 summary(coornum_aov3)
 
+# ggplot set up-----------------------------------------------------------------
+library(soilpalettes)
+theme_er <- function() {  # this for all the elements common across plots
+  theme_bw() %+replace%
+    theme(legend.position = "top",
+          legend.key=element_blank(),
+          legend.title = element_blank(),
+          legend.text = element_text(size = 12),
+          legend.key.size = unit(1.5, 'lines'),
+          panel.border = element_rect(color="black",size=2, fill = NA),
+          
+          plot.title = element_text(hjust = 0.5, size = 14),
+          plot.subtitle = element_text(hjust = 0.5, size = 12, lineheight = 1.5),
+          axis.text = element_text(size = 12, color = "black"),
+          axis.title = element_text(size = 12, face = "bold", color = "black"),
+          
+          # formatting for facets
+          panel.background = element_blank(),
+          strip.background = element_rect(colour="white", fill="white"), #facet formatting
+          panel.spacing.x = unit(1.5, "lines"), #facet spacing for x axis
+          panel.spacing.y = unit(1.5, "lines"), #facet spacing for x axis
+          strip.text.x = element_text(size=12, face="bold"), #facet labels
+          strip.text.y = element_text(size=12, face="bold", angle = 270) #facet labels
+    )
+}
 #ggplots-----------------------------------------------------------------------
 
 library(ggplot2)
+library(soilpalettes)
 
-p <- ggplot(tool, aes(x=co_num, fill=trmt)) + 
-  geom_histogram(aes(y = stat(count) / sum (count)), color = "black", binwidth=0.5) +
-  scale_y_continuous(labels = scales::percent) +
+ggplot(tool, aes(x = pore_coor, y = freq, fill = trmt)) +
+  geom_boxplot() + 
+  theme_er() +
+  scale_color_manual(values = soil_palette("redox2", 2))
+
+
+
+
+
+
+
+
+p = ggplot(tool, aes(x=number, y=freq, fill=trmt)) + 
+  geom_boxplot() +
+  # scale_y_continuous(labels = scales::percent) +
   labs (title = "Change in Pore Coordination Number Frequency following Freeze/Thaw",
         #caption = "Caption",
        # tag = "Figure X",
         x = expression (bold ("Pore Coordination Number")),
-        y = expression (bold ("Frequency, %")))
+        y = expression (bold ("Frequency, %"))) 
+        #scale_color_manual(values = soil_palette("redox", 2))
 
 
 p + theme_er() +
+  facet_wrap(sample~.)
+
+
+ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_water_perc, fill=trmt)) + geom_boxplot() +
+  labs (title = "Unconnected Water-Filled Pore Volume",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "D",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) + 
+  theme_er() +
   scale_fill_manual(values=c("Black", "White")) +
-  annotate("text", x = 12, y = 0.18, label = "P value < 0.05") +
-  guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
+  # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))
+
 
 
 p<-ggplot(tool, aes(x=co_num, color=trmt, fill=trmt)) + 
