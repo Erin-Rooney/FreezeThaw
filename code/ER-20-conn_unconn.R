@@ -61,9 +61,9 @@ b1 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=trmt)) 
         # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
         tag = "A",
         x = expression (bold (" ")),
-        y = expression (bold ("Volume, %"))) + 
+        y = expression (bold ("Volume, %"))) +   scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) + 
   theme_er() +
-  scale_fill_manual(values=c("Black", "White")) +
+  scale_fill_manual(values = soil_palette("redox", 2)) +
   # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
@@ -73,10 +73,10 @@ b2 = ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_pore_perc, fill=trmt)
         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
         tag = "B",
         x = expression (bold (" ")),
-        y = expression (bold ("Volume, %"))) +
+        y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.02)) +
         theme_er() +
-        scale_fill_manual(values=c("Black", "White")) +
-        # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
+  scale_fill_manual(values = soil_palette("redox", 2)) +
+  # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
         guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 b3 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt)) + geom_boxplot() +
@@ -84,10 +84,10 @@ b3 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt))
         # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
         tag = "C",
         x = expression (bold (" ")),
-        y = expression (bold ("Volume, %"))) + 
+        y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) +
   theme_er() +
-  scale_fill_manual(values=c("Black", "White")) +
-  annotate("text", x = 1.5, y = 0.077, label = "P value < 0.5") +
+  scale_fill_manual(values = soil_palette("redox", 2)) +
+  annotate("text", x = 1.5, y = 0.067, label = "P value < 0.5") +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 
@@ -96,9 +96,9 @@ b4 = ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_water_perc, fill=trmt
         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
         tag = "D",
         x = expression (bold (" ")),
-        y = expression (bold ("Volume, %"))) + 
+        y = expression (bold ("Volume, %"))) +   scale_y_continuous(labels = scales::percent, limit = c(0, 0.02)) +
   theme_er() +
-  scale_fill_manual(values=c("Black", "White")) +
+  scale_fill_manual(values = soil_palette("redox", 2)) +
   # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
@@ -108,6 +108,7 @@ b1+b3+b2+b4+ #combines the two plots
   plot_layout(guides = "collect") # sets a common legend
 
 
+###
 
 
 

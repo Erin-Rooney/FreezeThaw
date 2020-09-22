@@ -12,7 +12,7 @@ levels(as.factor(coornum_dat2$trmt))
 library(dplyr)
 coornum_dat2 = 
   coornum_dat2 %>% 
-  mutate(trmt = factor(trmt, levels = c("before", "after")))
+  #mutate(trmt = factor(trmt, levels = c("before", "after")))
   
 levels(as.factor(coornum_dat2$pore_coor))
 coornum_dat2 = 
@@ -81,12 +81,19 @@ library(soilpalettes)
 
 ggplot(tool, aes(x = pore_coor, y = freq, fill = trmt)) +
   geom_boxplot() + 
+  scale_y_continuous(labels = scales::percent) +
   theme_er() +
-  scale_color_manual(values = soil_palette("redox", 2))
+  scale_fill_manual(values = soil_palette("redox", 2)) +
+  labs (title = "Pore Coordination Number Frequency",
+        #caption = "Caption",
+        tag = "A",
+        x = expression (bold ("Pore Coordination Number")),
+        y = expression (bold ("Frequency, %"))) +
+   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 
 
-
+###
 
 
 

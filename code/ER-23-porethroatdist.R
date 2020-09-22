@@ -23,8 +23,8 @@ levels(as.factor(breadthdata_csv$trmt))
 library(dplyr)
 breadthdata_csv = 
   breadthdata_csv %>% 
-  mutate(trmt = recode(trmt, "before " = "before"),
-         trmt = factor(trmt, levels = c("before", "after")))
+  mutate(trmt = recode(trmt, "before " = "before"))
+         #trmt = factor(trmt, levels = c("before", "after")))
 
 ## ^^^KP: when you make the rep1, rep2, etc. ggplots, it arranges the after vs. before legend alphabetically
 ## set the order beforehand, so the legend will show `before` and then `after`
