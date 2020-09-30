@@ -32,9 +32,9 @@ breadthdata_csv =
 plot(breadthdata_csv)
 
 # Create Data Frames ---------------------------------------------------------------------
-rep_1 = breadthdata_csv[breadthdata_csv$sample=="40_50_16",]
+#rep_1 = breadthdata_csv[breadthdata_csv$sample=="40_50_16",]
 
-tool = breadthdata_csv[breadthdata_csv$site=="tool",]
+#tool = breadthdata_csv[breadthdata_csv$site=="tool",]
 
 ## KP: dplyr/tidyverse suggestion
 tool = breadthdata_csv %>% 
@@ -447,4 +447,51 @@ p + theme_er() +
   scale_color_manual(values = soil_palette("podzol", 6)) +   
   guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
   facet_grid(trmt~.)
+
+#Smooth line before/after pore throat dist----------------------------------
+
+
+levels(as.factor(breadthdata_csv$trmt))
+tool = 
+  tool %>% 
+  mutate(trmt = factor(trmt, levels = c("before", "after")))
+
+
+before = tool %>% 
+  filter(trmt=="before")
+
+after = tool %>% 
+  filter(trmt=="after")
+
+tool %>% 
+  mutate()
+
+
+ggplot (tool, aes(x = breadth_um, y = breadth_dist, color = trmt)) +
+  geom_point() + 
+  geom_smooth(span = 0.3) +
+  theme_er() +
+  facet_grid (.~trmt) +
+  scale_color_manual(values = soil_palette("gley", 2))
+
+
+
+ggplot (after, aes(x = breadth_um, y = breadth_dist)) +
+  geom_point() + 
+  geom_smooth(span = 0.3)
+ 
+
+
+  
+b + theme_er() + 
+  scale_color_manual(values = soil_palette("podzol", 6)) +   
+  guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
+  facet_grid(trmt~.)
+
+# breadth mean across samples-------------------------
+
+breadthdata_csv %>%
+ggplot(aes(x = trmt, y = breadth_um, fill = sample)) + geom_boxplot(
+  
+)
 
