@@ -20,7 +20,7 @@ levels(as.factor(breadthdata_csv$trmt))
 
 ## then use `recode` to fix it
 
-library(dplyr)
+library(tidyverse)
 breadthdata_csv = 
   breadthdata_csv %>% 
   mutate(trmt = recode(trmt, "before " = "before"))
@@ -463,16 +463,16 @@ before = tool %>%
 after = tool %>% 
   filter(trmt=="after")
 
-tool %>% 
-  mutate()
-
 
 ggplot (tool, aes(x = breadth_um, y = breadth_dist, color = trmt)) +
   geom_point() + 
   geom_smooth(span = 0.3) +
   theme_er() +
-  facet_grid (.~trmt) +
-  scale_color_manual(values = soil_palette("gley", 2))
+  facet_grid (.~trmt) +  
+  scale_y_continuous(labels = scales::percent) +
+  scale_color_manual(values = soil_palette("gley", 2)) +
+  labs (x = expression (bold ("Pore Throat Diameter, um")),
+  y = expression (bold ("Distribution, %")))
 
 
 

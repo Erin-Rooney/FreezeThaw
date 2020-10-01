@@ -2,19 +2,20 @@
 # Aug 3 2020
 
 # load data---------------------------------------------------------------------
-coornum_dat = read.csv("processed/coordination_number_aug32020.csv") 
+#coornum_dat = read.csv("processed/coordination_number_aug32020.csv") 
 coornum_dat2 = read.csv("processed/porecoor_fixed.csv")
 
 # set data frames, factor, level order------------------------------------------
 
 str(coornum_dat2)
 levels(as.factor(coornum_dat2$trmt))
-library(dplyr)
+library(tidyverse)
 coornum_dat2 = 
   coornum_dat2 %>% 
   #mutate(trmt = factor(trmt, levels = c("before", "after")))
   
 levels(as.factor(coornum_dat2$pore_coor))
+
 coornum_dat2 = 
   coornum_dat2 %>% 
 mutate(pore_coor = factor(pore_coor, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16")))
@@ -76,7 +77,6 @@ theme_er <- function() {  # this for all the elements common across plots
 }
 #ggplots-----------------------------------------------------------------------
 
-library(ggplot2)
 library(soilpalettes)
 
 ggplot(tool, aes(x = pore_coor, y = freq, fill = trmt)) +
