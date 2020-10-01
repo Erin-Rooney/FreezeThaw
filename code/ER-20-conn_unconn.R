@@ -12,9 +12,10 @@ plot(conn_csv)
 
 
 library(ggplot2)
-library(dplyr)
+library(tidyverse)
 library(stats)
 library(base)
+library(soilpalettes)
 
 # Create Rep and Site Data frames ---------------------------------------------------------------------
 
@@ -27,8 +28,11 @@ rep_5 = conn_csv[conn_csv$sample=="28_38_12",]
 rep_6 = conn_csv[conn_csv$sample=="41_50_16",]
 
 tool = conn_csv[conn_csv$site=="tool",]
-low = conn_csv[conn_csv$water=="low",]
-high = conn_csv[conn_csv$water=="high",]
+#low = conn_csv[conn_csv$water=="low",]
+#high = conn_csv[conn_csv$water=="high",]
+
+conn_csv = conn_csv %>% 
+  filter(site=="tool")
 
 # ggplot set up----------------------------------------------------------------
 theme_er <- function() {  # this for all the elements common across plots
@@ -87,7 +91,7 @@ b3 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt))
         y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) +
   theme_er() +
   scale_fill_manual(values = soil_palette("redox", 2)) +
-  annotate("text", x = 1.5, y = 0.067, label = "P value < 0.5") +
+  annotate("text", x = 1.5, y = 0.067, label = "P value < 0.05") +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 
