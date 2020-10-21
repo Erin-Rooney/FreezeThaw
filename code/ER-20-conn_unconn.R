@@ -60,55 +60,70 @@ theme_er <- function() {  # this for all the elements common across plots
 }
 # ggplots ---------------------------------------------------------------------
 
-b1 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=trmt)) + geom_boxplot() +
+ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=trmt)) + geom_boxplot() +
   labs (title = "Connected Air-Filled Pore Volume",
         # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
         tag = "A",
         x = expression (bold (" ")),
         y = expression (bold ("Volume, %"))) +   scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) + 
   theme_er() +
-  scale_fill_manual(values = soil_palette("redox", 2)) +
+  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
   # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
-
-b2 = ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_pore_perc, fill=trmt)) + geom_boxplot() +
-  labs (title = "Unconnected Air-Filled Pore Volume",
-        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "B",
-        x = expression (bold (" ")),
-        y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.02)) +
-        theme_er() +
-  scale_fill_manual(values = soil_palette("redox", 2)) +
-  # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
-        guides(fill = guide_legend(reverse = TRUE, title = NULL))
-
-b3 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt)) + geom_boxplot() +
+b1 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt)) + geom_boxplot() +
   labs (title = "Connected Water-Filled Pore Volume",
         # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "C",
+        tag = "A",
         x = expression (bold (" ")),
         y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) +
   theme_er() +
-  scale_fill_manual(values = soil_palette("redox", 2)) +
+  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
   annotate("text", x = 1.5, y = 0.067, label = "P value < 0.05") +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
+b2 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=trmt)) + geom_boxplot() +
+  labs (title = "Connected Air-Filled Pore Volume",
+        # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "B",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) +   scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) + 
+  theme_er() +
+  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
+  # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
-b4 = ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_water_perc, fill=trmt)) + geom_boxplot() +
+b3 = ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_water_perc, fill=trmt)) + geom_boxplot() +
   labs (title = "Unconnected Water-Filled Pore Volume",
         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "D",
+        tag = "C",
         x = expression (bold (" ")),
         y = expression (bold ("Volume, %"))) +   scale_y_continuous(labels = scales::percent, limit = c(0, 0.02)) +
   theme_er() +
-  scale_fill_manual(values = soil_palette("redox", 2)) +
+  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
   # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 
+b4 = ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_pore_perc, fill=trmt)) + geom_boxplot() +
+  labs (title = "Unconnected Air-Filled Pore Volume",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "D",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.02)) +
+        theme_er() +
+  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
+  # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
+        guides(fill = guide_legend(reverse = TRUE, title = NULL))
+
+
+
+
+
+
+
 library(patchwork)
-b1+b3+b2+b4+ #combines the two plots
+b1+b2+b3+b4+ #combines the two plots
   plot_layout(guides = "collect") # sets a common legend
 
 

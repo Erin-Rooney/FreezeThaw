@@ -90,6 +90,7 @@ summary(bindat_aov1)
 
 library(ggplot2)
 library(soilpalettes)
+library(PNWColors)
 
 theme_er <- function() {  # this for all the elements common across plots
   theme_bw() %+replace%
@@ -163,7 +164,56 @@ p + theme_er() +
 ## example:
 
 # g1-g5 combo dist ggplots -----------------------------------------------------------------
+breadthdata_csv %>% 
+  filter(sample=="40_50_16") %>% #created the subset and jumped directly into ggplot
+  ggplot(aes(x = breadth_um, y=breadth_dist, color = trmt))+
+  geom_line(size = 1)+
+  labs (#title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+    subtitle = "40-50 cm, 16% moisture",
+    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    #tag = "Figure 1",
+    x = expression (bold ("Pore Throat Diameter, um")),
+    y = expression (bold ("Distribution, %")))+
+  scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))+
+  theme_er()
 
+levels(as.factor(breadthdata_csv$sample))
+str(breadthdata_csv)
+
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(sample = recode(sample, "40_50_16" = "Aggregate-1"))
+
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(sample = recode(sample, "40_50_28" = "Aggregate-2"))
+
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(sample = recode(sample, "28_38_12" = "Aggregate-3"))
+
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(sample = recode(sample, "28_38_28" = "Aggregate-4"))
+
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(sample = recode(sample, "41_50_16" = "Aggregate-5"))
+
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(sample = recode(sample, "41_50_28" = "Aggregate-6"))
+         
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(sample = factor(sample, levels = c("Aggregate-1", "Aggregate-2", "Aggregate-3", "Aggregate-4", "Aggregate-5", "Aggregate-6")))
+ 
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(trmt = factor(trmt, levels = c("before", "after")))
+
+  
 
 # rep1 ggplot
 g1 = breadthdata_csv %>% 
@@ -176,7 +226,7 @@ g1 = breadthdata_csv %>%
         #tag = "Figure 1",
         x = expression (bold ("Pore Throat Diameter, um")),
         y = expression (bold ("Distribution, %")))+
-  scale_color_manual(values = soil_palette("redox",2)) +   
+  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))+
   theme_er()
 
@@ -267,7 +317,7 @@ g = ggplot(tool, aes(x = breadth_um, y=breadth_dist, color = trmt))+
   geom_line(size = 1)+
   #geom_density(adjust=0.5)+
   
-  labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+  labs (title = "Pore Throat Diameter Distribution",
         #subtitle = "After Freeze/Thaw",
         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
         #tag = "Figure 6",
@@ -277,8 +327,9 @@ g = ggplot(tool, aes(x = breadth_um, y=breadth_dist, color = trmt))+
 g
 
 g + theme_er() + 
-  scale_color_manual(values = soil_palette("redox", 2)) +   
-  guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
+  scale_color_manual(values = c("#b0986c", "#72e1e1"))+
+  #scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
+  #guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
   facet_wrap(sample~.)
 
 
@@ -398,7 +449,7 @@ p1 = ggplot(before, aes(x = breadth_um, y=breadth_dist, color = sample))+
         y = expression (bold ("Distribution, %")))
 
 p1 + theme_er() + 
-  scale_color_manual(values = soil_palette("podzol", 6)) +   
+  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 ###
@@ -415,7 +466,7 @@ p2 = ggplot(after, aes(x = breadth_um, y=breadth_dist, color = sample))+
         y = expression (bold ("Distribution, %")))
 
 p2 + theme_er() + 
-  scale_color_manual(values = soil_palette("podzol", 6)) +   
+  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 
@@ -425,7 +476,7 @@ p2 + theme_er() +
 # combine p1 and p2
 
 library(patchwork)
-p1+p2+ #combines the two plots
+p1+p2 + #combines the two plots
  plot_layout(guides = "collect") # sets a common legend
 
 ###
@@ -436,7 +487,7 @@ p = ggplot(tool, aes(x = breadth_um, y=breadth_dist, color = sample))+
   geom_line(size = 1)+
   #geom_density(adjust=0.5)+
   
-  labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+  labs (#title = "Pore Throat Size Distribution",
         #subtitle = "After Freeze/Thaw",
         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
         #tag = "Figure 6",
@@ -444,7 +495,7 @@ p = ggplot(tool, aes(x = breadth_um, y=breadth_dist, color = sample))+
         y = expression (bold ("Distribution, %")))
 
 p + theme_er() + 
-  scale_color_manual(values = soil_palette("podzol", 6)) +   
+  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
   guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
   facet_grid(trmt~.)
 
@@ -470,7 +521,7 @@ ggplot (tool, aes(x = breadth_um, y = breadth_dist, color = trmt)) +
   theme_er() +
   facet_grid (.~trmt) +  
   scale_y_continuous(labels = scales::percent) +
-  scale_color_manual(values = soil_palette("gley", 2)) +
+  scale_color_manual(values = c("#b0986c", "#72e1e1"))+
   labs (x = expression (bold ("Pore Throat Diameter, um")),
   y = expression (bold ("Distribution, %")))
 

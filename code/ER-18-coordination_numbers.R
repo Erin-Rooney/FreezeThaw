@@ -52,6 +52,7 @@ summary(coornum_aov3)
 
 # ggplot set up-----------------------------------------------------------------
 library(soilpalettes)
+library(PNWColors)
 theme_er <- function() {  # this for all the elements common across plots
   theme_bw() %+replace%
     theme(legend.position = "top",
@@ -77,16 +78,15 @@ theme_er <- function() {  # this for all the elements common across plots
 }
 #ggplots-----------------------------------------------------------------------
 
-library(soilpalettes)
 
 ggplot(tool, aes(x = pore_coor, y = freq, fill = trmt)) +
   geom_boxplot() + 
   scale_y_continuous(labels = scales::percent) +
   theme_er() +
-  scale_fill_manual(values = soil_palette("redox", 2)) +
+  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
   labs (title = "Pore Coordination Number Frequency",
         #caption = "Caption",
-        tag = "A",
+        #tag = "A",
         x = expression (bold ("Pore Coordination Number")),
         y = expression (bold ("Frequency, %"))) +
    guides(fill = guide_legend(reverse = TRUE, title = NULL))
