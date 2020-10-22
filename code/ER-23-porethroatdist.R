@@ -19,8 +19,10 @@ str(breadthdata_csv)
 levels(as.factor(breadthdata_csv$trmt))
 
 ## then use `recode` to fix it
-
+library(agricolae)
 library(tidyverse)
+library(PairedData)
+library(ggpubr)
 breadthdata_csv = 
   breadthdata_csv %>% 
   mutate(trmt = recode(trmt, "before " = "before"))
@@ -71,18 +73,39 @@ after = breadthdata_csv[breadthdata_csv$trmt=="after",]
 breadth.aov1 <- aov(breadth_freq ~ trmt, data = tool)
 summary.aov(breadth.aov1)
 
+trmt_hsd = HSD.test(breadth.aov1, "trmt")
+print(trmt_hsd)
+
 
 breadth.aov2 <- aov(breadth_freq ~ trmt * bin, data = tool)
 summary.aov(breadth.aov2)
 
+bin_hsd = HSD.test(breadth.aov2, "bin")
+print(bin_hsd)
+
 breadth.aov3 <- aov(breadth_freq ~ bin + trmt, data = tool)
 summary.aov(breadth.aov3)
 
-breadth.aov4 <- aov(breadth_freq ~ bin * sample, data = tool)
+breadth.aov4 <- aov(breadth_freq ~ sample, data = tool)
 summary.aov(breadth.aov4)
+
+sample_hsd = HSD.test(breadth.aov4, "sample")
+print(sample_hsd)
 
 bindat_aov1 = aov(breadth_dist ~ trmt, data = tool)
 summary(bindat_aov1)
+
+
+#Shapiro-Wilk normality test--------------------------------------
+before <- subset(tool, trmt == "before", breadth_dist, drop = TRUE)
+after <- subset(tool, trmt == "after", breadth_dist, drop = TRUE)
+pd <- paired(before, after)
+
+
+d <- with(tool,
+          breadth_dist[trmt == "before"] - breadth_dist[trmt == "after"])
+
+shapiro.test(d)
 
 
 # ggplot setup ------------------------------------------------------------
