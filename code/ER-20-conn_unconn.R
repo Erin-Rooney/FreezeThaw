@@ -44,12 +44,12 @@ theme_er <- function() {  # this for all the elements common across plots
           legend.title = element_blank(),
           legend.text = element_text(size = 12),
           legend.key.size = unit(1.5, 'lines'),
-          panel.border = element_rect(color="black",size=2, fill = NA),
+          panel.border = element_rect(color="black",size=0.25, fill = NA),
           
           plot.title = element_text(hjust = 0.5, size = 14),
           plot.subtitle = element_text(hjust = 0.5, size = 12, lineheight = 1.5),
-          axis.text = element_text(size = 12, color = "black"),
-          axis.title = element_text(size = 12, face = "bold", color = "black"),
+          axis.text = element_text(size = 14, color = "black"),
+          axis.title = element_text(size = 14, face = "bold", color = "black"),
           
           # formatting for facets
           panel.background = element_blank(),
@@ -74,49 +74,49 @@ ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=trmt)) + geo
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 b1 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt)) + geom_boxplot() +
-  labs (title = "Connected Water-Filled Pore Volume",
+  labs (title = "Connected Water-Filled Pores",
         # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
         tag = "A",
         x = expression (bold (" ")),
         y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) +
   theme_er() +
   scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
-  annotate("text", x = 1.5, y = 0.067, label = "P value < 0.05") +
-  guides(fill = guide_legend(reverse = TRUE, title = NULL))
+  annotate("text", x = 1.5, y = 0.067, label = "P value < 0.05") 
+  #guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 b2 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=trmt)) + geom_boxplot() +
-  labs (title = "Connected Air-Filled Pore Volume",
+  labs (title = "Connected Air-Filled Pores",
         # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
         tag = "B",
         x = expression (bold (" ")),
         y = expression (bold ("Volume, %"))) +   scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) + 
   theme_er() +
-  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
+  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) 
   # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
-  guides(fill = guide_legend(reverse = TRUE, title = NULL))
+  #guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 b3 = ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_water_perc, fill=trmt)) + geom_boxplot() +
-  labs (title = "Unconnected Water-Filled Pore Volume",
+  labs (title = "Unconnected Water-Filled Pores",
         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
         tag = "C",
         x = expression (bold (" ")),
         y = expression (bold ("Volume, %"))) +   scale_y_continuous(labels = scales::percent, limit = c(0, 0.02)) +
   theme_er() +
-  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
+  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) 
   # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
-  guides(fill = guide_legend(reverse = TRUE, title = NULL))
+  #guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 
 b4 = ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_pore_perc, fill=trmt)) + geom_boxplot() +
-  labs (title = "Unconnected Air-Filled Pore Volume",
+  labs (title = "Unconnected Air-Filled Pores",
         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
         tag = "D",
         x = expression (bold (" ")),
         y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.02)) +
         theme_er() +
-  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
+  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) 
   # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
-        guides(fill = guide_legend(reverse = TRUE, title = NULL))
+        #guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 
 
