@@ -107,6 +107,21 @@ d <- with(tool,
 
 shapiro.test(d)
 
+# Wilcoxon test Method 1
+
+res <- wilcox.test(breadth_dist ~ trmt, data = tool, paired = TRUE)
+res
+
+res$p.value
+
+#
+
+res <- wilcox.test(breadth_dist ~ trmt, data = tool, paired = TRUE,
+                   alternative = "less")
+res
+
+res$p.value
+
 
 # ggplot setup ------------------------------------------------------------
 

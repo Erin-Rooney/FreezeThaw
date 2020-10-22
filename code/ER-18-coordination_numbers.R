@@ -10,8 +10,13 @@ coornum_dat2 = read.csv("processed/porecoor_fixed.csv")
 str(coornum_dat2)
 levels(as.factor(coornum_dat2$trmt))
 library(tidyverse)
-coornum_dat2 = 
-  coornum_dat2 %>% 
+library(agricolae)
+library(PairedData)
+library(ggpubr)
+
+
+#coornum_dat2 = 
+  #coornum_dat2 %>% 
   #mutate(trmt = factor(trmt, levels = c("before", "after")))
   
 levels(as.factor(coornum_dat2$pore_coor))
@@ -29,6 +34,36 @@ tool = coornum_dat2[coornum_dat2$site=="tool",]
 
 #low = coornum_dat[coornum_dat$water=="low",]
 #high = coornum_dat[coornum_dat$water=="high",]
+
+#Shapiro-Wilk normality test----------------------------
+
+before <- subset(tool, trmt == "before", freq, drop = TRUE)
+after <- subset(tool, trmt == "after", freq, drop = TRUE)
+pd <- paired(before, after)
+
+
+d <- with(tool,
+          freq[trmt == "before"] - freq[trmt == "after"])
+
+shapiro.test(d) # p value = 4.011e-11, not normally distributed
+
+# Wilcoxon test Method 1
+
+res <- wilcox.test(freq ~ trmt, data = tool, paired = TRUE)
+res
+
+res$p.value
+
+#
+
+res <- wilcox.test(freq ~ trmt, data = tool, paired = TRUE,
+                   alternative = "less")
+res
+
+res$p.value
+
+
+
 
 # aov---------------------------------------------------------------------------
 # NONE OF THESE WORK OR MAKE SENSE, STATISTiCALLY
