@@ -11,11 +11,13 @@ plot(conn_csv)
 # Load packages ---------------------------------------------------------------------
 
 
-library(ggplot2)
 library(tidyverse)
 library(stats)
 library(base)
 library(soilpalettes)
+library(agricolae)
+library(PairedData)
+library(ggpubr)
 
 # Create Rep and Site Data frames ---------------------------------------------------------------------
 
@@ -204,10 +206,13 @@ summary(conn_aov1)
 conn.aov <- aov(conn_water_perc ~ trmt, data = tool)
 summary.aov(conn.aov)
 
+trmt_hsd = HSD.test(conn.aov, "trmt")
+print(trmt_hsd)
+
 conn_aov2 = aov(data = tool, unconn_pore_perc ~ trmt)
 summary(conn_aov2)
 
-conn_aov3 = aov(data = tool, conn_water_perc ~ trmt)
+conn_aov3 = aov(data = tool, conn_pore_perc ~ trmt)
 summary(conn_aov3)
 
 conn_aov4 = aov(data = tool, unconn_water_perc ~ trmt)
