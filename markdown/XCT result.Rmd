@@ -1,0 +1,156 @@
+---
+title: "XCT results"
+author: "Erin C Rooney"
+date: "10/26/2020"
+output: github_document
+---
+
+```{r setup, include=TRUE}
+knitr::opts_chunk$set(echo=FALSE,
+                      message=FALSE,
+                      warning=FALSE,
+                      comment = "#>", 
+                      fig.path = "images/"
+                      )
+
+```
+
+## Measuring the Soil Pore Network response to freeze/thaw in permafrost soil aggregates using X-Ray Computed Tomography
+
+<details>
+  <summary>click to open</summary>
+
+# Pore Throat Diameters
+
+### Statistics
+```{r Load}
+breadthdata_csv = read.csv("processed/ftc_porethroatdist_july312020_2.csv") 
+levels(as.factor(breadthdata_csv$trmt)) 
+library(agricolae)
+library(tidyverse)
+library(PairedData)
+library(ggpubr)
+
+```
+
+
+```{r Statistics}
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(trmt = recode(trmt, "before " = "before"))
+tool = breadthdata_csv %>% 
+  filter(site=="tool")
+before <- subset(tool, trmt == "before", breadth_dist, drop = TRUE)
+after <- subset(tool, trmt == "after", breadth_dist, drop = TRUE)
+pd <- paired(before, after)
+
+
+d <- with(tool,
+          breadth_dist[trmt == "before"] - breadth_dist[trmt == "after"])
+
+shapiro.test(d)
+
+res <- wilcox.test(breadth_dist ~ trmt, data = tool, paired = TRUE,
+                   alternative = "less")
+res
+
+res$p.value
+
+```
+
+
+### Figures
+```{r Pore Throat Distributions}
+library(PNWColors)
+theme_er <- function() {  # this for all the elements common across plots
+  theme_bw() %+replace%
+    theme(legend.position = "top",
+          legend.key=element_blank(),
+          legend.title = element_blank(),
+          legend.text = element_text(size = 12),
+          legend.key.size = unit(1.5, 'lines'),
+          panel.border = element_rect(color="black",size=2, fill = NA),
+          
+          plot.title = element_text(hjust = 0.5, size = 14),
+          plot.subtitle = element_text(hjust = 0.5, size = 12, lineheight = 1.5),
+          axis.text = element_text(size = 12, color = "black"),
+          axis.title = element_text(size = 12, face = "bold", color = "black"),
+          
+          # formatting for facets
+          panel.background = element_blank(),
+          strip.background = element_rect(colour="white", fill="white"), #facet formatting
+          panel.spacing.x = unit(1.5, "lines"), #facet spacing for x axis
+          panel.spacing.y = unit(1.5, "lines"), #facet spacing for x axis
+          strip.text.x = element_text(size=12, face="bold"), #facet labels
+          strip.text.y = element_text(size=12, face="bold", angle = 270) #facet labels
+    )
+}
+
+levels(as.factor(breadthdata_csv$sample))
+str(breadthdata_csv)
+
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(sample = recode(sample, "40_50_16" = "Aggregate-1"))
+
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(sample = recode(sample, "40_50_28" = "Aggregate-2"))
+
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(sample = recode(sample, "28_38_12" = "Aggregate-3"))
+
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(sample = recode(sample, "28_38_28" = "Aggregate-4"))
+
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(sample = recode(sample, "41_50_16" = "Aggregate-5"))
+
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(sample = recode(sample, "41_50_28" = "Aggregate-6"))
+         
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(sample = factor(sample, levels = c("Aggregate-1", "Aggregate-2", "Aggregate-3", "Aggregate-4", "Aggregate-5", "Aggregate-6")))
+ 
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(trmt = factor(trmt, levels = c("before", "after")))
+
+g = ggplot(tool, aes(x = breadth_um, y=breadth_dist, color = trmt))+
+  geom_line(size = 1)+
+  #geom_density(adjust=0.5)+
+  
+  labs (title = "Pore Throat Diameter Distribution",
+        #subtitle = "After Freeze/Thaw",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 6",
+        x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Distribution, %")))
+
+g + theme_er() + 
+  scale_color_manual(values = c("#b0986c", "#72e1e1"))+
+  #scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
+  #guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
+  facet_wrap(sample~.)
+```
+
+
+</details>
+
+## Pore Coordination Numbers
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+```{r}
+Sys.Date()
+sessionInfo()
+```
