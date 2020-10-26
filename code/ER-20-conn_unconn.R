@@ -18,6 +18,7 @@ library(soilpalettes)
 library(agricolae)
 library(PairedData)
 library(ggpubr)
+library(PNWColors)
 
 # Create Rep and Site Data frames ---------------------------------------------------------------------
 
@@ -81,7 +82,11 @@ b1 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt))
         y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) +
   theme_er() +
   scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
-  annotate("text", x = 1.5, y = 0.067, label = "P value < 0.05") 
+  annotate("text", x = 1.5, y = 0.083, label = "p value < 0.05") +
+  annotate("text", x = 1, y = 0.055, label = "A") +
+  annotate("text", x = 2, y = 0.037, label = "B") 
+
+
   #guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 b2 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=trmt)) + geom_boxplot() +
