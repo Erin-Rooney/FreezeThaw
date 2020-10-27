@@ -5,7 +5,7 @@ date: "10/26/2020"
 output: github_document
 ---
 
-```{r setup, include=TRUE}
+```{r setup, include=TRUE, echo=FALSE}
 knitr::opts_chunk$set(echo=FALSE,
                       message=FALSE,
                       warning=FALSE,
@@ -17,10 +17,11 @@ knitr::opts_chunk$set(echo=FALSE,
 
 ## Measuring the Soil Pore Network response to freeze/thaw in permafrost soil aggregates using X-Ray Computed Tomography
 
-<details>
-  <summary>click to open</summary>
 
-# Pore Throat Diameters
+## Pore Throat Diameters
+
+<details>
+  <summary>click to open stats</summary>
 
 ### Statistics
 ```{r Load}
@@ -34,7 +35,7 @@ library(ggpubr)
 ```
 
 
-```{r Statistics}
+```{r Statistics1}
 breadthdata_csv = 
   breadthdata_csv %>% 
   mutate(trmt = recode(trmt, "before " = "before"))
@@ -43,22 +44,21 @@ tool = breadthdata_csv %>%
 before <- subset(tool, trmt == "before", breadth_dist, drop = TRUE)
 after <- subset(tool, trmt == "after", breadth_dist, drop = TRUE)
 pd <- paired(before, after)
-
-
 d <- with(tool,
           breadth_dist[trmt == "before"] - breadth_dist[trmt == "after"])
-
 shapiro.test(d)
-
 res <- wilcox.test(breadth_dist ~ trmt, data = tool, paired = TRUE,
                    alternative = "less")
 res
-
 res$p.value
 
 ```
 
+</details>
 
+<details>
+  <summary>click to open figures</summary>
+  
 ### Figures
 ```{r Pore Throat Distributions}
 library(PNWColors)
@@ -144,13 +144,147 @@ g + theme_er() +
 
 ## Pore Coordination Numbers
 
-You can also embed plots, for example:
+<details>
+  <summary>click to open stats</summary>
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+### Statistics
+```{r statistics2}
+coornum_dat2 = read.csv("processed/porecoor_fixed.csv")
+levels(as.factor(coornum_dat2$pore_coor))
+coornum_dat2 = 
+  coornum_dat2 %>% 
+mutate(pore_coor = factor(pore_coor, levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16")))
+levels(as.factor(coornum_dat2$trmt))
+tool = coornum_dat2[coornum_dat2$site=="tool",]
+#Shapiro-Wilk normality test----------------------------
+before <- subset(tool, trmt == "before", freq, drop = TRUE)
+after <- subset(tool, trmt == "after", freq, drop = TRUE)
+pd <- paired(before, after)
+d <- with(tool,
+          freq[trmt == "before"] - freq[trmt == "after"])
+shapiro.test(d) # p value = 4.011e-11, not normally distributed
+# Wilcoxon test Method 1
+res <- wilcox.test(freq ~ trmt, data = tool, paired = TRUE)
+res
+res$p.value
 ```
 
+</details>
+
+<details>
+  <summary>click to open figures</summary>
+
+### Figures
+```{r Pore Coordination Numbers}
+ggplot(tool, aes(x = pore_coor, y = freq, fill = trmt)) +
+  geom_boxplot() + 
+  scale_y_continuous(labels = scales::percent) +
+  theme_er() +
+  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
+  labs (title = "Pore Coordination Number Frequency",
+        #caption = "Caption",
+        #tag = "A",
+        x = expression (bold ("Pore Coordination Number")),
+        y = expression (bold ("Frequency, %"))) +
+   guides(fill = guide_legend(reverse = TRUE, title = NULL))
+```
+
+</details>
+
+## Air and Water-filled Pore Volumes
+
+<details>
+  <summary>click to open stats</summary>
+
+### Statistics
+```{r statistics3}
+conn_csv = read.csv("processed/conn_unconn_aug52020.csv") 
+level_order <- c('before', 'after')
+tool = conn_csv %>% 
+  filter(site=="tool")
+conn.aov <- aov(conn_water_perc ~ trmt, data = tool)
+summary.aov(conn.aov)
+trmt_hsd = HSD.test(conn.aov, "trmt")
+print(trmt_hsd)
+conn_aov2 = aov(data = tool, unconn_pore_perc ~ trmt)
+summary(conn_aov2)
+conn_aov3 = aov(data = tool, conn_pore_perc ~ trmt)
+summary(conn_aov3)
+conn_aov4 = aov(data = tool, unconn_water_perc ~ trmt)
+summary(conn_aov4)
+```
+
+</details>
+
+<details>
+  <summary>click to open figures</summary>
+
+### Figures
+```{r Pore volumes}
+b1 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt)) + geom_boxplot() +
+  labs (title = "Connected Water-Filled Pores",
+        # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "A",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) +
+  theme_er() +
+  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
+  annotate("text", x = 1.5, y = 0.083, label = "p value < 0.05") +
+  annotate("text", x = 1, y = 0.055, label = "A") +
+  annotate("text", x = 2, y = 0.037, label = "B") 
+
+  #guides(fill = guide_legend(reverse = TRUE, title = NULL))
+
+b2 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=trmt)) + geom_boxplot() +
+  labs (title = "Connected Air-Filled Pores",
+        # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "B",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) +   scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) + 
+  theme_er() +
+  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) 
+  # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
+  #guides(fill = guide_legend(reverse = TRUE, title = NULL))
+
+b3 = ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_water_perc, fill=trmt)) + geom_boxplot() +
+  labs (title = "Unconnected Water-Filled Pores",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "C",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) +   scale_y_continuous(labels = scales::percent, limit = c(0, 0.02)) +
+  theme_er() +
+  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) 
+  # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
+  #guides(fill = guide_legend(reverse = TRUE, title = NULL))
+
+b4 = ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_pore_perc, fill=trmt)) + geom_boxplot() +
+  labs (title = "Unconnected Air-Filled Pores",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "D",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.02)) +
+        theme_er() +
+  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) 
+  # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
+        #guides(fill = guide_legend(reverse = TRUE, title = NULL))
+
+library(patchwork)
+b1+b2+b3+b4+ #combines the two plots
+  plot_layout(guides = "collect") # sets a common legend
+```
+
+
+</details>
+
+
+### Session Info
+
+<details>
+  <summary>Session Info</summary>
+  
 ```{r}
 Sys.Date()
 sessionInfo()
 ```
+
+</details>
