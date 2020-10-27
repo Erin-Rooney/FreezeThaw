@@ -50,7 +50,7 @@ Erin C Rooney
     #>  $ breadth_freq: int  3 0 0 4 3 4 7 6 15 3 ...
     #>  $ breadth_dist: num  0.0297 0 0 0.0396 0.0297 ...
 
-![](images/Pore%20Throat%20Distributions-1.png)<!-- -->
+![](images/Pore%20Throat%20Distributions-1.png)<!-- -->![](images/Pore%20Throat%20Distributions-2.png)<!-- -->![](images/Pore%20Throat%20Distributions-3.png)<!-- -->
 
 </details>
 
