@@ -30,11 +30,11 @@ rep_4 = conn_csv[conn_csv$sample=="28_38_28",]
 rep_5 = conn_csv[conn_csv$sample=="28_38_12",]
 rep_6 = conn_csv[conn_csv$sample=="41_50_16",]
 
-tool = conn_csv[conn_csv$site=="tool",]
+#tool = conn_csv[conn_csv$site=="tool",]
 #low = conn_csv[conn_csv$water=="low",]
 #high = conn_csv[conn_csv$water=="high",]
 
-conn_csv = conn_csv %>% 
+tool = conn_csv %>% 
   filter(site=="tool")
 
 # ggplot set up----------------------------------------------------------------

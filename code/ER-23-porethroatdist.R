@@ -362,8 +362,6 @@ g = ggplot(tool, aes(x = breadth_um, y=breadth_dist, color = trmt))+
         x = expression (bold ("Pore Throat Diameter, um")),
         y = expression (bold ("Distribution, %")))
 
-g
-
 g + theme_er() + 
   scale_color_manual(values = c("#b0986c", "#72e1e1"))+
   #scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
