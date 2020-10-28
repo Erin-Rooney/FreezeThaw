@@ -23,13 +23,6 @@ library(PNWColors)
 # Create Rep and Site Data frames ---------------------------------------------------------------------
 
 
-rep_1 = conn_csv[conn_csv$sample=="40_50_16",]
-rep_2 = conn_csv[conn_csv$sample=="41_50_28",]
-rep_3 = conn_csv[conn_csv$sample=="40_50_28",]
-rep_4 = conn_csv[conn_csv$sample=="28_38_28",]
-rep_5 = conn_csv[conn_csv$sample=="28_38_12",]
-rep_6 = conn_csv[conn_csv$sample=="41_50_16",]
-
 #tool = conn_csv[conn_csv$site=="tool",]
 #low = conn_csv[conn_csv$water=="low",]
 #high = conn_csv[conn_csv$water=="high",]
@@ -62,17 +55,6 @@ theme_er <- function() {  # this for all the elements common across plots
     )
 }
 # ggplots ---------------------------------------------------------------------
-
-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=trmt)) + geom_boxplot() +
-  labs (title = "Connected Air-Filled Pore Volume",
-        # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "A",
-        x = expression (bold (" ")),
-        y = expression (bold ("Volume, %"))) +   scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) + 
-  theme_er() +
-  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
-  # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
-  guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 b1 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt)) + geom_boxplot() +
   labs (title = "Connected Water-Filled Pores",
@@ -143,97 +125,104 @@ b1+b2+b3+b4+ #combines the two plots
 # Older ggplots ---------------------------------------------------------------------
 
 
-p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=water)) + geom_boxplot() + geom_jitter() +
-  labs (title = "Impact of Freeze/Thaw Cycles and Water Content on Connected Pore Volume",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure X",
-        x = expression (bold ("freeze/thaw treatment")),
-        y = expression (bold ("connected pore content, %"))) 
-        
-p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
-
-
-
-
-
-p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=water)) + geom_boxplot() + geom_jitter() +
-  labs (title = "Impact of Freeze/Thaw Cycles and Water Content on Connected Pore Volume",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure X",
-        x = expression (bold ("freeze/thaw treatment")),
-        y = expression (bold ("connected pore content, %"))) 
-
-p + scale_fill_manual(values=c("Black", "White")) +
-  annotate("text", x = 2, y = 0.070, label = "P value < ?") +
-  guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
-
-
-
-p<-ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_pore_perc, fill=water)) + geom_boxplot() + geom_jitter() +
-  labs (title = "Impact of Freeze/Thaw Cycles and Water Content on Unconnected Pore Volume",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure X",
-        x = expression (bold ("freeze/thaw treatment")),
-        y = expression (bold ("unconnected pore content, %"))) 
-
-p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
-
-
-p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=water)) + geom_boxplot() + geom_jitter() +
-  labs (title = "Impact of Freeze/Thaw Cycles and Water Content on Connected Water Volume",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure X",
-        x = expression (bold ("freeze/thaw treatment")),
-        y = expression (bold ("connected water content, %"))) 
-
-p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
-
-
-
-p<-ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_water_perc, fill=water)) + geom_boxplot() + geom_jitter() +
-  labs (title = "Impact of Freeze/Thaw Cycles and Water Content on Unconnected Water Volume",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure X",
-        x = expression (bold ("freeze/thaw treatment")),
-        y = expression (bold ("unconnected water content, %"))) 
-
-p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
+# p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=water)) + geom_boxplot() + geom_jitter() +
+#   labs (title = "Impact of Freeze/Thaw Cycles and Water Content on Connected Pore Volume",
+#         caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+#         tag = "Figure X",
+#         x = expression (bold ("freeze/thaw treatment")),
+#         y = expression (bold ("connected pore content, %"))) 
+#         
+# p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
+# 
+# 
+# 
+# 
+# 
+# p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=water)) + geom_boxplot() + geom_jitter() +
+#   labs (title = "Impact of Freeze/Thaw Cycles and Water Content on Connected Pore Volume",
+#         caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+#         tag = "Figure X",
+#         x = expression (bold ("freeze/thaw treatment")),
+#         y = expression (bold ("connected pore content, %"))) 
+# 
+# p + scale_fill_manual(values=c("Black", "White")) +
+#   annotate("text", x = 2, y = 0.070, label = "P value < ?") +
+#   guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
+# 
+# 
+# 
+# p<-ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_pore_perc, fill=water)) + geom_boxplot() + geom_jitter() +
+#   labs (title = "Impact of Freeze/Thaw Cycles and Water Content on Unconnected Pore Volume",
+#         caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+#         tag = "Figure X",
+#         x = expression (bold ("freeze/thaw treatment")),
+#         y = expression (bold ("unconnected pore content, %"))) 
+# 
+# p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
+# 
+# 
+# p<-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=water)) + geom_boxplot() + geom_jitter() +
+#   labs (title = "Impact of Freeze/Thaw Cycles and Water Content on Connected Water Volume",
+#         caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+#         tag = "Figure X",
+#         x = expression (bold ("freeze/thaw treatment")),
+#         y = expression (bold ("connected water content, %"))) 
+# 
+# p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
+# 
+# 
+# 
+# p<-ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_water_perc, fill=water)) + geom_boxplot() + geom_jitter() +
+#   labs (title = "Impact of Freeze/Thaw Cycles and Water Content on Unconnected Water Volume",
+#         caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+#         tag = "Figure X",
+#         x = expression (bold ("freeze/thaw treatment")),
+#         y = expression (bold ("unconnected water content, %"))) 
+# 
+# p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
 
 
 
 
 # AOV ---------------------------------------------------------------------
 
-conn_aov1 = aov(tool, conn_water_perc ~ trmt)
-summary(conn_aov1)
-
-#correct anova
+#correct anovas
 conn.aov <- aov(conn_water_perc ~ trmt, data = tool)
 summary.aov(conn.aov)
 
 trmt_hsd = HSD.test(conn.aov, "trmt")
 print(trmt_hsd)
 
-conn_aov2 = aov(data = tool, unconn_pore_perc ~ trmt)
-summary(conn_aov2)
+conn.aov2 <- aov(unconn_water_perc ~ trmt, data = tool)
 
-conn_aov3 = aov(data = tool, conn_pore_perc ~ trmt)
-summary(conn_aov3)
+conn.aov3 <- aov(conn_pore_perc ~ trmt, data = tool)
 
-conn_aov4 = aov(data = tool, unconn_water_perc ~ trmt)
-summary(conn_aov4)
+conn.aov4 <- aov(unconn_pore_perc ~ trmt, data = tool)
 
-conn_aov1 = aov(data = tool, conn_pore_perc ~ trmt*water)
-summary(conn_aov1)
+summary(conn.aov2)
+summary(conn.aov3)
+summary(conn.aov4)
 
-conn_aov2 = aov(data = tool, unconn_pore_perc ~ trmt*water)
-summary(conn_aov2)
+# conn_aov2 = aov(data = tool, unconn_pore_perc ~ trmt)
+# summary(conn_aov2)
+# 
+# conn_aov3 = aov(data = tool, conn_pore_perc ~ trmt)
+# summary(conn_aov3)
+# 
+# conn_aov4 = aov(data = tool, unconn_water_perc ~ trmt)
+# summary(conn_aov4)
 
-conn_aov3 = aov(data = tool, conn_water_perc ~ trmt*water)
-summary(conn_aov3)
-
-conn_aov4 = aov(data = tool, unconn_water_perc ~ trmt*water)
-summary(conn_aov4)
+# conn_aov1 = aov(data = tool, conn_pore_perc ~ trmt*water)
+# summary(conn_aov1)
+# 
+# conn_aov2 = aov(data = tool, unconn_pore_perc ~ trmt*water)
+# summary(conn_aov2)
+# 
+# conn_aov3 = aov(data = tool, conn_water_perc ~ trmt*water)
+# summary(conn_aov3)
+# 
+# conn_aov4 = aov(data = tool, unconn_water_perc ~ trmt*water)
+# summary(conn_aov4)
 
 # Stray Code ---------------------------------------------------------------------
 
