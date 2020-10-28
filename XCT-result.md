@@ -165,7 +165,7 @@ Erin C Rooney
 
 <summary>Session Info</summary>
 
-    #> [1] "2020-10-26"
+    #> [1] "2020-10-27"
 
     #> R version 4.0.1 (2020-06-06)
     #> Platform: x86_64-w64-mingw32/x64 (64-bit)
@@ -184,11 +184,11 @@ Erin C Rooney
     #> [1] stats     graphics  grDevices utils     datasets  methods   base     
     #> 
     #> other attached packages:
-    #>  [1] patchwork_1.0.1  PNWColors_0.1.0  ggpubr_0.4.0     PairedData_1.1.1
-    #>  [5] lattice_0.20-41  mvtnorm_1.1-1    gld_2.6.2        MASS_7.3-51.6   
-    #>  [9] forcats_0.5.0    stringr_1.4.0    dplyr_1.0.0      purrr_0.3.4     
-    #> [13] readr_1.3.1      tidyr_1.1.0      tibble_3.0.1     ggplot2_3.3.2   
-    #> [17] tidyverse_1.3.0  agricolae_1.3-3 
+    #>  [1] patchwork_1.0.1  PNWColors_0.1.0  ggthemes_4.2.0   ggpubr_0.4.0    
+    #>  [5] PairedData_1.1.1 lattice_0.20-41  mvtnorm_1.1-1    gld_2.6.2       
+    #>  [9] MASS_7.3-51.6    forcats_0.5.0    stringr_1.4.0    dplyr_1.0.0     
+    #> [13] purrr_0.3.4      readr_1.3.1      tidyr_1.1.0      tibble_3.0.1    
+    #> [17] ggplot2_3.3.2    tidyverse_1.3.0  agricolae_1.3-3 
     #> 
     #> loaded via a namespace (and not attached):
     #>  [1] nlme_3.1-148      fs_1.4.2          lubridate_1.7.9   httr_1.4.1       
