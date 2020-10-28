@@ -263,7 +263,7 @@ b1 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt))
         tag = "A",
         x = expression (bold (" ")),
         y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) +
-  theme_er() +
+  theme_er2() +
   scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
   annotate("text", x = 1.5, y = 0.083, label = "p value < 0.05") +
   annotate("text", x = 1, y = 0.055, label = "A") +
@@ -277,7 +277,7 @@ b2 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_pore_perc, fill=trmt)) 
         tag = "B",
         x = expression (bold (" ")),
         y = expression (bold ("Volume, %"))) +   scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) + 
-  theme_er() +
+  theme_er2() +
   scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) 
   # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
   #guides(fill = guide_legend(reverse = TRUE, title = NULL))
@@ -288,7 +288,7 @@ b3 = ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_water_perc, fill=trmt
         tag = "C",
         x = expression (bold (" ")),
         y = expression (bold ("Volume, %"))) +   scale_y_continuous(labels = scales::percent, limit = c(0, 0.02)) +
-  theme_er() +
+  theme_er2() +
   scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) 
   # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
   #guides(fill = guide_legend(reverse = TRUE, title = NULL))
@@ -299,7 +299,7 @@ b4 = ggplot(tool, aes(x=factor(trmt,level_order), y=unconn_pore_perc, fill=trmt)
         tag = "D",
         x = expression (bold (" ")),
         y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.02)) +
-        theme_er() +
+        theme_er2() +
   scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) 
   # annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
         #guides(fill = guide_legend(reverse = TRUE, title = NULL))

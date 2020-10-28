@@ -165,7 +165,7 @@ Erin C Rooney
 
 <summary>Session Info</summary>
 
-    #> [1] "2020-10-27"
+    #> [1] "2020-10-28"
 
     #> R version 4.0.1 (2020-06-06)
     #> Platform: x86_64-w64-mingw32/x64 (64-bit)
