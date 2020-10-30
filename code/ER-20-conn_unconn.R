@@ -56,6 +56,51 @@ theme_er <- function() {  # this for all the elements common across plots
 }
 # ggplots ---------------------------------------------------------------------
 
+# attempt 1
+
+ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt)) + geom_segment(
+  mapping = NULL,
+  data = NULL,
+  stat = "identity",
+  position = "identity",
+  arrow = NULL,
+  arrow.fill = NULL,
+  lineend = "butt",
+  linejoin = "round",
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE
+) +
+  labs (title = "Connected Water-Filled Pores",
+        # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "A",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) +
+  theme_er() +
+  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
+  annotate("text", x = 1.5, y = 0.083, label = "p value < 0.05") +
+  annotate("text", x = 1, y = 0.055, label = "A") +
+  annotate("text", x = 2, y = 0.037, label = "B") 
+
+#attempt 2
+
+
+p <- ggplot(tool, aes(x=factor("trmt"), y=conn_water_perc, color = sample)) + geom_point()
+
+P + geom_segment(data = tool, aes(x = "trmt$before", y = conn_water_perc,
+                                  xend = "trmt$after", yend = conn_water_perc,
+                                  color = sample), size = 5, alpha = 0.3)
+
+#attempt 3
+
+tool %>% 
+  ggplot() + geom_segment(data = tool, aes(x = "trmt$before", y = conn_water_perc,
+                             xend = "trmt$after", yend = conn_water_perc,
+                             color = sample), size = 5, alpha = 0.3)
+
+
+
+
 b1 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt)) + geom_boxplot() +
   labs (title = "Connected Water-Filled Pores",
         # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
