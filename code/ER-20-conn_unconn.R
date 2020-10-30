@@ -56,6 +56,8 @@ theme_er <- function() {  # this for all the elements common across plots
 }
 # ggplots ---------------------------------------------------------------------
 
+
+
 # attempt 1
 
 ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt)) + geom_segment(
@@ -85,10 +87,10 @@ ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt)) + ge
 #attempt 2
 
 
-p <- ggplot(tool, aes(x=factor("trmt"), y=conn_water_perc, color = sample)) + geom_point()
+p <- ggplot(tool, aes(x=factor(trmt, level_order), y=conn_water_perc, color = sample)) + geom_point()
 
-P + geom_segment(data = tool, aes(x = "trmt$before", y = conn_water_perc,
-                                  xend = "trmt$after", yend = conn_water_perc,
+p + geom_segment(data = tool, aes(x = 1, y = conn_water_perc,
+                                  xend = 2, yend = conn_water_perc,
                                   color = sample), size = 5, alpha = 0.3)
 
 #attempt 3
@@ -97,6 +99,11 @@ tool %>%
   ggplot() + geom_segment(data = tool, aes(x = "trmt$before", y = conn_water_perc,
                              xend = "trmt$after", yend = conn_water_perc,
                              color = sample), size = 5, alpha = 0.3)
+
+
+ggplot()+geom_point(data = tool, aes(x=factor(trmt, level_order), y=conn_water_perc, color = sample))+ geom_path()
+
+
 
 
 
