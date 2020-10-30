@@ -29,8 +29,33 @@ mutate(pore_coor = factor(pore_coor, levels = c("1", "2", "3", "4", "5", "6", "7
 ## you can only look up levels for a factor variable, 
 ## so first convert from char to factor, and then look at the levels
 
+tool = 
+  coornum_dat2[coornum_dat2$site=="tool",]
 
-tool = coornum_dat2[coornum_dat2$site=="tool",]
+porecoor1 = 
+  tool %>% 
+  filter(pore_coor == 1) %>% 
+  group_by(sample) 
+
+porecoor1 %>% 
+  slice(7:12)
+
+
+before <- subset(tool, trmt == "before", freq, drop = TRUE)
+after <- subset(tool, trmt == "after", freq, drop = TRUE)
+
+tool %>% 
+  dplyr::mutate(diff = round((after - before)))
+
+tool %>% 
+  dplyr::mutate(diff = round((1+C-(0.5*O)-S-(0.5*(N+P+H)))/(C-(0.5*O)-S-N-P),4),
+              NOSC =  round(4-(((4*C)+H-(3*N)-(2*O)-(2*S))/C),4),
+              HC = round(H/C,2),
+              OC = round(O/C,2)) %>% 
+
+
+  dplyr::mutate(reps = n()) %>%
+  
 
 #low = coornum_dat[coornum_dat$water=="low",]
 #high = coornum_dat[coornum_dat$water=="high",]
