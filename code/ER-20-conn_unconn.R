@@ -95,7 +95,7 @@ p + geom_segment(data = tool, aes(x = 1, y = conn_water_perc,
 
 #attempt 3
 
-ggplot()+geom_point(data = tool, aes(x=factor(trmt, level_order), y=conn_water_perc, color = sample))+ geom_path()
+ggplot(data = tool, aes(x=factor(trmt, level_order), y=conn_water_perc, color = sample))+geom_point()+ geom_path()
 
 
 #attempt 4
