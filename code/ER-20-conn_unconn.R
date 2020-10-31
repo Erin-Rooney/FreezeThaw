@@ -56,61 +56,72 @@ theme_er <- function() {  # this for all the elements common across plots
 }
 # ggplots ---------------------------------------------------------------------
 
+#line segment plots
 
-
-# attempt 1
-
-ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt)) + geom_segment(
-  mapping = NULL,
-  data = NULL,
-  stat = "identity",
-  position = "identity",
-  arrow = NULL,
-  arrow.fill = NULL,
-  lineend = "butt",
-  linejoin = "round",
-  na.rm = FALSE,
-  show.legend = NA,
-  inherit.aes = TRUE
-) +
+b1 = tool %>% 
+  mutate (trmt = factor(trmt, levels = c("before", "after"))) %>% 
+  ggplot(aes(x = trmt, y = conn_water_perc, color = sample)) + geom_point() +
+                            geom_path(aes(group = sample))+
   labs (title = "Connected Water-Filled Pores",
         # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
         tag = "A",
         x = expression (bold (" ")),
         y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) +
   theme_er() +
-  scale_fill_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
+  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
   annotate("text", x = 1.5, y = 0.083, label = "p value < 0.05") +
-  annotate("text", x = 1, y = 0.055, label = "A") +
+  annotate("text", x = 1, y = 0.076, label = "A") +
   annotate("text", x = 2, y = 0.037, label = "B") 
+  
+b2 = tool %>% 
+  mutate (trmt = factor(trmt, levels = c("before", "after"))) %>% 
+  ggplot(aes(x = trmt, y = conn_pore_perc, color = sample)) + geom_point() +
+  geom_path(aes(group = sample))+
+  labs (title = "Connected Air-Filled Pores",
+        # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "B",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) +
+  theme_er() +
+  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) 
+  #annotate("text", x = 1.5, y = 0.083, label = "p value < 0.05") +
+  #annotate("text", x = 1, y = 0.076, label = "A") +
+  #annotate("text", x = 2, y = 0.037, label = "B") 
 
-#attempt 2
+b3 = tool %>% 
+  mutate (trmt = factor(trmt, levels = c("before", "after"))) %>% 
+  ggplot(aes(x = trmt, y = unconn_water_perc, color = sample)) + geom_point() +
+  geom_path(aes(group = sample))+
+  labs (title = "Unconnected Water-Filled Pores",
+        # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "C",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.02)) +
+  theme_er() +
+  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) 
+#annotate("text", x = 1.5, y = 0.083, label = "p value < 0.05") +
+#annotate("text", x = 1, y = 0.076, label = "A") +
+#annotate("text", x = 2, y = 0.037, label = "B") 
+
+b4 = tool %>% 
+  mutate (trmt = factor(trmt, levels = c("before", "after"))) %>% 
+  ggplot(aes(x = trmt, y = unconn_pore_perc, color = sample)) + geom_point() +
+  geom_path(aes(group = sample))+
+  labs (title = "Unconnected Air-Filled Pores",
+        # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        tag = "D",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.02)) +
+  theme_er() +
+  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) 
+#annotate("text", x = 1.5, y = 0.083, label = "p value < 0.05") +
+#annotate("text", x = 1, y = 0.076, label = "A") +
+#annotate("text", x = 2, y = 0.037, label = "B") 
 
 
-p <- ggplot(tool, aes(x=factor(trmt, level_order), y=conn_water_perc, color = sample)) + geom_point()
-
-p + geom_segment(data = tool, aes(x = 1, y = conn_water_perc,
-                                  xend = 2, yend = conn_water_perc,
-                                  color = sample), size = 5, alpha = 0.3)
-
-#attempt 3
-
-ggplot(data = tool, aes(x=factor(trmt, level_order), y=conn_water_perc, color = sample))+geom_point()+ geom_path()
-
-
-#attempt 4
-
-tool %>% 
-  ggplot() + geom_segment(data = tool, aes(x = 1, y = conn_water_perc,
-                             xend = 2, yend = conn_water_perc,
-                             color = sample), size = 5, alpha = 0.3)
-
-
-
-
-
-
-
+library(patchwork)
+b1+b2+b3+b4+ #combines the two plots
+  plot_layout(guides = "collect") # sets a common legend
 
 
 b1 = ggplot(tool, aes(x=factor(trmt,level_order), y=conn_water_perc, fill=trmt)) + geom_boxplot() +
