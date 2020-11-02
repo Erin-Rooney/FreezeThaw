@@ -6,7 +6,8 @@ source("code/0-packages.R")
 
 # Load Data ---------------------------------------------------------------------
 
-breadthdata_csv = read.csv("processed/ftc_porethroatdist_july312020_2.csv") 
+# breadthdata_csv = read.csv("processed/ftc_porethroatdist_july312020_2.csv") 
+breadthdata_csv = read.csv("processed/5bin_breadth_nov22020.csv")
 plot(breadthdata_csv)
 
 # Fix Data and Set Levels ---------------------------------------------------------------------
@@ -37,8 +38,7 @@ plot(breadthdata_csv)
 #tool = breadthdata_csv[breadthdata_csv$site=="tool",]
 
 ## KP: dplyr/tidyverse suggestion
-tool = breadthdata_csv %>% 
-  filter(site=="tool")
+
 
 ## KP: not sure why you're creating separate files for breadth_freq, trmt, bin.
 ## not needed, and it could cause confusion because you now have a file named `trmt`, 
@@ -152,8 +152,8 @@ theme_er <- function() {  # this for all the elements common across plots
 # older bin ggplots -----------------------------------------------------------------
 
 
-p_bin <- ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
-  geom_boxplot()
+# p_bin <- ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
+#   geom_boxplot()
   #geom_density(adjust=0.5)+
   
   # labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
@@ -170,26 +170,26 @@ p_bin <- ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
   
 # KP: if you don't need to recall the figures later, 
 # you could even just plot the figures directly without saving them to an object.  
-ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
-    geom_boxplot()+
-    guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
+# ggplot(tool, aes(x = bin, y=breadth_freq, color = trmt))+
+#     geom_boxplot()+
+#     guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
 
 ###
 
-p = ggplot(rep_1, aes(x = breadth_um, y=breadth_dist, color = trmt ))+
-  geom_line(size = 1)+
-  #geom_density(adjust=0.5)+
-  
-  labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
-        subtitle = "40-50 cm, 16% moisture",
-        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        #tag = "Figure 1",
-        x = expression (bold ("Pore Throat Diameter, um")),
-        y = expression (bold ("Distribution, %")))
-
-p + theme_er() + 
-  scale_color_manual(values = soil_palette("redox",2)) +   
-  guides(fill = guide_legend(reverse = TRUE, title = NULL))
+# p = ggplot(rep_1, aes(x = breadth_um, y=breadth_dist, color = trmt ))+
+#   geom_line(size = 1)+
+#   #geom_density(adjust=0.5)+
+#   
+#   labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+#         subtitle = "40-50 cm, 16% moisture",
+#         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+#         #tag = "Figure 1",
+#         x = expression (bold ("Pore Throat Diameter, um")),
+#         y = expression (bold ("Distribution, %")))
+# 
+# p + theme_er() + 
+#   scale_color_manual(values = soil_palette("redox",2)) +   
+#   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 ## KP: suggestion to streamline these multiple plots
 ## instead of creating new files rep1, rep2, etc. just to plot the graphs,
@@ -197,46 +197,70 @@ p + theme_er() +
 ## example:
 
 # g1-g5 combo dist ggplots -----------------------------------------------------------------
-breadthdata_csv %>% 
-  filter(sample=="40_50_16") %>% #created the subset and jumped directly into ggplot
-  ggplot(aes(x = breadth_um, y=breadth_dist, color = trmt))+
-  geom_line(size = 1)+
-  labs (#title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
-    subtitle = "40-50 cm, 16% moisture",
-    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-    #tag = "Figure 1",
-    x = expression (bold ("Pore Throat Diameter, um")),
-    y = expression (bold ("Distribution, %")))+
-  scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
-  guides(fill = guide_legend(reverse = TRUE, title = NULL))+
-  theme_er1()
+# breadthdata_csv %>% 
+#   filter(sample=="40_50_16") %>% #created the subset and jumped directly into ggplot
+#   ggplot(aes(x = breadth_um, y=breadth_dist, color = trmt))+
+#   geom_line(size = 1)+
+#   labs (#title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+#     subtitle = "40-50 cm, 16% moisture",
+#     #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+#     #tag = "Figure 1",
+#     x = expression (bold ("Pore Throat Diameter, um")),
+#     y = expression (bold ("Distribution, %")))+
+#   scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
+#   guides(fill = guide_legend(reverse = TRUE, title = NULL))+
+#   theme_er1()
 
 levels(as.factor(breadthdata_csv$sample))
 str(breadthdata_csv)
 
-breadthdata_csv = 
-  breadthdata_csv %>% 
-  mutate(sample = recode(sample, "40_50_16" = "Aggregate-1"))
+# breadthdata_csv = 
+#   breadthdata_csv %>% 
+#   mutate(sample = recode(sample, "40_50_16" = "Aggregate-1"))
+# 
+# breadthdata_csv = 
+#   breadthdata_csv %>% 
+#   mutate(sample = recode(sample, "40_50_28" = "Aggregate-2"))
+# 
+# breadthdata_csv = 
+#   breadthdata_csv %>% 
+#   mutate(sample = recode(sample, "28_38_12" = "Aggregate-3"))
+# 
+# breadthdata_csv = 
+#   breadthdata_csv %>% 
+#   mutate(sample = recode(sample, "28_38_28" = "Aggregate-4"))
+# 
+# breadthdata_csv = 
+#   breadthdata_csv %>% 
+#   mutate(sample = recode(sample, "41_50_16" = "Aggregate-5"))
+# 
+# breadthdata_csv = 
+#   breadthdata_csv %>% 
+#   mutate(sample = recode(sample, "41_50_28" = "Aggregate-6"))
 
 breadthdata_csv = 
   breadthdata_csv %>% 
-  mutate(sample = recode(sample, "40_50_28" = "Aggregate-2"))
+  mutate(sample = recode(sample, "40-50-16" = "Aggregate-1"))
 
 breadthdata_csv = 
   breadthdata_csv %>% 
-  mutate(sample = recode(sample, "28_38_12" = "Aggregate-3"))
+  mutate(sample = recode(sample, "40-50-28" = "Aggregate-2"))
 
 breadthdata_csv = 
   breadthdata_csv %>% 
-  mutate(sample = recode(sample, "28_38_28" = "Aggregate-4"))
+  mutate(sample = recode(sample, "28-38-12" = "Aggregate-3"))
 
 breadthdata_csv = 
   breadthdata_csv %>% 
-  mutate(sample = recode(sample, "41_50_16" = "Aggregate-5"))
+  mutate(sample = recode(sample, "28-38-28" = "Aggregate-4"))
 
 breadthdata_csv = 
   breadthdata_csv %>% 
-  mutate(sample = recode(sample, "41_50_28" = "Aggregate-6"))
+  mutate(sample = recode(sample, "41-50-16" = "Aggregate-5"))
+
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(sample = recode(sample, "41-50-28" = "Aggregate-6"))
          
 breadthdata_csv = 
   breadthdata_csv %>% 
@@ -246,7 +270,8 @@ breadthdata_csv =
   breadthdata_csv %>% 
   mutate(trmt = factor(trmt, levels = c("before", "after")))
 
-  
+tool = breadthdata_csv %>% 
+  filter(site=="tool")
 
 # rep1 ggplot
 # g1 = breadthdata_csv %>% 
@@ -345,7 +370,7 @@ breadthdata_csv =
 
 #trying to create a two panel figure featuring two rows for before/after.
 
-g = ggplot(tool, aes(x = breadth_um, y=breadth_dist, color = trmt))+
+g = ggplot(tool, aes(x = breadth_um, y=freq, color = trmt))+
   geom_line(size = 1)+
   #geom_density(adjust=0.5)+
   
