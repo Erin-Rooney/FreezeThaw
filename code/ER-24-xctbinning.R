@@ -76,4 +76,4 @@ tool = breadthdata_csv %>%
 # Binning-----------------------------------------------------------------------
 
 tool %>% 
-  
+  dplyr::mutate(0.005 = if_else(breadth<0.005, paste0("0.005", 0.005)))
