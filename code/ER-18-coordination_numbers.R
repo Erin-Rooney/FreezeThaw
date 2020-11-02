@@ -431,6 +431,7 @@ theme_er <- function() {  # this for all the elements common across plots
 }
 #ggplots-----------------------------------------------------------------------
 
+#freq, not diff plot 
 
 ggplot(tool, aes(x = pore_coor, y = freq, fill = trmt)) +
   geom_boxplot() + 
