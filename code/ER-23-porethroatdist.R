@@ -49,10 +49,7 @@ plot(breadthdata_csv)
 # bin = breadthdata_csv$"bin"
 # sample = breadthdata_csv$"sample"
 
-## KP:  I see below (ggplots) why you created separate files for `before` and `after`,
-## but since facet_grid is working now, I'd use that instead of creating separate plots and then combining.
-before = breadthdata_csv[breadthdata_csv$trmt=="before",]
-after = breadthdata_csv[breadthdata_csv$trmt=="after",]
+
 
 # KP tips ---------------------------------------------------------------------
 ## KP: the above sectioning attempt does the job, but I suggest including section headings in there,
@@ -492,7 +489,12 @@ g + theme_er() +
 # p1-p2 combo ggplots -----------------------------------------------------------------
 
 
-p1 = ggplot(before, aes(x = breadth_um, y=breadth_dist, color = sample))+
+## KP:  I see below (ggplots) why you created separate files for `before` and `after`,
+## but since facet_grid is working now, I'd use that instead of creating separate plots and then combining.
+before = breadthdata_csv[breadthdata_csv$trmt=="before",]
+after = breadthdata_csv[breadthdata_csv$trmt=="after",]
+
+p1 = ggplot(before, aes(x = breadth_um, y=freq, color = sample))+
   geom_line(size = 1)+
   #geom_density(adjust=0.5)+
   
@@ -509,7 +511,7 @@ p1 + theme_er() +
 
 ###
 
-p2 = ggplot(after, aes(x = breadth_um, y=breadth_dist, color = sample))+
+p2 = ggplot(after, aes(x = breadth_um, y=freq, color = sample))+
   geom_line(size = 1)+
   #geom_density(adjust=0.5)+
   
@@ -537,7 +539,7 @@ p1+p2 + #combines the two plots
 
 #trying to create a two panel figure featuring two rows for before/after.
 
-p = ggplot(tool, aes(x = breadth_um, y=breadth_dist, color = sample))+
+p = ggplot(tool, aes(x = breadth_um, y=freq, color = sample))+
   geom_line(size = 1)+
   #geom_density(adjust=0.5)+
   
@@ -569,7 +571,7 @@ after = tool %>%
   filter(trmt=="after")
 
 
-ggplot (tool, aes(x = breadth_um, y = breadth_dist, color = trmt)) +
+ggplot (tool, aes(x = breadth_um, y = freq, color = trmt)) +
   geom_point() + 
   geom_smooth(span = 0.3) +
   theme_er() +
