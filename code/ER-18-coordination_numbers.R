@@ -169,7 +169,7 @@ allcombo %>%
                      breaks = seq(0,16,4)) +
   theme_er() +
  # facet_wrap(~ sample) +
-  scale_color_manual(values = pnw_palette("Sunset2", 6)) +
+  scale_color_manual(values = pnw_palette("Bay", 6)) +
   labs (title = "Pore Coordination Number Frequency",
         #caption = "Caption",
         #tag = "A",
@@ -182,14 +182,14 @@ allcombo %>%
 allcombo %>%
   mutate(pore_coor = as.numeric(pore_coor)) %>% 
   ggplot(aes(x = pore_coor, y = diff, color = sample)) +
-  geom_boxplot() +
-  geom_point(size = 4) + 
+  #geom_boxplot() +
+  geom_point(size = 3) + 
   geom_path(aes(group = sample), size = 1)+ 
   scale_x_continuous(limits = c(0,16), 
                      breaks = seq(0,16,4)) +
   theme_er() +
-  # facet_wrap(~ sample) +
-  scale_color_manual(values = pnw_palette("Sunset2", 6)) +
+  facet_wrap(~ sample) +
+  scale_color_manual(values = pnw_palette("Bay", 6)) +
   labs (title = "Pore Coordination Number Frequency",
         #caption = "Caption",
         #tag = "A",
