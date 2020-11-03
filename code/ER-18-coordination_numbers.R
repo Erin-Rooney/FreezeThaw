@@ -29,33 +29,17 @@ mutate(pore_coor = factor(pore_coor, levels = c("1", "2", "3", "4", "5", "6", "7
 levels(as.factor(coornum_dat2$sample))
 str(coornum_dat2)
 
-coornum_dat2 = 
+coornum_dat3 = 
   coornum_dat2 %>% 
-  mutate(sample = recode(sample, "40_50_16" = "Aggregate-1"))
-
-coornum_dat2 = 
-  coornum_dat2 %>% 
-  mutate(sample = recode(sample, "40_50_28" = "Aggregate-2"))
-
-coornum_dat2 = 
-  coornum_dat2 %>% 
-  mutate(sample = recode(sample, "28_38_12" = "Aggregate-3"))
-
-coornum_dat2 = 
-  coornum_dat2 %>% 
-  mutate(sample = recode(sample, "28_38_28" = "Aggregate-4"))
-
-coornum_dat2 = 
-  coornum_dat2 %>% 
-  mutate(sample = recode(sample, "41_50_16" = "Aggregate-5"))
-
-coornum_dat2 = 
-  coornum_dat2 %>% 
-  mutate(sample = recode(sample, "41_50_28" = "Aggregate-6"))
-
-coornum_dat2 = 
-  coornum_dat2 %>% 
-  mutate(sample = factor(sample, levels = c("Aggregate-1", "Aggregate-2", "Aggregate-3", "Aggregate-4", "Aggregate-5", "Aggregate-6")))
+  #recode sample names
+  mutate(sample = recode(sample, "40_50_16" = "Aggregate-1", 
+                         "40_50_28" = "Aggregate-2",
+                         "28_38_12" = "Aggregate-3",
+                         "28_38_28" = "Aggregate-4",
+                         "41_50_16" = "Aggregate-5",
+                         "41_50_28" = "Aggregate-6")) 
+  #set sample levels
+  #mutate(sample = factor(sample, levels = c("Aggregate-1", "Aggregate-2", "Aggregate-3", "Aggregate-4", "Aggregate-5", "Aggregate-6")))
 
 
 
@@ -64,287 +48,16 @@ coornum_dat2 =
 ## so first convert from char to factor, and then look at the levels
 
 tool = 
-  coornum_dat2[coornum_dat2$site=="tool",]
+  coornum_dat3 %>% 
+  filter(site=="tool")
 
 #Isolate by poor coordination number and calculate diff between before and after frequencies by aggregate
 
-#1
-
-porecoor1 = 
+allcombo =
   tool %>% 
-  filter(pore_coor == 1) %>% 
-  group_by(sample)
-
-before = porecoor1 %>% 
-  filter(trmt == "before")
-
-after = porecoor1 %>% 
-  filter(trmt == "after")
-
-combo1 = before %>% 
-  left_join(after, by = "sample") %>% 
-  dplyr::mutate(diff = ((freq.y - freq.x)))
-
-#2
-porecoor2 = 
-  tool %>% 
-  filter(pore_coor == 2) %>% 
-  group_by(sample)
-
-before = porecoor2 %>% 
-  filter(trmt == "before")
-
-after = porecoor2 %>% 
-  filter(trmt == "after")
-
-combo2 = before %>% 
-  left_join(after, by = "sample") %>% 
-  dplyr::mutate(diff = ((freq.y - freq.x)))
-
-#3
-porecoor3 = 
-  tool %>% 
-  filter(pore_coor == 3) %>% 
-  group_by(sample)
-
-before = porecoor3 %>% 
-  filter(trmt == "before")
-
-after = porecoor3 %>% 
-  filter(trmt == "after")
-
-combo3 = before %>% 
-  left_join(after, by = "sample") %>% 
-  dplyr::mutate(diff = ((freq.y - freq.x)))
-
-#4
-porecoor4 = 
-  tool %>% 
-  filter(pore_coor == 4) %>% 
-  group_by(sample)
-
-before = porecoor4 %>% 
-  filter(trmt == "before")
-
-after = porecoor4 %>% 
-  filter(trmt == "after")
-
-combo4 = before %>% 
-  left_join(after, by = "sample") %>% 
-  dplyr::mutate(diff = ((freq.y - freq.x)))
-  
-#5
-porecoor5 = 
-  tool %>% 
-  filter(pore_coor == 5) %>% 
-  group_by(sample)
-
-before = porecoor5 %>% 
-  filter(trmt == "before")
-
-after = porecoor5 %>% 
-  filter(trmt == "after")
-
-combo5 = before %>% 
-  left_join(after, by = "sample") %>% 
-  dplyr::mutate(diff = ((freq.y - freq.x)))
-
-#6
-porecoor6 = 
-  tool %>% 
-  filter(pore_coor == 6) %>% 
-  group_by(sample)
-
-before = porecoor6 %>% 
-  filter(trmt == "before")
-
-after = porecoor6 %>% 
-  filter(trmt == "after")
-
-combo6 = before %>% 
-  left_join(after, by = "sample") %>% 
-  dplyr::mutate(diff = ((freq.y - freq.x)))
-
-#7
-porecoor7 = 
-  tool %>% 
-  filter(pore_coor == 7) %>% 
-  group_by(sample)
-
-before = porecoor7 %>% 
-  filter(trmt == "before")
-
-after = porecoor7 %>% 
-  filter(trmt == "after")
-
-combo7 = before %>% 
-  left_join(after, by = "sample") %>% 
-  dplyr::mutate(diff = ((freq.y - freq.x)))
-
-#8
-porecoor8 = 
-  tool %>% 
-  filter(pore_coor == 8) %>% 
-  group_by(sample)
-
-before = porecoor8 %>% 
-  filter(trmt == "before")
-
-after = porecoor8 %>% 
-  filter(trmt == "after")
-
-combo8 = before %>% 
-  left_join(after, by = "sample") %>% 
-  dplyr::mutate(diff = ((freq.y - freq.x)))
-
-#9
-porecoor9 = 
-  tool %>% 
-  filter(pore_coor == 9) %>% 
-  group_by(sample)
-
-before = porecoor9 %>% 
-  filter(trmt == "before")
-
-after = porecoor9 %>% 
-  filter(trmt == "after")
-
-combo9 = before %>% 
-  left_join(after, by = "sample") %>% 
-  dplyr::mutate(diff = ((freq.y - freq.x)))
-
-#10
-porecoor10 = 
-  tool %>% 
-  filter(pore_coor == 10) %>% 
-  group_by(sample)
-
-before = porecoor10 %>% 
-  filter(trmt == "before")
-
-after = porecoor10 %>% 
-  filter(trmt == "after")
-
-combo10 = before %>% 
-  left_join(after, by = "sample") %>% 
-  dplyr::mutate(diff = ((freq.y - freq.x)))
-
-#11
-
-porecoor11 = 
-  tool %>% 
-  filter(pore_coor == 11) %>% 
-  group_by(sample)
-
-before = porecoor11 %>% 
-  filter(trmt == "before")
-
-after = porecoor11 %>% 
-  filter(trmt == "after")
-
-combo11 = before %>% 
-  left_join(after, by = "sample") %>% 
-  dplyr::mutate(diff = ((freq.y - freq.x)))
-
-#12
-porecoor12 = 
-  tool %>% 
-  filter(pore_coor == 12) %>% 
-  group_by(sample)
-
-before = porecoor12 %>% 
-  filter(trmt == "before")
-
-after = porecoor12 %>% 
-  filter(trmt == "after")
-
-combo12 = before %>% 
-  left_join(after, by = "sample") %>% 
-  dplyr::mutate(diff = ((freq.y - freq.x)))
-
-#13
-porecoor13 = 
-  tool %>% 
-  filter(pore_coor == 13) %>% 
-  group_by(sample)
-
-before = porecoor13 %>% 
-  filter(trmt == "before")
-
-after = porecoor13 %>% 
-  filter(trmt == "after")
-
-combo13 = before %>% 
-  left_join(after, by = "sample") %>% 
-  dplyr::mutate(diff = ((freq.y - freq.x)))
-
-#14
-porecoor14 = 
-  tool %>% 
-  filter(pore_coor == 14) %>% 
-  group_by(sample)
-
-before = porecoor14 %>% 
-  filter(trmt == "before")
-
-after = porecoor14 %>% 
-  filter(trmt == "after")
-
-combo14 = before %>% 
-  left_join(after, by = "sample") %>% 
-  dplyr::mutate(diff = ((freq.y - freq.x)))
-
-#15
-porecoor15 = 
-  tool %>% 
-  filter(pore_coor == 15) %>% 
-  group_by(sample)
-
-before = porecoor15 %>% 
-  filter(trmt == "before")
-
-after = porecoor15 %>% 
-  filter(trmt == "after")
-
-combo15 = before %>% 
-  left_join(after, by = "sample") %>% 
-  dplyr::mutate(diff = ((freq.y - freq.x)))
-
-#16
-porecoor16 = 
-  tool %>% 
-  filter(pore_coor == 16) %>% 
-  group_by(sample)
-
-before = porecoor16 %>% 
-  filter(trmt == "before")
-
-after = porecoor16 %>% 
-  filter(trmt == "after")
-
-combo16 = before %>% 
-  left_join(after, by = "sample") %>% 
-  dplyr::mutate(diff = ((freq.y - freq.x)))
-
-#rejoin
-
-allcombo = 
-  combo1 %>% 
-  bind_rows(combo2) %>% 
-  bind_rows(combo3) %>% 
-  bind_rows(combo4) %>% 
-  bind_rows(combo5) %>% 
-  bind_rows(combo6) %>% 
-  bind_rows(combo7) %>%   
-  bind_rows(combo8) %>% 
-  bind_rows(combo9) %>% 
-  bind_rows(combo10) %>% 
-  bind_rows(combo11) %>% 
-  bind_rows(combo12) %>% 
-  bind_rows(combo13) %>% 
-  bind_rows(combo14) %>% 
-  bind_rows(combo15) %>% 
-  bind_rows(combo16) 
+  dplyr::select(-count) %>% 
+  spread(trmt, freq) %>% 
+  mutate(diff = round(after - before, 5))
 
 #low = coornum_dat[coornum_dat$water=="low",]
 #high = coornum_dat[coornum_dat$water=="high",]
@@ -447,13 +160,16 @@ ggplot(tool, aes(x = pore_coor, y = freq, fill = trmt)) +
 
 #all combo plot
 
-allcombo %>% 
-  ggplot(aes(x = pore_coor.x, y = diff, color = sample)) +
-  geom_point() + 
-  geom_path(aes(group = sample))+ 
-  #scale_y_continuous(labels = scales::percent) +
+allcombo %>%
+  mutate(pore_coor = as.numeric(pore_coor)) %>% 
+  ggplot(aes(x = pore_coor, y = diff, color = sample)) +
+  geom_point(size = 4) + 
+  geom_path(aes(group = sample), size = 1)+ 
+  scale_x_continuous(limits = c(0,16), 
+                     breaks = seq(0,16,4)) +
   theme_er() +
-  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
+ # facet_wrap(~ sample) +
+  scale_color_manual(values = pnw_palette("Sunset2", 6)) +
   labs (title = "Pore Coordination Number Frequency",
         #caption = "Caption",
         #tag = "A",
@@ -461,8 +177,29 @@ allcombo %>%
         y = expression (bold ("difference in frequency"))) +
   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
+
+# boxplot + point + path 
+allcombo %>%
+  mutate(pore_coor = as.numeric(pore_coor)) %>% 
+  ggplot(aes(x = pore_coor, y = diff, color = sample)) +
+  geom_boxplot() +
+  geom_point(size = 4) + 
+  geom_path(aes(group = sample), size = 1)+ 
+  scale_x_continuous(limits = c(0,16), 
+                     breaks = seq(0,16,4)) +
+  theme_er() +
+  # facet_wrap(~ sample) +
+  scale_color_manual(values = pnw_palette("Sunset2", 6)) +
+  labs (title = "Pore Coordination Number Frequency",
+        #caption = "Caption",
+        #tag = "A",
+        x = expression (bold ("pore coordination number")),
+        y = expression (bold ("difference in frequency"))) +
+  guides(fill = guide_legend(reverse = TRUE, title = NULL))
+
+
 p = allcombo %>% 
-  ggplot(aes(x = pore_coor.x, y = diff, fill = site.x)) +
+  ggplot(aes(x = pore_coor, y = diff, fill = site)) +
   geom_boxplot() + 
   #geom_path(aes(group = sample))+ 
   #scale_y_continuous(labels = scales::percent) +
