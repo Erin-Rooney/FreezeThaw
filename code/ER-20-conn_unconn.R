@@ -93,7 +93,8 @@ ggplot(data = tool_long, aes(x = trmt, y = volume, color = sample, fill = sample
          # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
          # tag = "A",
          x = expression (bold (" ")),
-         y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) +
+         y = expression (bold ("Volume, %"))) +  
+  scale_y_continuous(labels = scales::percent) +
    theme_er() +
    scale_color_manual(values = pnw_palette("Bay", 6)) +
   scale_fill_manual(values = pnw_palette("Bay", 6)) 
