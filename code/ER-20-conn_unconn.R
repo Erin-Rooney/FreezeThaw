@@ -83,24 +83,24 @@ tool_long = tool %>%
                          "41_50_16" = "Aggregate-5",
                          "41_50_28" = "Aggregate-6"))
 
-ggplot(data = tool_long, aes(x = trmt, y = volume, color = sample, fill = sample)) + 
-   geom_boxplot(aes(group = trmt), fill = "gray50", alpha = 0.2, width = 0.2) + 
-   geom_path(aes(group = sample), size = 0.7)+
-   geom_point(size = 4, shape = 21, stroke = 1, color = "black") + 
+ggplot(aes(x = trmt, y = volume, color = sample, fill = sample)) + 
+  geom_boxplot(aes(group = trmt), fill = "gray50", alpha = 0.2, width = 0.2) + 
+  geom_path(aes(group = sample), size = 0.7)+
+  geom_point(size = 4, shape = 21, stroke = 1, color = "black") + 
   #geom_text(data = gglabel, aes(x = trmt, y = volume, label = label), color = "black")+
   facet_grid(connected ~ filltype, scales = "free_y")+
-   labs (title = "Pore Volumes",
-         # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-         # tag = "A",
-         x = expression (bold (" ")),
-         y = expression (bold ("Volume, %"))) +  
+  labs (title = "Pore Volumes",
+        # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        # tag = "A",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) +  
   scale_y_continuous(labels = scales::percent) +
-   theme_er() +
-   scale_color_manual(values = pnw_palette("Bay", 6)) +
+  theme_er() +
+  scale_color_manual(values = pnw_palette("Bay", 6)) +
   scale_fill_manual(values = pnw_palette("Bay", 6)) 
-   #annotate("text", x = 1.5, y = 0.083, label = "p value < 0.05") +
-   #annotate("text", x = 1, y = 0.076, label = "A") +
-   #annotate("text", x = 2, y = 0.037, label = "B"))
+#annotate("text", x = 1.5, y = 0.083, label = "p value < 0.05") +
+#annotate("text", x = 1, y = 0.076, label = "A") +
+#annotate("text", x = 2, y = 0.037, label = "B"))
 
 
 
