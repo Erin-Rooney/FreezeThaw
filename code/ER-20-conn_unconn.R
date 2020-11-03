@@ -58,6 +58,16 @@ theme_er <- function() {  # this for all the elements common across plots
 
 #line segment plots
 
+library(tibble)
+gglabel = tribble(
+  ~trmt, ~volume, ~connected, ~filltype, ~label,
+  1.5, 0.08, 'connected', 'water', "p < 0.05"
+  
+)
+
+
+  
+
 tool_long = tool %>% 
   mutate (trmt = factor(trmt, levels = c("before", "after"))) %>%
    reshape2::melt(id = c('site', 'sample', 'trmt', 'water'),
@@ -65,32 +75,33 @@ tool_long = tool %>%
   mutate(connected = case_when(grepl("unconn", Type)~"unconnected", 
                                grepl("conn", Type)~"connected"),
          filltype = case_when(grepl("water", Type)~"water", 
-                               grepl("pore", Type)~"air")) 
+                              grepl("pore", Type)~"air")) %>% 
+  mutate(sample = recode(sample, "40_50_16" = "Aggregate-1", 
+                         "40_50_28" = "Aggregate-2",
+                         "28_38_12" = "Aggregate-3",
+                         "28_38_28" = "Aggregate-4",
+                         "41_50_16" = "Aggregate-5",
+                         "41_50_28" = "Aggregate-6"))
 
-ggplot(data = tool_long, aes(x = trmt, y = volume, color = sample)) + 
+ggplot(data = tool_long, aes(x = trmt, y = volume, color = sample, fill = sample)) + 
    geom_boxplot(aes(group = trmt), fill = "gray50", alpha = 0.2, width = 0.2) + 
    geom_path(aes(group = sample), size = 0.7)+
    geom_point(size = 4, shape = 21, stroke = 1, color = "black") + 
-  geom_text(data = gglabel, aes(x = trmt, y = volume, label = label), color = "black")+
+  #geom_text(data = gglabel, aes(x = trmt, y = volume, label = label), color = "black")+
   facet_grid(connected ~ filltype, scales = "free_y")+
-   labs (title = "Connected Water-Filled Pores",
+   labs (title = "Pore Volumes",
          # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
          # tag = "A",
          x = expression (bold (" ")),
          y = expression (bold ("Volume, %"))) +  scale_y_continuous(labels = scales::percent, limits = c(0, 0.09)) +
-   theme_er() 
-   #scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
+   theme_er() +
+   scale_color_manual(values = pnw_palette("Bay", 6)) +
+  scale_fill_manual(values = pnw_palette("Bay", 6)) 
    #annotate("text", x = 1.5, y = 0.083, label = "p value < 0.05") +
    #annotate("text", x = 1, y = 0.076, label = "A") +
    #annotate("text", x = 2, y = 0.037, label = "B"))
 
-library(tibble)
-gglabel = tribble(
-  ~trmt, ~volume, ~connected, ~filltype, ~label,
-  1.5, 0.08, 'connected', 'water', "p < 0.05"
-  
-)
-  
+
 
 
 
