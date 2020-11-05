@@ -49,7 +49,8 @@ coornum_dat3 =
 
 tool = 
   coornum_dat3 %>% 
-  filter(site=="tool")
+  filter(site=="tool")%>% 
+  mutate(trmt = factor(trmt, levels = c("before", "after")))
 
 #Isolate by poor coordination number and calculate diff between before and after frequencies by aggregate
 
@@ -122,8 +123,8 @@ library(PNWColors)
 theme_er <- function() {  # this for all the elements common across plots
   theme_bw() %+replace%
     theme(legend.position = "top",
-          #legend.key=element_blank(),
-          #legend.title = element_blank(),
+          legend.key=element_blank(),
+          legend.title = element_blank(),
           legend.text = element_text(size = 12),
           legend.key.size = unit(1.5, 'lines'),
           panel.border = element_rect(color="black",size=1, fill = NA),
@@ -175,8 +176,26 @@ allcombo %>%
         #tag = "A",
         x = expression (bold ("pore coordination number")),
         y = expression (bold ("difference in frequency"))) +
-  guides(fill = guide_legend(reverse = TRUE, title = NULL))
+  guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
 
+#before/after facet wrap 
+
+tool %>%
+  mutate(pore_coor = as.numeric(pore_coor)) %>% 
+  ggplot(aes(x = pore_coor, y = freq, color = trmt)) +
+  geom_path(aes(group = trmt), size = 1)+ 
+  #geom_point(size = 3.5, alpha = 0.5) + 
+  scale_x_continuous(limits = c(0,16), 
+                     breaks = seq(0,16,4)) +
+  theme_er() +
+  facet_wrap(~ sample) +
+  scale_color_manual(values = c("#b0986c", "#72e1e1"))+
+  labs (#title = "Pore Coordination Number Frequency",
+        #caption = "Caption",
+        #tag = "A",
+        x = expression (bold ("pore coordination number")),
+        y = expression (bold ("difference in frequency"))) +
+  guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
 
 # boxplot + point + path 
 allcombo %>%
