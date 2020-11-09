@@ -160,9 +160,9 @@ theme_er <- function() {  # this for all the elements common across plots
   #x = expression (bold ("Pore Throat Diameter, um")),
   #y = expression (bold ("Distribution, %")))
   
-  p_bin + #scale_fill_manual(values=c("Black", "White")) +
-  #annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
-  guides(fill = guide_legend(reverse = TRUE, title = NULL))
+  # p_bin + #scale_fill_manual(values=c("Black", "White")) +
+  # #annotate("text", x = 2.25, y = 0.070, label = "P value < 0.5") +
+  # guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
   
 # KP: if you don't need to recall the figures later, 
@@ -269,6 +269,7 @@ breadthdata_csv =
 
 tool = breadthdata_csv %>% 
   filter(site=="tool")
+
 
 # rep1 ggplot
 # g1 = breadthdata_csv %>% 
@@ -383,6 +384,7 @@ g + theme_er() +
   #scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
   #guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
   facet_wrap(sample~.)
+
 
 
 
@@ -555,7 +557,27 @@ p + theme_er() +
   guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
   facet_grid(trmt~.)
 
-#Smooth line before/after pore throat dist----------------------------------
+
+str(tool)
+
+tool %>%
+  filter(sample == "Aggregate-1", "Aggregate-4", "Aggregate-5") %>% 
+  ggplot(aes(x = breadth_um, y=freq, color = sample))+
+  geom_line(size = 1)+
+  #geom_density(adjust=0.5)+
+  
+  labs (#title = "Pore Throat Size Distribution",
+    #subtitle = "After Freeze/Thaw",
+    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    #tag = "Figure 6",
+    x = expression (bold ("Pore Throat Diameter, um")),
+    y = expression (bold ("Distribution, %"))) + 
+  theme_er() + 
+  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
+  guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
+  facet_grid(trmt~.)
+
+ #Smooth line before/after pore throat dist----------------------------------
 
 
 levels(as.factor(breadthdata_csv$trmt))
