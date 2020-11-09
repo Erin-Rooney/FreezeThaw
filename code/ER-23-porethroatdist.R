@@ -561,7 +561,7 @@ p + theme_er() +
 str(tool)
 
 tool %>%
-  filter(sample %in% "Aggregate-1" & "Aggregate-4" & "Aggregate-5") %>% 
+  filter(sample == c("Aggregate-1", "Aggregate-4", "Aggregate-5")) %>% 
   ggplot(aes(x = breadth_um, y=freq, color = sample))+
   geom_line(size = 1)+
   #geom_density(adjust=0.5)+
@@ -577,6 +577,23 @@ tool %>%
   guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
   facet_grid(trmt~.)
 
+
+tool %>%
+  filter(sample == c("Aggregate-2", "Aggregate-3", "Aggregate-6")) %>% 
+  ggplot(aes(x = breadth_um, y=freq, color = sample))+
+  geom_line(size = 1)+
+  #geom_density(adjust=0.5)+
+  
+  labs (#title = "Pore Throat Size Distribution",
+    #subtitle = "After Freeze/Thaw",
+    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    #tag = "Figure 6",
+    x = expression (bold ("Pore Throat Diameter, um")),
+    y = expression (bold ("Distribution, %"))) + 
+  theme_er() + 
+  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
+  guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
+  facet_grid(trmt~.)
  #Smooth line before/after pore throat dist----------------------------------
 
 
