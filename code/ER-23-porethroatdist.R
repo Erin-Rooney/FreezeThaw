@@ -561,7 +561,7 @@ p + theme_er() +
 str(tool)
 
 tool %>%
-  filter(sample == "Aggregate-1", "Aggregate-4", "Aggregate-5") %>% 
+  filter(sample %in% "Aggregate-1" & "Aggregate-4" & "Aggregate-5") %>% 
   ggplot(aes(x = breadth_um, y=freq, color = sample))+
   geom_line(size = 1)+
   #geom_density(adjust=0.5)+
