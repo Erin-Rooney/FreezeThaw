@@ -224,7 +224,7 @@ p = allcombo %>%
   #scale_y_continuous(labels = scales::percent) +
   theme_er() +
   scale_fill_manual(values = pnw_palette("Anemone", 4, type = "discrete")) +
-  labs (title = "Pore Coordination Number Frequency",
+  labs (#title = "Pore Coordination Number Frequency",
         #caption = "Caption",
         #tag = "A",
         x = expression (bold ("pore coordination number")),
