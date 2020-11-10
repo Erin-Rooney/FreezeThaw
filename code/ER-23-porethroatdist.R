@@ -591,7 +591,7 @@ tool %>%
     x = expression (bold ("Pore Throat Diameter, um")),
     y = expression (bold ("Distribution, %"))) + 
   theme_er() + 
-  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
+  scale_color_manual(values = pnw_palette("Sailboat", 3, type = "discrete")) +
   guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
   facet_grid(trmt~.)
  #Smooth line before/after pore throat dist----------------------------------
@@ -620,6 +620,31 @@ ggplot (tool, aes(x = breadth_um, y = freq, color = trmt)) +
   labs (x = expression (bold ("Pore Throat Diameter, um")),
   y = expression (bold ("Distribution, %")))
 
+
+tool %>% 
+  filter(sample == c("Aggregate-1", "Aggregate-4", "Aggregate-5")) %>% 
+  ggplot (aes(x = breadth_um, y = freq, color = sample, group = trmt)) +
+  geom_point() + 
+  geom_smooth(span = 0.3) +
+  theme_er() +
+  facet_grid (.~trmt) +  
+  scale_y_continuous(labels = scales::percent) +
+  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
+  labs (x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Distribution, %")))
+
+
+tool %>% 
+filter(sample == c("Aggregate-2", "Aggregate-3", "Aggregate-6")) %>% 
+ggplot (aes(x = breadth_um, y = freq, color = sample, group = trmt)) +
+  geom_point() + 
+  geom_smooth(span = 0.3) +
+  theme_er() +
+  facet_grid (.~trmt) +  
+  scale_y_continuous(labels = scales::percent) +
+  scale_color_manual(values = pnw_palette("Sailboat", 3, type = "discrete")) +
+  labs (x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Distribution, %")))
 
 
 # ggplot (after, aes(x = breadth_um, y = breadth_dist)) +
