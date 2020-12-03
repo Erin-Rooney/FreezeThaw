@@ -79,7 +79,11 @@ tool_long = tool %>%
                          "28_38_12" = "Aggregate-3",
                          "28_38_28" = "Aggregate-4",
                          "41_50_16" = "Aggregate-5",
-                         "41_50_28" = "Aggregate-6"))
+                         "41_50_28" = "Aggregate-6"),
+         Type = recode(Type, "conn_pore_perc" = "Connected Air-Filled Pores",
+                       "unconn_pore_perc" = "Unconnected Air-Filled Pores",
+                       "conn_water_perc" = "Connected Water-Filled Pores",
+                       "unconn_water_perc" = "Unconnected Water-Filled Pores"))
 
 ggplot(data = tool_long, aes(x = trmt, y = volume)) + 
   geom_boxplot(aes(group = trmt), fill = "gray50", alpha = 0.2, width = 0.2) + 
@@ -102,8 +106,31 @@ ggplot(data = tool_long, aes(x = trmt, y = volume)) +
 #annotate("text", x = 2, y = 0.037, label = "B"))
 
 
+#ggplot by aggregate----------------------------------------
 
 
+ggplot(data = tool_long, aes(x = trmt, y = volume, color = Type)) + 
+  #geom_boxplot(aes(group = trmt), fill = "gray50", alpha = 0.2, width = 0.2) + 
+  geom_path(aes(group = Type, color = Type), size = 0.7)+
+  geom_point(aes(fill = Type), size = 4, shape = 21, stroke = 1, color = "black") + 
+  #geom_text(data = gglabel, aes(x = trmt, y = volume, label = label), color = "black")+
+  facet_grid(. ~ sample)+
+  labs (title = "Pore Volumes",
+        # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        # tag = "A",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) +  
+  scale_y_continuous(labels = scales::label_percent(accuracy = 0.1),
+                     name = "Air-Filled Pore Volume, %",
+                     sec.axis = sec_axis( trans=~.*.20, name= "Water-Filled Pore Volume, %", labels = scales::label_percent(accuracy = 0.1))
+                     ) +
+  expand_limits(y = 0)+
+  theme_er() +
+  scale_color_manual(values = pnw_palette("Bay", 6)) +
+  scale_fill_manual(values = pnw_palette("Bay", 6)) 
+
+
+######################################
 
 b2 = tool %>% 
   mutate (trmt = factor(trmt, levels = c("before", "after"))) %>% 
