@@ -161,7 +161,7 @@ ggplot() +
   scale_fill_manual(values = pnw_palette("Bay", 6)) 
 
 
-w######################################
+######################################
 
 b2 = tool %>% 
   mutate (trmt = factor(trmt, levels = c("before", "after"))) %>% 
