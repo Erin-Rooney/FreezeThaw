@@ -122,7 +122,7 @@ library(soilpalettes)
 library(PNWColors)
 theme_er <- function() {  # this for all the elements common across plots
   theme_bw() %+replace%
-    theme(legend.position = "top",
+    theme(legend.position = "right",
           legend.key=element_blank(),
           legend.title = element_blank(),
           legend.text = element_text(size = 12),
@@ -181,14 +181,15 @@ allcombo %>%
 #before/after facet wrap 
 
 tool %>%
+  filter(sample == "Aggregate-6") %>% 
   mutate(pore_coor = as.numeric(pore_coor)) %>% 
   ggplot(aes(x = pore_coor, y = freq, color = trmt)) +
   geom_path(aes(group = trmt), size = 1)+ 
-  #geom_point(size = 3.5, alpha = 0.5) + 
+  geom_point(size = 3.5, alpha = 0.5) + 
   scale_x_continuous(limits = c(0,16), 
                      breaks = seq(0,16,4)) +
   theme_er() +
-  facet_wrap(~ sample) +
+  #facet_wrap(~ sample) +
   scale_color_manual(values = c("#b0986c", "#72e1e1"))+
   labs (#title = "Pore Coordination Number Frequency",
         #caption = "Caption",
