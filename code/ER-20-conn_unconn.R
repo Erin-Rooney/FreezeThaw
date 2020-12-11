@@ -131,7 +131,29 @@ ggplot(data = tool_long, aes(x = trmt, y = volume, color = Type)) +
   #scale_fill_manual(values = pnw_palette("Bay", 4)) 
 
 
+tool_long %>% 
+  filter(sample == "Aggregate-6") %>% 
+  ggplot(aes(x = trmt, y = volume, color = Type)) + 
+  #geom_boxplot(aes(group = trmt), fill = "gray50", alpha = 0.2, width = 0.2) + 
+  geom_path(aes(group = Type, color = Type), size = 0.7)+
+  geom_point(aes(fill = Type), size = 6, shape = 21, stroke = 1, color = "black") + 
+  #geom_text(data = gglabel, aes(x = trmt, y = volume, label = label), color = "black")+
+  #facet_wrap(. ~ sample)+
+  labs (#title = "Pore Volumes",
+        # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        # tag = "A",
+        x = expression (bold (" ")),
+        y = expression (bold ("Volume, %"))) +  
+  scale_y_continuous(labels = scales::label_percent(accuracy = 0.1),
+                     name = "Pore Volume, %"
+  ) +
+  expand_limits(y = 0)+
+  theme_er() +
+  scale_color_manual(values = c("#c67b6f", "#5d74a5", "#efbc82", "#b0cbe7"))+
+  scale_fill_manual(values = c("#c67b6f", "#5d74a5",  "#efbc82", "#b0cbe7"))
 
+#scale_color_manual(values = pnw_palette("Bay", 4)) +
+#scale_fill_manual(values = pnw_palette("Bay", 4)) 
 
 
 # dual y axis
