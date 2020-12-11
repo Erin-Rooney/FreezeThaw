@@ -124,7 +124,7 @@ res$p.value
 
 theme_er <- function() {  # this for all the elements common across plots
   theme_bw() %+replace%
-    theme(legend.position = "top",
+    theme(legend.position = "bottom",
           legend.key=element_blank(),
           legend.title = element_blank(),
           legend.text = element_text(size = 12),
@@ -387,8 +387,23 @@ g + theme_er() +
 
 
 
-
-
+tool %>% 
+  filter(sample == "Aggregate-6") %>% 
+ggplot(aes(x = breadth_um, y=freq, color = trmt))+
+  geom_line(size = 1)+
+  #geom_density(adjust=0.5)+
+  
+  labs (#title = "Pore Throat Diameter Distribution",
+        #subtitle = "After Freeze/Thaw",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 6",
+        x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Distribution, %"))) + 
+  theme_er() + 
+  scale_color_manual(values = c("#b0986c", "#72e1e1"))
+  #scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
+  #guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
+  #facet_wrap(sample~.)
 
 
 
@@ -603,12 +618,36 @@ tool =
   mutate(trmt = factor(trmt, levels = c("before", "after")))
 
 
+tool = 
+  tool %>% 
+  mutate(sample = recode(sample, "Aggregate-1" = "Core A, 40-50 cm, 16%"))
+
+tool = 
+  tool %>% 
+  mutate(sample = recode(sample, "Aggregate-2" = "Core A, 40-50 cm, 28%"))
+
+tool = 
+  tool %>% 
+  mutate(sample = recode(sample, "Aggregate-3" = "Core B, 28-38 cm, 16%"))
+
+tool = 
+  tool %>% 
+  mutate(sample = recode(sample, "Aggregate-4" = "Core B, 28-38 cm, 28%"))
+
+tool = 
+  tool %>% 
+  mutate(sample = recode(sample, "Aggregate-5" = "Core C, 41-50 cm, 16%"))
+
+tool = 
+  tool %>% 
+  mutate(sample = recode(sample, "Aggregate-6" = "Core C, 41-50 cm, 28%"))
+
+
 before = tool %>% 
   filter(trmt=="before")
 
 after = tool %>% 
   filter(trmt=="after")
-
 
 ggplot (tool, aes(x = breadth_um, y = freq, color = trmt)) +
   geom_point() + 
@@ -622,7 +661,7 @@ ggplot (tool, aes(x = breadth_um, y = freq, color = trmt)) +
 
 
 tool %>% 
-  filter(sample == c("Aggregate-1", "Aggregate-4", "Aggregate-5")) %>% 
+  filter(sample == c("Core A, 40-50 cm, 16%", "Core B, 28-38 cm, 28%", "Core C, 41-50 cm, 16%")) %>% 
   ggplot (aes(x = breadth_um, y = freq, color = sample, group = trmt)) +
   geom_point() + 
   geom_smooth(span = 0.3) +
@@ -635,7 +674,7 @@ tool %>%
 
 
 tool %>% 
-filter(sample == c("Aggregate-2", "Aggregate-3", "Aggregate-6")) %>% 
+filter(sample == c("Core A, 40-50 cm, 28%", "Core B, 28-38 cm, 16%", "Core C, 41-50 cm, 28%")) %>% 
 ggplot (aes(x = breadth_um, y = freq, color = sample, group = trmt)) +
   geom_point() + 
   geom_smooth(span = 0.3) +
