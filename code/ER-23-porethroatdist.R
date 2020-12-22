@@ -10,6 +10,9 @@ source("code/0-packages.R")
 breadthdata_csv = read.csv("processed/5bin_breadth_nov22020.csv")
 plot(breadthdata_csv)
 
+# I'm adding a new data set to this that captures more measurements and aligns them with pore throat diameters, no counts
+alldat_csv = read.csv("processed/fulldata_ftc_xct.csv")
+
 # Fix Data and Set Levels ---------------------------------------------------------------------
 ## KP: you should see from the `plot` output that you have three levels for `trmt`.
 ## investigate by looking at the levels
@@ -92,30 +95,30 @@ plot(breadthdata_csv)
 
 
 #Shapiro-Wilk normality test--------------------------------------
-before <- subset(tool, trmt == "before", breadth_dist, drop = TRUE)
-after <- subset(tool, trmt == "after", breadth_dist, drop = TRUE)
-pd <- paired(before, after)
-
-
-d <- with(tool,
-          breadth_dist[trmt == "before"] - breadth_dist[trmt == "after"])
-
-shapiro.test(d)
-
-# Wilcoxon test Method 1
-
-res <- wilcox.test(breadth_dist ~ trmt, data = tool, paired = TRUE)
-res
-
-res$p.value
-
-#
-
-res <- wilcox.test(breadth_dist ~ trmt, data = tool, paired = TRUE,
-                   alternative = "less")
-res
-
-res$p.value
+# before <- subset(tool, trmt == "before", breadth_dist, drop = TRUE)
+# after <- subset(tool, trmt == "after", breadth_dist, drop = TRUE)
+# pd <- paired(before, after)
+# 
+# 
+# d <- with(tool,
+#           breadth_dist[trmt == "before"] - breadth_dist[trmt == "after"])
+# 
+# shapiro.test(d)
+# 
+# # Wilcoxon test Method 1
+# 
+# res <- wilcox.test(breadth_dist ~ trmt, data = tool, paired = TRUE)
+# res
+# 
+# res$p.value
+# 
+# #
+# 
+# res <- wilcox.test(breadth_dist ~ trmt, data = tool, paired = TRUE,
+#                    alternative = "less")
+# res
+# 
+# res$p.value
 
 
 # ggplot setup ------------------------------------------------------------
@@ -124,7 +127,7 @@ res$p.value
 
 theme_er <- function() {  # this for all the elements common across plots
   theme_bw() %+replace%
-    theme(legend.position = "bottom",
+    theme(legend.position = "right",
           legend.key=element_blank(),
           legend.title = element_blank(),
           legend.text = element_text(size = 12),
@@ -388,7 +391,7 @@ g + theme_er() +
 
 
 tool %>% 
-  filter(sample == "Aggregate-6") %>% 
+  filter(sample == "Aggregate-3") %>% 
 ggplot(aes(x = breadth_um, y=freq, color = trmt))+
   geom_line(size = 1)+
   #geom_density(adjust=0.5)+
@@ -398,9 +401,12 @@ ggplot(aes(x = breadth_um, y=freq, color = trmt))+
         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
         #tag = "Figure 6",
         x = expression (bold ("Pore Throat Diameter, um")),
-        y = expression (bold ("Distribution, %"))) + 
+        y = expression (bold ("frequency, %"))) + 
   theme_er() + 
-  scale_color_manual(values = c("#b0986c", "#72e1e1"))
+  scale_color_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_y_continuous(labels = (scales::percent),
+                     limits = c(0.00,0.20),
+                     breaks = seq(0,0.20,0.05))
   #scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
   #guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
   #facet_wrap(sample~.)
@@ -667,10 +673,15 @@ tool %>%
   geom_smooth(span = 0.3) +
   theme_er() +
   facet_grid (.~trmt) +  
-  scale_y_continuous(labels = scales::percent) +
   scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
   labs (x = expression (bold ("Pore Throat Diameter, um")),
-        y = expression (bold ("Distribution, %")))
+        y = expression (bold ("Distribution, %"))) +
+  scale_y_continuous(labels = (scales::percent),
+                     limits = c(-0.05,0.12),
+                     breaks = seq(-0.05,0.1,0.05))+
+  scale_x_continuous(limits = c(0,150),
+                     breaks = seq(0,150,50))
+
 
 
 tool %>% 
@@ -683,7 +694,12 @@ ggplot (aes(x = breadth_um, y = freq, color = sample, group = trmt)) +
   scale_y_continuous(labels = scales::percent) +
   scale_color_manual(values = pnw_palette("Sailboat", 3, type = "discrete")) +
   labs (x = expression (bold ("Pore Throat Diameter, um")),
-        y = expression (bold ("Distribution, %")))
+        y = expression (bold ("Distribution, %")))+
+  scale_y_continuous(labels = (scales::percent),
+                     limits = c(-0.05,0.12),
+                     breaks = seq(-0.05,0.1,0.05))+
+  scale_x_continuous(limits = c(0,150),
+                     breaks = seq(0,150,50))
 
 
 # ggplot (after, aes(x = breadth_um, y = breadth_dist)) +
