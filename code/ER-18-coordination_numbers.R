@@ -65,30 +65,30 @@ allcombo =
 
 #Shapiro-Wilk normality test----------------------------
 
-before <- subset(tool, trmt == "before", freq, drop = TRUE)
-after <- subset(tool, trmt == "after", freq, drop = TRUE)
-pd <- paired(before, after)
-
-
-d <- with(tool,
-          freq[trmt == "before"] - freq[trmt == "after"])
-
-shapiro.test(d) # p value = 4.011e-11, not normally distributed
-
-# Wilcoxon test Method 1
-
-res <- wilcox.test(freq ~ trmt, data = tool, paired = TRUE)
-res
-
-res$p.value
-
-#
-
-res <- wilcox.test(freq ~ trmt, data = tool, paired = TRUE,
-                   alternative = "less")
-res
-
-res$p.value
+# before <- subset(tool, trmt == "before", freq, drop = TRUE)
+# after <- subset(tool, trmt == "after", freq, drop = TRUE)
+# pd <- paired(before, after)
+# 
+# 
+# d <- with(tool,
+#           freq[trmt == "before"] - freq[trmt == "after"])
+# 
+# shapiro.test(d) # p value = 4.011e-11, not normally distributed
+# 
+# # Wilcoxon test Method 1
+# 
+# res <- wilcox.test(freq ~ trmt, data = tool, paired = TRUE)
+# res
+# 
+# res$p.value
+# 
+# #
+# 
+# res <- wilcox.test(freq ~ trmt, data = tool, paired = TRUE,
+#                    alternative = "less")
+# res
+# 
+# res$p.value
 
 
 
@@ -122,10 +122,10 @@ library(soilpalettes)
 library(PNWColors)
 theme_er <- function() {  # this for all the elements common across plots
   theme_bw() %+replace%
-    theme(legend.position = "right",
+    theme(legend.position = "none",
           legend.key=element_blank(),
           legend.title = element_blank(),
-          legend.text = element_text(size = 12),
+          legend.text = element_blank(),
           legend.key.size = unit(1.5, 'lines'),
           panel.border = element_rect(color="black",size=1, fill = NA),
           
@@ -181,13 +181,16 @@ allcombo %>%
 #before/after facet wrap 
 
 tool %>%
-  filter(sample == "Aggregate-6") %>% 
+  filter(sample == "Aggregate-3") %>% 
   mutate(pore_coor = as.numeric(pore_coor)) %>% 
   ggplot(aes(x = pore_coor, y = freq, color = trmt)) +
   geom_path(aes(group = trmt), size = 1)+ 
   geom_point(size = 3.5, alpha = 0.5) + 
   scale_x_continuous(limits = c(0,16), 
                      breaks = seq(0,16,4)) +
+  scale_y_continuous(labels = (scales::percent),
+                     limits = c(0.0,0.6),
+                     breaks = seq(0,0.6,0.2))+
   theme_er() +
   #facet_wrap(~ sample) +
   scale_color_manual(values = c("#b0986c", "#72e1e1"))+
@@ -195,7 +198,7 @@ tool %>%
         #caption = "Caption",
         #tag = "A",
         x = expression (bold ("pore coordination number")),
-        y = expression (bold ("difference in frequency"))) +
+        y = expression (bold ("frequency, %"))) +
   guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
 
 # boxplot + point + path 
