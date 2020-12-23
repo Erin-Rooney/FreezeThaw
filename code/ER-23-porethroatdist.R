@@ -34,6 +34,7 @@ breadthdata_csv =
 ## set the order beforehand, so the legend will show `before` and then `after`
 
 plot(breadthdata_csv)
+plot(alldat_csv)
 
 # Create Data Frames ---------------------------------------------------------------------
 #rep_1 = breadthdata_csv[breadthdata_csv$sample=="40_50_16",]
@@ -474,7 +475,7 @@ alldat_csv =
 
 
 alldat_csv %>% 
-  filter(sample == "Aggregate-3") %>% 
+  #filter(sample == "Aggregate-3") %>% 
   ggplot(aes(x = (breadth_mm3*100), y=shape_factor, color = ftc))+
   geom_point()+
   #geom_line(size = 1)+
@@ -492,23 +493,25 @@ alldat_csv %>%
                     breaks = seq(0,1.0,0.25))+
   scale_x_continuous(limits = c(0.00,150),
                      breaks = seq(0,150,50))+
-  scale_y_log10()
+  scale_y_log10()+
+  facet_grid(ftc~sample)
   
 
 # smoothing
 
-alldat_csv %>% 
+alldat_csv %>%
+  #filter(breadth_mm3 > 25) %>% 
   #filter(sample == c("Core A, 40-50 cm, 16%", "Core B, 28-38 cm, 28%", "Core C, 41-50 cm, 16%")) %>% 
   ggplot (aes(x = (breadth_mm3*100), y=shape_factor, color = sample)) +
   geom_point() + 
-  geom_smooth(span = 0.3) +
+  #geom_smooth(span = 0.3) +
   theme_er() +
   facet_grid (ftc~sample) +  
   scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
   labs (x = expression (bold ("Pore Throat Diameter, um")),
         y = expression (bold ("Pore Shape Factor, %"))) +
-  scale_x_continuous(limits = c(0.00,200),
-                     breaks = seq(0,200,50))
+  scale_x_continuous(limits = c(0.00,250),
+                     breaks = seq(0,250,50))
   #scale_y_log10()
 
 
