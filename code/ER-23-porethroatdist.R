@@ -127,7 +127,7 @@ plot(breadthdata_csv)
 
 theme_er <- function() {  # this for all the elements common across plots
   theme_bw() %+replace%
-    theme(legend.position = "right",
+    theme(legend.position = "none",
           legend.key=element_blank(),
           legend.title = element_blank(),
           legend.text = element_text(size = 12),
@@ -212,6 +212,7 @@ theme_er <- function() {  # this for all the elements common across plots
 #   theme_er1()
 
 levels(as.factor(breadthdata_csv$sample))
+levels(as.factor(alldat_csv$sample))
 str(breadthdata_csv)
 
 # breadthdata_csv = 
@@ -272,6 +273,39 @@ breadthdata_csv =
 
 tool = breadthdata_csv %>% 
   filter(site=="tool")
+
+
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(sample = recode(sample, "40-50-16" = "Aggregate-1"))
+
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(sample = recode(sample, "40-50-28" = "Aggregate-2"))
+
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(sample = recode(sample, "28-38-12" = "Aggregate-3"))
+
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(sample = recode(sample, "28-38-28" = "Aggregate-4"))
+
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(sample = recode(sample, "41-50-16" = "Aggregate-5"))
+
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(sample = recode(sample, "41-50-28" = "Aggregate-6"))
+
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(sample = factor(sample, levels = c("Aggregate-1", "Aggregate-2", "Aggregate-3", "Aggregate-4", "Aggregate-5", "Aggregate-6")))
+
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(ftc = factor(ftc, levels = c("before", "after")))
 
 
 # rep1 ggplot
@@ -391,11 +425,10 @@ g + theme_er() +
 
 
 tool %>% 
-  filter(sample == "Aggregate-3") %>% 
+  #filter(sample == "Aggregate-3") %>% 
 ggplot(aes(x = breadth_um, y=freq, color = trmt))+
   geom_line(size = 1)+
   #geom_density(adjust=0.5)+
-  
   labs (#title = "Pore Throat Diameter Distribution",
         #subtitle = "After Freeze/Thaw",
         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
@@ -406,12 +439,111 @@ ggplot(aes(x = breadth_um, y=freq, color = trmt))+
   scale_color_manual(values = c("#b0986c", "#72e1e1")) +
   scale_y_continuous(labels = (scales::percent),
                      limits = c(0.00,0.20),
-                     breaks = seq(0,0.20,0.05))
+                     breaks = seq(0,0.20,0.05))+
   #scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
   #guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
-  #facet_wrap(sample~.)
+  facet_grid(.~sample)
+
+# Okay, time for some new graphs. We're doing pore shape factor/volume x pore throat dist by agg
 
 
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(sample = recode(sample, "Aggregate-1" = "Core A, 40-50 cm, 16%"))
+
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(sample = recode(sample, "Aggregate-2" = "Core A, 40-50 cm, 28%"))
+
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(sample = recode(sample, "Aggregate-3" = "Core B, 28-38 cm, 16%"))
+
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(sample = recode(sample, "Aggregate-4" = "Core B, 28-38 cm, 28%"))
+
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(sample = recode(sample, "Aggregate-5" = "Core C, 41-50 cm, 16%"))
+
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(sample = recode(sample, "Aggregate-6" = "Core C, 41-50 cm, 28%"))
+
+
+
+alldat_csv %>% 
+  filter(sample == "Aggregate-3") %>% 
+  ggplot(aes(x = (breadth_mm3*100), y=shape_factor, color = ftc))+
+  geom_point()+
+  #geom_line(size = 1)+
+  #geom_density(adjust=0.5)+
+  
+  labs (#title = "Pore Throat Diameter Distribution",
+    #subtitle = "After Freeze/Thaw",
+    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    #tag = "Figure 6",
+    x = expression (bold ("Pore Throat Diameter, um")),
+    y = expression (bold ("Pore Shape Factor"))) + 
+  theme_er() + 
+  scale_color_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_y_continuous(limits = c(0.00,1.0),
+                    breaks = seq(0,1.0,0.25))+
+  scale_x_continuous(limits = c(0.00,150),
+                     breaks = seq(0,150,50))+
+  scale_y_log10()
+  
+
+# smoothing
+
+alldat_csv %>% 
+  #filter(sample == c("Core A, 40-50 cm, 16%", "Core B, 28-38 cm, 28%", "Core C, 41-50 cm, 16%")) %>% 
+  ggplot (aes(x = (breadth_mm3*100), y=shape_factor, color = sample)) +
+  geom_point() + 
+  geom_smooth(span = 0.3) +
+  theme_er() +
+  facet_grid (ftc~sample) +  
+  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
+  labs (x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Pore Shape Factor, %"))) +
+  scale_x_continuous(limits = c(0.00,200),
+                     breaks = seq(0,200,50))
+  #scale_y_log10()
+
+
+alldat_csv %>% 
+  filter(sample == c("Core A, 40-50 cm, 16%", "Core B, 28-38 cm, 28%", "Core C, 41-50 cm, 16%")) %>% 
+  ggplot (aes(x = (breadth_mm3*100), y=volume_mm3, color = sample)) +
+  geom_point() + 
+  geom_smooth(span = 0.3) +
+  theme_er() +
+  facet_grid (ftc~sample) +  
+  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
+  labs (x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Volume, um3, log10"))) +
+  scale_x_continuous(limits = c(0.00,150),
+                     breaks = seq(0,150,50))+
+  scale_y_log10()
+
+
+
+alldat_csv %>% 
+  filter(sample == c("Core A, 40-50 cm, 28%", "Core B, 28-38 cm, 16%", "Core C, 41-50 cm, 28%")) %>% 
+  ggplot (aes(x = breadth_um, y = freq, color = sample, group = trmt)) +
+  geom_point() + 
+  geom_smooth(span = 0.3) +
+  theme_er() +
+  facet_grid (.~trmt) +  
+  scale_y_continuous(labels = scales::percent) +
+  scale_color_manual(values = pnw_palette("Sailboat", 3, type = "discrete")) +
+  labs (x = expression (bold ("Pore Throat Diameter, um")),
+        y = expression (bold ("Distribution, %")))+
+  scale_y_continuous(labels = (scales::percent),
+                     limits = c(-0.05,0.12),
+                     breaks = seq(-0.05,0.1,0.05))+
+  scale_x_continuous(limits = c(0,150),
+                     breaks = seq(0,150,50))
 
 
 # 
@@ -700,6 +832,9 @@ ggplot (aes(x = breadth_um, y = freq, color = sample, group = trmt)) +
                      breaks = seq(-0.05,0.1,0.05))+
   scale_x_continuous(limits = c(0,150),
                      breaks = seq(0,150,50))
+
+
+
 
 
 # ggplot (after, aes(x = breadth_um, y = breadth_dist)) +
