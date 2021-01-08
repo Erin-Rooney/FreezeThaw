@@ -475,7 +475,7 @@ alldat_csv =
 
 
 alldat_csv %>% 
-  #filter(sample == "Aggregate-3") %>% 
+  #filter(breadth_mm3 > 0.4 & breadth_mm3 < 0.80) %>% 
   ggplot(aes(x = (breadth_mm3*100), y=shape_factor, color = ftc))+
   geom_point()+
   #geom_line(size = 1)+
@@ -495,7 +495,78 @@ alldat_csv %>%
                      breaks = seq(0,150,50))+
   scale_y_log10()+
   facet_grid(ftc~sample)
+
+####
   
+alldat_csv %>% 
+  filter(breadth_mm3 > 0.25 & breadth_mm3 < 1.5) %>% 
+  ggplot(aes(x = (breadth_mm3*100), y=shape_factor, color = ftc))+
+  geom_point(size = 4, alpha = 0.5)+
+  #geom_smooth(size = 1)+
+  #geom_density(adjust=0.5)+
+  annotate("segment", x = 50, xend = 50, y = 0.00, yend = 1.00, color = "red", size= 1) +
+  labs (#title = "Pore Throat Diameter Distribution",
+    #subtitle = "After Freeze/Thaw",
+    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    #tag = "Figure 6",
+    x = expression (bold ("Pore Throat Diameter, um")),
+    y = expression (bold ("Pore Shape Factor"))) + 
+  theme_er() + 
+  scale_color_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_y_continuous(limits = c(0.00,1.0),
+                     breaks = seq(0,1.0,0.25))+
+  scale_x_continuous(limits = c(20,150),
+                     breaks = seq(0,150,50))+
+  #scale_y_log10()+
+  #scale_x_log10()+
+  facet_grid(ftc~sample)
+
+#### volume
+
+alldat_csv %>% 
+  filter(breadth_mm3 > 0.25 & breadth_mm3 < 1.5) %>% 
+  ggplot(aes(x = (breadth_mm3*100), y=volume_mm3*100, color = ftc))+
+  geom_point(size = 4, alpha = 0.5)+
+  #geom_smooth(size = 1)+
+  #geom_density(adjust=0.5)+
+  annotate("segment", x = 50, xend = 50, y = 0.00, yend = 3.00, color = "red", size= 1) +
+  labs (#title = "Pore Throat Diameter Distribution",
+    #subtitle = "After Freeze/Thaw",
+    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    #tag = "Figure 6",
+    x = expression (bold ("Pore Throat Diameter, um")),
+    y = expression (bold ("Volume, um"))) + 
+  theme_er() + 
+  scale_color_manual(values = c("#b0986c", "#72e1e1")) +
+  #scale_y_continuous(limits = c(0.00,1.0),
+                    # breaks = seq(0,1.0,0.1))+
+  #scale_x_continuous(limits = c(20,150),
+                     #breaks = seq(0,150,50))+
+  facet_grid(ftc~sample)
+
+# Count
+
+alldat_csv %>% 
+  #filter(breadth_mm3 > 0.25 & breadth_mm3 < 1.5) %>% 
+  ggplot(aes(x = (breadth_mm3*100), fill = ftc))+
+  geom_histogram(aes(y = stat(count)), 
+                 bindwidth=5) +
+  #geom_smooth(size = 1)+
+  #geom_density(adjust=0.5)+
+  #annotate("segment", x = 50, xend = 50, y = 0.00, yend = 3.00, color = "red", size= 1) +
+  #labs (#title = "Pore Throat Diameter Distribution",
+    #subtitle = "After Freeze/Thaw",
+    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    #tag = "Figure 6",
+    #x = expression (bold ("Pore Throat Diameter, um")),
+    #y = expression (bold ("Volume, um"))) + 
+  theme_er() + 
+  scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_x_continuous(limits = c(0,150),
+  breaks = seq(0,150,50))+
+  facet_grid(.~sample)
+
+
 
 # smoothing
 
