@@ -212,6 +212,8 @@ theme_er <- function() {  # this for all the elements common across plots
 #   guides(fill = guide_legend(reverse = TRUE, title = NULL))+
 #   theme_er1()
 
+#Data processing for breadthdata_csv-----------------------------
+
 levels(as.factor(breadthdata_csv$sample))
 levels(as.factor(alldat_csv$sample))
 str(breadthdata_csv)
@@ -275,38 +277,6 @@ breadthdata_csv =
 tool = breadthdata_csv %>% 
   filter(site=="tool")
 
-
-alldat_csv = 
-  alldat_csv %>% 
-  mutate(sample = recode(sample, "40-50-16" = "Aggregate-1"))
-
-alldat_csv = 
-  alldat_csv %>% 
-  mutate(sample = recode(sample, "40-50-28" = "Aggregate-2"))
-
-alldat_csv = 
-  alldat_csv %>% 
-  mutate(sample = recode(sample, "28-38-12" = "Aggregate-3"))
-
-alldat_csv = 
-  alldat_csv %>% 
-  mutate(sample = recode(sample, "28-38-28" = "Aggregate-4"))
-
-alldat_csv = 
-  alldat_csv %>% 
-  mutate(sample = recode(sample, "41-50-16" = "Aggregate-5"))
-
-alldat_csv = 
-  alldat_csv %>% 
-  mutate(sample = recode(sample, "41-50-28" = "Aggregate-6"))
-
-alldat_csv = 
-  alldat_csv %>% 
-  mutate(sample = factor(sample, levels = c("Aggregate-1", "Aggregate-2", "Aggregate-3", "Aggregate-4", "Aggregate-5", "Aggregate-6")))
-
-alldat_csv = 
-  alldat_csv %>% 
-  mutate(ftc = factor(ftc, levels = c("before", "after")))
 
 
 # rep1 ggplot
@@ -448,30 +418,67 @@ ggplot(aes(x = breadth_um, y=freq, color = trmt))+
 # Okay, time for some new graphs. We're doing pore shape factor/volume x pore throat dist by agg
 
 
-alldat_csv = 
-  alldat_csv %>% 
-  mutate(sample = recode(sample, "Aggregate-1" = "Core A, 40-50 cm, 16%"))
+# alldat_csv = 
+#   alldat_csv %>% 
+#   mutate(sample = recode(sample, "40-50-16" = "Aggregate-1"))
+# 
+# alldat_csv = 
+#   alldat_csv %>% 
+#   mutate(sample = recode(sample, "40-50-28" = "Aggregate-2"))
+# 
+# alldat_csv = 
+#   alldat_csv %>% 
+#   mutate(sample = recode(sample, "28-38-12" = "Aggregate-3"))
+# 
+# alldat_csv = 
+#   alldat_csv %>% 
+#   mutate(sample = recode(sample, "28-38-28" = "Aggregate-4"))
+# 
+# alldat_csv = 
+#   alldat_csv %>% 
+#   mutate(sample = recode(sample, "41-50-16" = "Aggregate-5"))
+# 
+# alldat_csv = 
+#   alldat_csv %>% 
+#   mutate(sample = recode(sample, "41-50-28" = "Aggregate-6"))
+
+# alldat_csv = 
+#   alldat_csv %>% 
+#   mutate(sample = factor(sample, levels = c("Aggregate-1", "Aggregate-2", "Aggregate-3", "Aggregate-4", "Aggregate-5", "Aggregate-6")))
+
+#data processing for alldat_csv------------------------------
 
 alldat_csv = 
   alldat_csv %>% 
-  mutate(sample = recode(sample, "Aggregate-2" = "Core A, 40-50 cm, 28%"))
+  mutate(ftc = factor(ftc, levels = c("before", "after")))
 
 alldat_csv = 
   alldat_csv %>% 
-  mutate(sample = recode(sample, "Aggregate-3" = "Core B, 28-38 cm, 16%"))
+  mutate(sample = recode(sample, "40-50-16" = "Core B, 40-50 cm, 16%"))
 
 alldat_csv = 
   alldat_csv %>% 
-  mutate(sample = recode(sample, "Aggregate-4" = "Core B, 28-38 cm, 28%"))
+  mutate(sample = recode(sample, "40-50-28" = "Core B, 40-50 cm, 28%"))
 
 alldat_csv = 
   alldat_csv %>% 
-  mutate(sample = recode(sample, "Aggregate-5" = "Core C, 41-50 cm, 16%"))
+  mutate(sample = recode(sample, "28-38-12" = "Core A, 28-38 cm, 16%"))
 
 alldat_csv = 
   alldat_csv %>% 
-  mutate(sample = recode(sample, "Aggregate-6" = "Core C, 41-50 cm, 28%"))
+  mutate(sample = recode(sample, "28-38-28" = "Core A, 28-38 cm, 28%"))
 
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(sample = recode(sample, "41-50-16" = "Core C, 41-50 cm, 16%"))
+
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(sample = recode(sample, "41-50-28" = "Core C, 41-50 cm, 28%"))
+
+alldat_csv = 
+  alldat_csv %>% 
+  mutate(sample = factor(sample, levels = c("Core A, 28-38 cm, 16%", "Core A, 28-38 cm, 28%", "Core B, 40-50 cm, 16%", "Core B, 40-50 cm, 28%", "Core C, 41-50 cm, 16%", "Core C, 41-50 cm, 28%")))
 
 
 alldat_csv %>% 
@@ -510,14 +517,14 @@ alldat_csv %>%
     #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
     #tag = "Figure 6",
     x = expression (bold ("Pore Throat Diameter, um")),
-    y = expression (bold ("Pore Shape Factor"))) + 
+    y = expression (bold ("Pore Shape Factor, log10"))) + 
   theme_er() + 
   scale_color_manual(values = c("#b0986c", "#72e1e1")) +
   scale_y_continuous(limits = c(0.00,1.0),
                      breaks = seq(0,1.0,0.25))+
   scale_x_continuous(limits = c(20,150),
                      breaks = seq(0,150,50))+
-  #scale_y_log10()+
+  scale_y_log10()+
   #scale_x_log10()+
   facet_grid(ftc~sample)
 
@@ -566,13 +573,13 @@ alldat_csv %>%
   breaks = seq(0,150,50))+
   facet_grid(.~sample)
 
-
+count(alldat_csv, groups = sample)
 
 # smoothing
 
 alldat_csv %>%
   #filter(breadth_mm3 > 25) %>% 
-  #filter(sample == c("Core A, 40-50 cm, 16%", "Core B, 28-38 cm, 28%", "Core C, 41-50 cm, 16%")) %>% 
+  #filter(sample == c("Core B, 40-50 cm, 16%", "Core A, 28-38 cm, 28%", "Core C, 41-50 cm, 16%")) %>% 
   ggplot (aes(x = (breadth_mm3*1000), y=shape_factor, color = sample)) +
   geom_point() + 
   geom_smooth(span = 0.3) +
@@ -587,7 +594,7 @@ alldat_csv %>%
 
 
 alldat_csv %>% 
-  filter(sample == c("Core A, 40-50 cm, 16%", "Core B, 28-38 cm, 28%", "Core C, 41-50 cm, 16%")) %>% 
+  filter(sample == c("Core B, 40-50 cm, 16%", "Core A, 28-38 cm, 28%", "Core C, 41-50 cm, 16%")) %>% 
   ggplot (aes(x = (breadth_mm3*1000), y=(volume_mm3*1000), color = sample)) +
   geom_point() + 
   geom_smooth(aes(group = ftc, span = 0.5)) +
@@ -602,7 +609,7 @@ alldat_csv %>%
   scale_y_log10()
 
 alldat_csv %>% 
-  filter(sample == c("Core A, 40-50 cm, 16%", "Core B, 28-38 cm, 28%", "Core C, 41-50 cm, 16%")) %>% 
+  filter(sample == c("Core B, 40-50 cm, 16%", "Core A, 28-38 cm, 28%", "Core C, 41-50 cm, 16%")) %>% 
   ggplot (aes(x = (breadth_mm3*1000), y=shape_factor, color = sample)) +
   geom_point() + 
   geom_smooth(aes(group = ftc, span = 0.5)) +
@@ -621,7 +628,7 @@ alldat_csv %>%
 
 
 alldat_csv %>% 
-  filter(sample == c("Core A, 40-50 cm, 28%", "Core B, 28-38 cm, 16%", "Core C, 41-50 cm, 28%")) %>% 
+  filter(sample == c("Core B, 40-50 cm, 28%", "Core A, 28-38 cm, 16%", "Core C, 41-50 cm, 28%")) %>% 
   ggplot (aes(x = (breadth_mm3*1000), y=(volume_mm3*1000), color = sample)) +
   geom_point() + 
   geom_smooth(aes(group = ftc, span = 0.5)) +
@@ -636,7 +643,7 @@ alldat_csv %>%
   scale_y_log10()
 
 alldat_csv %>% 
-  filter(sample == c("Core A, 40-50 cm, 28%", "Core B, 28-38 cm, 16%", "Core C, 41-50 cm, 28%")) %>% 
+  filter(sample == c("Core B, 40-50 cm, 28%", "Core A, 28-38 cm, 16%", "Core C, 41-50 cm, 28%")) %>% 
   ggplot (aes(x = (breadth_mm3*1000), y=shape_factor, color = sample)) +
   geom_point() + 
   geom_smooth(aes(group = ftc, span = 0.5)) +
