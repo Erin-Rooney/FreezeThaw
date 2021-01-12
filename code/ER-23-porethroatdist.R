@@ -531,9 +531,9 @@ alldat_csv %>%
 #### volume
 
 alldat_csv %>% 
-  filter(breadth_mm3 > 0.25 & breadth_mm3 < 1.5) %>% 
+  #filter(breadth_mm3 > 0.25 & breadth_mm3 < 1.5) %>% 
   ggplot(aes(x = (breadth_mm3*100), y=volume_mm3*100, color = ftc))+
-  geom_point(size = 4, alpha = 0.5)+
+  geom_point(size = 2, alpha = 0.5)+
   #geom_smooth(size = 1)+
   #geom_density(adjust=0.5)+
   annotate("segment", x = 50, xend = 50, y = 0.00, yend = 3.00, color = "red", size= 1) +
