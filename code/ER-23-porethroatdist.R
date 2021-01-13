@@ -533,20 +533,21 @@ alldat_csv %>%
 alldat_csv %>% 
   #filter(breadth_mm3 > 0.25 & breadth_mm3 < 1.5) %>% 
   ggplot(aes(x = (breadth_mm3*100), y=volume_mm3*100, color = ftc))+
-  geom_point(size = 2, alpha = 0.5)+
+  geom_point(size = 2)+
   #geom_smooth(size = 1)+
   #geom_density(adjust=0.5)+
-  annotate("segment", x = 50, xend = 50, y = 0.00, yend = 3.00, color = "red", size= 1) +
+  #annotate("segment", x = 50, xend = 50, y = 0.00, yend = 3.00, color = "red", size= 1) +
   labs (#title = "Pore Throat Diameter Distribution",
     #subtitle = "After Freeze/Thaw",
     #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
     #tag = "Figure 6",
     x = expression (bold ("Pore Throat Diameter, um")),
-    y = expression (bold ("Volume, um"))) + 
+    y = expression (bold ("Volume, um, log10"))) + 
   theme_er() + 
   scale_color_manual(values = c("#b0986c", "#72e1e1")) +
   #scale_y_continuous(limits = c(0.00,1.0),
                     # breaks = seq(0,1.0,0.1))+
+  scale_y_log10()+
   #scale_x_continuous(limits = c(20,150),
                      #breaks = seq(0,150,50))+
   facet_grid(ftc~sample)
@@ -557,21 +558,23 @@ alldat_csv %>%
   #filter(breadth_mm3 > 0.25 & breadth_mm3 < 1.5) %>% 
   ggplot(aes(x = (breadth_mm3*100), fill = ftc))+
   geom_histogram(aes(y = stat(count)), 
-                 bindwidth=5) +
+                 bindwidth=5, color = "black") +
   #geom_smooth(size = 1)+
   #geom_density(adjust=0.5)+
   #annotate("segment", x = 50, xend = 50, y = 0.00, yend = 3.00, color = "red", size= 1) +
-  #labs (#title = "Pore Throat Diameter Distribution",
+  labs (#title = "Pore Throat Diameter Distribution",
     #subtitle = "After Freeze/Thaw",
     #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
     #tag = "Figure 6",
-    #x = expression (bold ("Pore Throat Diameter, um")),
-    #y = expression (bold ("Volume, um"))) + 
+    x = expression (bold ("Pore Throat Diameter, um, log10")),
+    y = expression (bold ("Count, log10"))) + 
   theme_er() + 
   scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
   scale_x_continuous(limits = c(0,150),
   breaks = seq(0,150,50))+
-  facet_grid(.~sample)
+  facet_grid(.~sample)+
+  scale_x_log10()+
+  scale_y_log10()
 
 count(alldat_csv, groups = sample)
 
