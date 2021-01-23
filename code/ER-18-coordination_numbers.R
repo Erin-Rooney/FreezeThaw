@@ -32,12 +32,12 @@ str(coornum_dat2)
 coornum_dat3 = 
   coornum_dat2 %>% 
   #recode sample names
-  mutate(sample = recode(sample, "40_50_16" = "Aggregate-1", 
-                         "40_50_28" = "Aggregate-2",
-                         "28_38_12" = "Aggregate-3",
-                         "28_38_28" = "Aggregate-4",
-                         "41_50_16" = "Aggregate-5",
-                         "41_50_28" = "Aggregate-6")) 
+  mutate(sample = recode(sample, "40_50_16" = "Core B, 16%", 
+                         "40_50_28" = "Core B, 28%",
+                         "28_38_12" = "Core A, 16%",
+                         "28_38_28" = "Core A, 28%",
+                         "41_50_16" = "Core C, 16%",
+                         "41_50_28" = "Core C, 28%")) 
   #set sample levels
   #mutate(sample = factor(sample, levels = c("Aggregate-1", "Aggregate-2", "Aggregate-3", "Aggregate-4", "Aggregate-5", "Aggregate-6")))
 
@@ -122,10 +122,10 @@ library(soilpalettes)
 library(PNWColors)
 theme_er <- function() {  # this for all the elements common across plots
   theme_bw() %+replace%
-    theme(legend.position = "none",
-          legend.key=element_blank(),
+    theme(legend.position = "right",
+          #legend.key=element_blank(),
           legend.title = element_blank(),
-          legend.text = element_blank(),
+          #legend.text = element_blank(),
           legend.key.size = unit(1.5, 'lines'),
           panel.border = element_rect(color="black",size=1, fill = NA),
           
@@ -175,8 +175,30 @@ allcombo %>%
         #caption = "Caption",
         #tag = "A",
         x = expression (bold ("pore coordination number")),
-        y = expression (bold ("difference in frequency"))) +
-  guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
+        y = expression (bold ("difference in frequency"))) 
+  #guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
+
+
+#All combo shading
+
+allcombo %>%
+  mutate(pore_coor = as.numeric(pore_coor)) %>% 
+  ggplot(aes(x = pore_coor, y = diff, color = sample)) +
+  geom_point(size = 4) + 
+  geom_path(aes(group = sample), size = 1)+ 
+  geom_area(aes(group = sample, fill = sample, alpha = 0.5))+
+  scale_x_continuous(limits = c(0,16), 
+                     breaks = seq(0,16,4)) +
+  theme_er() +
+  # facet_wrap(~ sample) +
+  scale_color_manual(values = pnw_palette("Bay", 6)) +
+  scale_fill_manual(values = pnw_palette("Bay", 6)) +
+  labs (title = "Pore Coordination Number Frequency",
+        #caption = "Caption",
+        #tag = "A",
+        x = expression (bold ("pore coordination number")),
+        y = expression (bold ("difference in frequency"))) 
+  #guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
 
 #before/after facet wrap 
 
@@ -244,7 +266,7 @@ p = allcombo %>%
 
 
 
-p = ggplot(tool, aes(x=number, y=freq, fill=trmt)) + 
+p = ggplot(tool, aes(x=pore_coor, y=freq, fill=trmt)) + 
   geom_boxplot() +
   # scale_y_continuous(labels = scales::percent) +
   labs (title = "Change in Pore Coordination Number Frequency following Freeze/Thaw",
@@ -356,4 +378,9 @@ p<-ggplot(after, aes(x=co_num, fill=water)) +
         y = expression (bold ("frequency, %")))
 
 p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
+
+
+#########
+
+
 
