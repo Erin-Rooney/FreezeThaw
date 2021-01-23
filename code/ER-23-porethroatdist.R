@@ -446,6 +446,7 @@ diff %>%
         #tag = "A",
         x = expression (bold ("pore throat diameter, um")),
         y = expression (bold ("difference in frequency"))) 
+ # facet_wrap(.~sample)
 
 
 # Okay, time for some new graphs. We're doing pore shape factor/volume x pore throat dist by agg
