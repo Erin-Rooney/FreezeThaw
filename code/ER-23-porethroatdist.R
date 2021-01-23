@@ -177,20 +177,6 @@ theme_er <- function() {  # this for all the elements common across plots
 
 ###
 
-# p = ggplot(rep_1, aes(x = breadth_um, y=breadth_dist, color = trmt ))+
-#   geom_line(size = 1)+
-#   #geom_density(adjust=0.5)+
-#   
-#   labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
-#         subtitle = "40-50 cm, 16% moisture",
-#         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-#         #tag = "Figure 1",
-#         x = expression (bold ("Pore Throat Diameter, um")),
-#         y = expression (bold ("Distribution, %")))
-# 
-# p + theme_er() + 
-#   scale_color_manual(values = soil_palette("redox",2)) +   
-#   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
 ## KP: suggestion to streamline these multiple plots
 ## instead of creating new files rep1, rep2, etc. just to plot the graphs,
@@ -218,57 +204,33 @@ levels(as.factor(breadthdata_csv$sample))
 levels(as.factor(alldat_csv$sample))
 str(breadthdata_csv)
 
-# breadthdata_csv = 
-#   breadthdata_csv %>% 
-#   mutate(sample = recode(sample, "40_50_16" = "Aggregate-1"))
-# 
-# breadthdata_csv = 
-#   breadthdata_csv %>% 
-#   mutate(sample = recode(sample, "40_50_28" = "Aggregate-2"))
-# 
-# breadthdata_csv = 
-#   breadthdata_csv %>% 
-#   mutate(sample = recode(sample, "28_38_12" = "Aggregate-3"))
-# 
-# breadthdata_csv = 
-#   breadthdata_csv %>% 
-#   mutate(sample = recode(sample, "28_38_28" = "Aggregate-4"))
-# 
-# breadthdata_csv = 
-#   breadthdata_csv %>% 
-#   mutate(sample = recode(sample, "41_50_16" = "Aggregate-5"))
-# 
-# breadthdata_csv = 
-#   breadthdata_csv %>% 
-#   mutate(sample = recode(sample, "41_50_28" = "Aggregate-6"))
+breadthdata_csv = 
+  breadthdata_csv %>% 
+  mutate(sample = recode(sample, "40-50-16" = "Core B, 16%"))
 
 breadthdata_csv = 
   breadthdata_csv %>% 
-  mutate(sample = recode(sample, "40-50-16" = "Aggregate-1"))
+  mutate(sample = recode(sample, "40-50-28" = "Core B, 28%"))
 
 breadthdata_csv = 
   breadthdata_csv %>% 
-  mutate(sample = recode(sample, "40-50-28" = "Aggregate-2"))
+  mutate(sample = recode(sample, "28-38-12" = "Core A, 16%"))
 
 breadthdata_csv = 
   breadthdata_csv %>% 
-  mutate(sample = recode(sample, "28-38-12" = "Aggregate-3"))
+  mutate(sample = recode(sample, "28-38-28" = "Core A, 28%"))
 
 breadthdata_csv = 
   breadthdata_csv %>% 
-  mutate(sample = recode(sample, "28-38-28" = "Aggregate-4"))
+  mutate(sample = recode(sample, "41-50-16" = "Core C, 16%"))
 
 breadthdata_csv = 
   breadthdata_csv %>% 
-  mutate(sample = recode(sample, "41-50-16" = "Aggregate-5"))
-
-breadthdata_csv = 
-  breadthdata_csv %>% 
-  mutate(sample = recode(sample, "41-50-28" = "Aggregate-6"))
+  mutate(sample = recode(sample, "41-50-28" = "Core C, 28%"))
          
 breadthdata_csv = 
   breadthdata_csv %>% 
-  mutate(sample = factor(sample, levels = c("Aggregate-1", "Aggregate-2", "Aggregate-3", "Aggregate-4", "Aggregate-5", "Aggregate-6")))
+  mutate(sample = factor(sample, levels = c("Core A, 16%", "Core A, 28%", "Core B, 16%", "Core B, 28%", "Core C, 16%", "Core C, 28%")))
  
 breadthdata_csv = 
   breadthdata_csv %>% 
@@ -277,7 +239,21 @@ breadthdata_csv =
 tool = breadthdata_csv %>% 
   filter(site=="tool")
 
+before = tool[tool$trmt=="before",]
+after = tool[tool$trmt=="after",]
 
+before = before %>% 
+  rename(before_freq = freq)
+
+after = after %>% 
+  rename(after_freq = freq)
+
+
+diff = before %>% 
+  left_join(dplyr::select(after, after_freq, sample, by = character("sample"), "breadth_um"))
+
+rlang::last_error()
+rlang::last_trace()
 
 # rep1 ggplot
 # g1 = breadthdata_csv %>% 
@@ -454,31 +430,31 @@ alldat_csv =
 
 alldat_csv = 
   alldat_csv %>% 
-  mutate(sample = recode(sample, "40-50-16" = "Core B, 40-50 cm, 16%"))
+  mutate(sample = recode(sample, "40-50-16" = "Core B, 16%"))
 
 alldat_csv = 
   alldat_csv %>% 
-  mutate(sample = recode(sample, "40-50-28" = "Core B, 40-50 cm, 28%"))
+  mutate(sample = recode(sample, "40-50-28" = "Core B, 28%"))
 
 alldat_csv = 
   alldat_csv %>% 
-  mutate(sample = recode(sample, "28-38-12" = "Core A, 28-38 cm, 16%"))
+  mutate(sample = recode(sample, "28-38-12" = "Core A, 16%"))
 
 alldat_csv = 
   alldat_csv %>% 
-  mutate(sample = recode(sample, "28-38-28" = "Core A, 28-38 cm, 28%"))
+  mutate(sample = recode(sample, "28-38-28" = "Core A, 28%"))
 
 alldat_csv = 
   alldat_csv %>% 
-  mutate(sample = recode(sample, "41-50-16" = "Core C, 41-50 cm, 16%"))
+  mutate(sample = recode(sample, "41-50-16" = "Core C, 16%"))
 
 alldat_csv = 
   alldat_csv %>% 
-  mutate(sample = recode(sample, "41-50-28" = "Core C, 41-50 cm, 28%"))
+  mutate(sample = recode(sample, "41-50-28" = "Core C, 28%"))
 
 alldat_csv = 
   alldat_csv %>% 
-  mutate(sample = factor(sample, levels = c("Core A, 28-38 cm, 16%", "Core A, 28-38 cm, 28%", "Core B, 40-50 cm, 16%", "Core B, 40-50 cm, 28%", "Core C, 41-50 cm, 16%", "Core C, 41-50 cm, 28%")))
+  mutate(sample = factor(sample, levels = c("Core A, 16%", "Core A, 28%", "Core B, 16%", "Core B, 28%", "Core C, 16%", "Core C, 28%")))
 
 
 alldat_csv %>% 
@@ -582,7 +558,7 @@ count(alldat_csv, groups = sample)
 
 alldat_csv %>%
   #filter(breadth_mm3 > 25) %>% 
-  #filter(sample == c("Core B, 40-50 cm, 16%", "Core A, 28-38 cm, 28%", "Core C, 41-50 cm, 16%")) %>% 
+  #filter(sample == c("Core B, 16%", "Core A, 28%", "Core C, 16%")) %>% 
   ggplot (aes(x = (breadth_mm3*1000), y=shape_factor, color = sample)) +
   geom_point() + 
   geom_smooth(span = 0.3) +
@@ -597,7 +573,7 @@ alldat_csv %>%
 
 
 alldat_csv %>% 
-  filter(sample == c("Core B, 40-50 cm, 16%", "Core A, 28-38 cm, 28%", "Core C, 41-50 cm, 16%")) %>% 
+  filter(sample == c("Core B, 16%", "Core A, 28%", "Core C, 16%")) %>% 
   ggplot (aes(x = (breadth_mm3*1000), y=(volume_mm3*1000), color = sample)) +
   geom_point() + 
   geom_smooth(aes(group = ftc, span = 0.5)) +
@@ -612,7 +588,7 @@ alldat_csv %>%
   scale_y_log10()
 
 alldat_csv %>% 
-  filter(sample == c("Core B, 40-50 cm, 16%", "Core A, 28-38 cm, 28%", "Core C, 41-50 cm, 16%")) %>% 
+  filter(sample == c("Core B, 16%", "Core A, 28%", "Core C, 16%")) %>% 
   ggplot (aes(x = (breadth_mm3*1000), y=shape_factor, color = sample)) +
   geom_point() + 
   geom_smooth(aes(group = ftc, span = 0.5)) +
@@ -631,7 +607,7 @@ alldat_csv %>%
 
 
 alldat_csv %>% 
-  filter(sample == c("Core B, 40-50 cm, 28%", "Core A, 28-38 cm, 16%", "Core C, 41-50 cm, 28%")) %>% 
+  filter(sample == c("Core B, 28%", "Core A, 16%", "Core C, 28%")) %>% 
   ggplot (aes(x = (breadth_mm3*1000), y=(volume_mm3*1000), color = sample)) +
   geom_point() + 
   geom_smooth(aes(group = ftc, span = 0.5)) +
@@ -646,7 +622,7 @@ alldat_csv %>%
   scale_y_log10()
 
 alldat_csv %>% 
-  filter(sample == c("Core B, 40-50 cm, 28%", "Core A, 28-38 cm, 16%", "Core C, 41-50 cm, 28%")) %>% 
+  filter(sample == c("Core B, 28%", "Core A, 16%", "Core C, 28%")) %>% 
   ggplot (aes(x = (breadth_mm3*1000), y=shape_factor, color = sample)) +
   geom_point() + 
   geom_smooth(aes(group = ftc, span = 0.5)) +
@@ -760,8 +736,9 @@ alldat_csv %>%
 
 ## KP:  I see below (ggplots) why you created separate files for `before` and `after`,
 ## but since facet_grid is working now, I'd use that instead of creating separate plots and then combining.
-before = breadthdata_csv[breadthdata_csv$trmt=="before",]
-after = breadthdata_csv[breadthdata_csv$trmt=="after",]
+
+  
+
 
 p1 = ggplot(before, aes(x = breadth_um, y=freq, color = sample))+
   geom_line(size = 1)+
