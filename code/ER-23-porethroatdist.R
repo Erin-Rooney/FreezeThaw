@@ -250,10 +250,10 @@ after = after %>%
 
 
 diff = before %>% 
-  left_join(after %>% dplyr::select(after_freq, sample), by = "sample") %>% 
+  left_join(after %>% dplyr::select(after_freq, sample, breadth_um)) %>% 
   dplyr::mutate(diff_freq = (after_freq - before_freq))
 
-diff3 = before %>% 
+diff2 = before %>% 
   left_join(after %>% dplyr::select(after_freq, sample), by = c("sample", "breadth_um")) %>% 
   dplyr::mutate(diff_freq = (after_freq - before_freq))
 
