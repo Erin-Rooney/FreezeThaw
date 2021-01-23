@@ -253,9 +253,10 @@ diff = before %>%
   left_join(after %>% dplyr::select(after_freq, sample, breadth_um)) %>% 
   dplyr::mutate(diff_freq = (after_freq - before_freq))
 
-diff2 = before %>% 
-  left_join(after %>% dplyr::select(after_freq, sample), by = c("sample", "breadth_um")) %>% 
-  dplyr::mutate(diff_freq = (after_freq - before_freq))
+# diff2 = before %>% 
+#   left_join(after %>% dplyr::select(after_freq, sample), by = c("sample", "breadth_um")) %>% 
+#   dplyr::mutate(diff_freq = (after_freq - before_freq))
+
 
 
 # rep1 ggplot
@@ -394,40 +395,41 @@ ggplot(aes(x = breadth_um, y=freq, color = trmt))+
   #guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
   facet_grid(.~sample)
 
+# 
+# diff %>% 
+#   #filter(sample == "Aggregate-3") %>% 
+#   ggplot(aes(x = breadth_um, y=diff_freq, color = sample))+
+#   geom_line(size = 1)+
+#   #geom_density(adjust=0.5)+
+#   labs (#title = "Pore Throat Diameter Distribution",
+#     #subtitle = "After Freeze/Thaw",
+#     #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+#     #tag = "Figure 6",
+#     x = expression (bold ("Pore Throat Diameter, um")),
+#     y = expression (bold ("frequency, %"))) + 
+#   theme_er() + 
+#   scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
+#   scale_fill_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
+#   scale_y_continuous(labels = (scales::percent),
+#                      limits = c(0.00,0.20),
+#                      breaks = seq(0,0.20,0.05))
 
-diff %>% 
-  #filter(sample == "Aggregate-3") %>% 
-  ggplot(aes(x = breadth_um, y=diff_freq, color = sample))+
-  geom_line(size = 1)+
-  #geom_density(adjust=0.5)+
-  labs (#title = "Pore Throat Diameter Distribution",
-    #subtitle = "After Freeze/Thaw",
-    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-    #tag = "Figure 6",
-    x = expression (bold ("Pore Throat Diameter, um")),
-    y = expression (bold ("frequency, %"))) + 
-  theme_er() + 
-  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
-  scale_fill_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
-  scale_y_continuous(labels = (scales::percent),
-                     limits = c(0.00,0.20),
-                     breaks = seq(0,0.20,0.05))
+# diff %>% 
+#   ggplot(aes(x = breadth_um, y=diff_freq, color = sample))+
+#   geom_line(size = 1)+
+#   #geom_density(adjust=0.5)+
+#   
+#   labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
+#         subtitle = "After Freeze/Thaw",
+#         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+#         #tag = "Figure 6",
+#         x = expression (bold ("Pore Throat Diameter, um")),
+#         y = expression (bold ("Distribution, %"))) + 
+#   theme_er() + 
+#   scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
+#   guides(fill = guide_legend(reverse = TRUE, title = NULL))
 
-diff %>% 
-  ggplot(aes(x = breadth_um, y=diff_freq, color = sample))+
-  geom_line(size = 1)+
-  #geom_density(adjust=0.5)+
-  
-  labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
-        subtitle = "After Freeze/Thaw",
-        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        #tag = "Figure 6",
-        x = expression (bold ("Pore Throat Diameter, um")),
-        y = expression (bold ("Distribution, %"))) + 
-  theme_er() + 
-  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
-  guides(fill = guide_legend(reverse = TRUE, title = NULL))
-
+##this is the difference in freq plot that I am leaning toward:
 
 diff %>%
   mutate(breadth_um = as.numeric(breadth_um)) %>% 
