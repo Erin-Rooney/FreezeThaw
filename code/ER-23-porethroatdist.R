@@ -358,6 +358,7 @@ diff = before %>%
 
 g = ggplot(tool, aes(x = breadth_um, y=freq, color = trmt))+
   geom_line(size = 1)+
+  geom_area(aes(group = trmt, fill = trmt, alpha = 0.5))+
   #geom_density(adjust=0.5)+
   
   labs (title = "Pore Throat Diameter Distribution",
@@ -369,6 +370,7 @@ g = ggplot(tool, aes(x = breadth_um, y=freq, color = trmt))+
 
 g + theme_er() + 
   scale_color_manual(values = c("#b0986c", "#72e1e1"))+
+  scale_fill_manual(values = c("#b0986c", "#72e1e1"))+
   #scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
   #guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
   facet_wrap(sample~.)
