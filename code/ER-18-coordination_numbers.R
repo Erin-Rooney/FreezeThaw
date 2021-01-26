@@ -122,7 +122,7 @@ library(soilpalettes)
 library(PNWColors)
 theme_er <- function() {  # this for all the elements common across plots
   theme_bw() %+replace%
-    theme(legend.position = "right",
+    theme(legend.position = "none",
           #legend.key=element_blank(),
           legend.title = element_blank(),
           #legend.text = element_blank(),
@@ -186,7 +186,7 @@ allcombo %>%
   ggplot(aes(x = pore_coor, y = diff, color = sample)) +
   geom_point(size = 4) + 
   geom_path(aes(group = sample), size = 1)+ 
-  geom_area(aes(group = sample, fill = sample, alpha = 0.5))+
+  geom_area(aes(group = sample, fill = sample), alpha = 0.5, position = "identity")+
   scale_x_continuous(limits = c(0,16), 
                      breaks = seq(0,16,4)) +
   theme_er() +
@@ -203,7 +203,7 @@ allcombo %>%
 #before/after facet wrap 
 
 tool %>%
-  filter(sample == "Aggregate-3") %>% 
+  filter(sample == "Core C, 28%") %>% 
   mutate(pore_coor = as.numeric(pore_coor)) %>% 
   ggplot(aes(x = pore_coor, y = freq, color = trmt)) +
   geom_path(aes(group = trmt), size = 1)+ 
