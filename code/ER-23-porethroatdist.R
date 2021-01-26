@@ -128,7 +128,7 @@ plot(alldat_csv)
 
 theme_er <- function() {  # this for all the elements common across plots
   theme_bw() %+replace%
-    theme(legend.position = "bottom",
+    theme(legend.position = "none",
           legend.key=element_blank(),
           legend.title = element_blank(),
           legend.text = element_text(size = 12),
@@ -357,8 +357,8 @@ diff = before %>%
 #trying to create a two panel figure featuring two rows for before/after.
 
 g = ggplot(tool, aes(x = breadth_um, y=freq, color = trmt))+
-  geom_line(size = 1)+
-  geom_area(aes(group = trmt, fill = trmt, alpha = 0.5))+
+  geom_point()+
+  geom_area(aes(group = trmt, fill = trmt, alpha = 0.5, position = "identity"))+
   #geom_density(adjust=0.5)+
   
   labs (title = "Pore Throat Diameter Distribution",
@@ -378,9 +378,11 @@ g + theme_er() +
 
 
 tool %>% 
-  #filter(sample == "Aggregate-3") %>% 
+  filter(sample == "Core C, 28%") %>% 
 ggplot(aes(x = breadth_um, y=freq, color = trmt))+
-  geom_line(size = 1)+
+  geom_point(size = 4) + 
+  geom_path(aes(group = trmt), size = 1)+ 
+  geom_area(aes(group = trmt, fill = trmt), alpha = 0.5, position = "identity")+
   #geom_density(adjust=0.5)+
   labs (#title = "Pore Throat Diameter Distribution",
         #subtitle = "After Freeze/Thaw",
@@ -390,12 +392,13 @@ ggplot(aes(x = breadth_um, y=freq, color = trmt))+
         y = expression (bold ("frequency, %"))) + 
   theme_er() + 
   scale_color_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
   scale_y_continuous(labels = (scales::percent),
                      limits = c(0.00,0.20),
-                     breaks = seq(0,0.20,0.05))+
-  #scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
-  #guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
-  facet_grid(.~sample)
+                     breaks = seq(0.00,0.20,0.05))
+  #scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) 
+
+ 
 
 # 
 # diff %>% 
@@ -438,7 +441,7 @@ diff %>%
   ggplot(aes(x = breadth_um, y = diff_freq, color = sample)) +
   geom_point(size = 4) + 
   geom_path(aes(group = sample), size = 1)+ 
-  geom_area(aes(group = sample, fill = sample, alpha = 0.5))+
+  geom_area(aes(group = sample, fill = sample), alpha = 0.5, position = "identity")+
   theme_er() +
   # facet_wrap(~ sample) +
   scale_color_manual(values = pnw_palette("Bay", 6)) +
@@ -519,7 +522,7 @@ alldat_csv =
 
 alldat_csv %>% 
   #filter(breadth_mm3 > 0.4 & breadth_mm3 < 0.80) %>% 
-  ggplot(aes(x = (breadth_mm3*100), y=shape_factor, color = ftc))+
+  ggplot(aes(x = (breadth_mm3*100), y=shape_factor, color = sample))+
   geom_point()+
   #geom_line(size = 1)+
   #geom_density(adjust=0.5)+
@@ -531,12 +534,13 @@ alldat_csv %>%
     x = expression (bold ("Pore Throat Diameter, um")),
     y = expression (bold ("Pore Shape Factor"))) + 
   theme_er() + 
-  scale_color_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_color_manual(values = pnw_palette("Bay", 6)) +
   scale_y_continuous(limits = c(0.00,1.0),
                     breaks = seq(0,1.0,0.25))+
-  scale_x_continuous(limits = c(0.00,150),
-                     breaks = seq(0,150,50))+
+  scale_x_continuous(limits = c(0.00,200),
+                     breaks = seq(0,200,50))+
   scale_y_log10()+
+  scale_x_log10()+
   facet_grid(ftc~sample)
 
 ####
@@ -568,7 +572,7 @@ alldat_csv %>%
 
 alldat_csv %>% 
   #filter(breadth_mm3 > 0.25 & breadth_mm3 < 1.5) %>% 
-  ggplot(aes(x = (breadth_mm3*100), y=volume_mm3*100, color = ftc))+
+  ggplot(aes(x = (breadth_mm3*100), y=volume_mm3*100, color = sample))+
   geom_point(size = 2)+
   #geom_smooth(size = 1)+
   #geom_density(adjust=0.5)+
@@ -580,12 +584,12 @@ alldat_csv %>%
     x = expression (bold ("Pore Throat Diameter, um")),
     y = expression (bold ("Volume, um, log10"))) + 
   theme_er() + 
-  scale_color_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_color_manual(values = pnw_palette("Bay", 6)) +
   #scale_y_continuous(limits = c(0.00,1.0),
                     # breaks = seq(0,1.0,0.1))+
   scale_y_log10()+
-  #scale_x_continuous(limits = c(20,150),
-                     #breaks = seq(0,150,50))+
+  scale_x_continuous(limits = c(0,400),
+                     breaks = seq(0,400,200))+
   facet_grid(ftc~sample)
 
 # Count
@@ -614,22 +618,23 @@ alldat_csv %>%
 
 count(alldat_csv, groups = sample)
 
-# smoothing
+# 1-25-2020-------------------------------------
 
 alldat_csv %>%
   #filter(breadth_mm3 > 25) %>% 
   #filter(sample == c("Core B, 16%", "Core A, 28%", "Core C, 16%")) %>% 
   ggplot (aes(x = (breadth_mm3*1000), y=shape_factor, color = sample)) +
   geom_point() + 
-  geom_smooth(span = 0.3) +
+  #geom_smooth(span = 0.3) +
   theme_er() +
   facet_grid (ftc~sample) +  
-  scale_color_manual(values = pnw_palette("Sailboat", 6, type = "discrete")) +
+  scale_color_manual(values = pnw_palette("Bay", 6)) +
   labs (x = expression (bold ("Pore Throat Diameter, um")),
         y = expression (bold ("Pore Shape Factor"))) +
   scale_x_continuous(limits = c(0.00,160),
                      breaks = seq(0,150,50))
   #scale_y_log10()
+
 
 
 alldat_csv %>% 
