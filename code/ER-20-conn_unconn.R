@@ -19,6 +19,7 @@ library(agricolae)
 library(PairedData)
 library(ggpubr)
 library(PNWColors)
+library(cowplot)
 
 # Create Rep and Site Data frames ---------------------------------------------------------------------
 
@@ -33,7 +34,7 @@ tool = conn_csv %>%
 # ggplot set up----------------------------------------------------------------
 theme_er <- function() {  # this for all the elements common across plots
   theme_bw() %+replace%
-    theme(legend.position = "right",
+    theme(legend.position = "none",
           legend.key=element_blank(),
           legend.title = element_blank(),
           legend.text = element_text(size = 12),
@@ -135,7 +136,7 @@ tool_long %>%
   filter(sample == "Aggregate-6") %>% 
   ggplot(aes(x = trmt, y = volume, color = Type)) + 
   #geom_boxplot(aes(group = trmt), fill = "gray50", alpha = 0.2, width = 0.2) + 
-  geom_path(aes(group = Type, color = Type), size = 0.7)+
+  geom_path(aes(group = Type, color = Type), size = 0.7, linetype = "dashed")+
   geom_point(aes(fill = Type), size = 6, shape = 21, stroke = 1, color = "black") + 
   #geom_text(data = gglabel, aes(x = trmt, y = volume, label = label), color = "black")+
   #facet_wrap(. ~ sample)+
