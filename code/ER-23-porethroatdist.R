@@ -253,6 +253,40 @@ diff = before %>%
   left_join(after %>% dplyr::select(after_freq, sample, breadth_um)) %>% 
   dplyr::mutate(diff_freq = (after_freq - before_freq))
 
+diff_freqsummary =
+  diff %>% 
+  dplyr::select(-site, -before_freq, -after_freq, -trmt, -breadth_mm) %>%
+  mutate(diff_perc = diff_freq * 100) %>% 
+ # mutate(diff_pos = if_else(diff_perc < 0, multiply(-1), as.numeric()
+ # )) %>% 
+  group_by(sample) %>% 
+  dplyr::summarise(total = sum(diff_pos))  
+  
+#
+
+diff_summary =
+  diff %>% 
+  dplyr::select(-site, -before_freq, -after_freq, -trmt, -breadth_mm) %>% 
+  #dplyr::summarise(total = sum(diff_freq))
+  mutate(diff_perc = diff_freq * 100) %>% 
+  dplyr::select(-diff_freq) %>% 
+  mutate(mag = case_when(diff_perc > 5 ~ '1',
+                         diff_perc < -5 ~ '1',
+                         )) %>% 
+  na.omit() %>% 
+  group_by(sample) %>% 
+  dplyr::mutate(mag = as.numeric(mag)) 
+
+diff_summary %>% 
+  group_by(sample) %>% 
+  dplyr::summarise(count = count(mag))
+  
+diff_summary %>% 
+  print
+
+write.csv(diff_summary, "processed/ptddsummary.csv", row.names = FALSE)
+
+
 # diff2 = before %>% 
 #   left_join(after %>% dplyr::select(after_freq, sample), by = c("sample", "breadth_um")) %>% 
 #   dplyr::mutate(diff_freq = (after_freq - before_freq))
