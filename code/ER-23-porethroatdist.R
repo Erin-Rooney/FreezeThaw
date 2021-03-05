@@ -378,9 +378,9 @@ g + theme_er() +
 
 
 tool %>% 
-  filter(sample == "Core C, 28%") %>% 
+  filter(sample == "Core A, 16%") %>% 
 ggplot(aes(x = breadth_um, y=freq, color = trmt))+
-  geom_point(size = 4) + 
+  #geom_point(size = 4) + 
   geom_path(aes(group = trmt), size = 1)+ 
   geom_area(aes(group = trmt, fill = trmt), alpha = 0.5, position = "identity")+
   #geom_density(adjust=0.5)+
