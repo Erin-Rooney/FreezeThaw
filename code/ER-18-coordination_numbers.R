@@ -58,7 +58,18 @@ allcombo =
   tool %>% 
   dplyr::select(-count) %>% 
   spread(trmt, freq) %>% 
-  mutate(diff = round(after - before, 5))
+  mutate(diff = round(after - before, 5)) %>% 
+  dplyr::select(-before, -after)
+
+allcombo_summary =
+  allcombo %>% 
+  group_by(sample) %>%
+  dplyr::summarise(total = sum(diff))
+
+allcombo_summary %>% 
+  print
+
+write.csv(allcombo_summary, "processed/pcnsummary.csv", row.names = FALSE)
 
 #low = coornum_dat[coornum_dat$water=="low",]
 #high = coornum_dat[coornum_dat$water=="high",]
