@@ -1,0 +1,7 @@
+sample,total,count
+"Core A, 16%",1.00E-09,3
+"Core A, 28%",4.00E-09,2
+"Core B, 16%",-2.00E-09,0
+"Core B, 28%",1.00E-09,3
+"Core C, 16%",1.00E-09,0
+"Core C, 28%",2.00E-09,2
