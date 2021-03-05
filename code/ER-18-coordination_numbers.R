@@ -176,7 +176,8 @@ allcombo %>%
         #tag = "A",
         x = expression (bold ("pore coordination number")),
         y = expression (bold ("difference in frequency"))) 
-  #guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
+  
+#guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
 
 
 #All combo shading
@@ -184,7 +185,7 @@ allcombo %>%
 allcombo %>%
   mutate(pore_coor = as.numeric(pore_coor)) %>% 
   ggplot(aes(x = pore_coor, y = diff, color = sample)) +
-  geom_point(size = 4) + 
+  geom_point(size = 3) + 
   geom_path(aes(group = sample), size = 1)+ 
   geom_area(aes(group = sample, fill = sample), alpha = 0.5, position = "identity")+
   scale_x_continuous(limits = c(0,16), 
