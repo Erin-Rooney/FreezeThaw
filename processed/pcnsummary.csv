@@ -1,7 +1,23 @@
-"sample","total"
-"Core A, 16%",-3.52365706057789e-18
-"Core A, 28%",-1.99999999999966e-05
-"Core B, 16%",-1.00000000000039e-05
-"Core B, 28%",0
-"Core C, 16%",0
-"Core C, 28%",-1.30104260698261e-17
+"sample","pore_coor","diff_perc","include"
+"Core A, 16%","1",10.9268708,"include"
+"Core A, 16%","2",6.7602041,"include"
+"Core A, 16%","3",14.1156463,"include"
+"Core A, 16%","5",8.1632653,"include"
+"Core A, 16%","6",6.292517,"include"
+"Core A, 28%","2",5.0951087,"include"
+"Core A, 28%","3",7.6766304,"include"
+"Core A, 28%","6",5.0271739,"include"
+"Core B, 16%","1",6.1316051,"include"
+"Core B, 16%","2",6.0817548,"include"
+"Core B, 16%","4",5.333998,"include"
+"Core B, 28%","1",7.1428571,"include"
+"Core B, 28%","3",7.1428571,"include"
+"Core B, 28%","4",14.2857143,"include"
+"Core C, 16%","1",18.2917611,"include"
+"Core C, 16%","2",6.1602418,"include"
+"Core C, 16%","6",6.122449,"include"
+"Core C, 28%","1",30.9653917,"include"
+"Core C, 28%","2",5.8287796,"include"
+"Core C, 28%","4",13.4790528,"include"
+"Core C, 28%","5",8.1967213,"include"
+"Core C, 28%","6",8.1967213,"include"
