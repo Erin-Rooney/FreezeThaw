@@ -58,13 +58,18 @@ allcombo =
   tool %>% 
   dplyr::select(-count) %>% 
   spread(trmt, freq) %>% 
-  mutate(diff = round(after - before, 5)) %>% 
+  dplyr::mutate(diff = abs(after - before)) %>% 
   dplyr::select(-before, -after)
 
 allcombo_summary =
-  allcombo %>% 
-  group_by(sample) %>%
-  dplyr::summarise(total = sum(diff))
+  allcombo %>%
+  dplyr::select(-site) %>%
+  #dplyr::summarise(total = sum(diff_freq))
+  mutate(diff_perc = diff * 100) %>%
+  dplyr::select(-diff) %>%
+  mutate(include = case_when(diff_perc > 10 ~ 'include'
+  )) %>%
+  na.omit() 
 
 allcombo_summary %>% 
   print
