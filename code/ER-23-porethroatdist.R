@@ -251,7 +251,8 @@ after = after %>%
 
 diff = before %>% 
   left_join(after %>% dplyr::select(after_freq, sample, breadth_um)) %>% 
-  dplyr::mutate(diff_freq = (after_freq - before_freq))
+  dplyr::mutate(diff_freq = abs(after_freq - before_freq))
+
 
 diff_freqsummary =
   diff %>% 
@@ -265,26 +266,26 @@ diff_freqsummary =
 #
 
 diff_summary =
-  diff %>% 
-  dplyr::select(-site, -before_freq, -after_freq, -trmt, -breadth_mm) %>% 
+  diff %>%
+  dplyr::select(-site, -before_freq, -after_freq, -trmt, -breadth_mm) %>%
   #dplyr::summarise(total = sum(diff_freq))
-  mutate(diff_perc = diff_freq * 100) %>% 
-  dplyr::select(-diff_freq) %>% 
-  mutate(mag = case_when(diff_perc > 5 ~ '1',
-                         diff_perc < -5 ~ '1',
-                         )) %>% 
-  na.omit() %>% 
-  group_by(sample) %>% 
-  dplyr::mutate(mag = as.numeric(mag)) 
+  mutate(diff_perc = diff_freq * 100) %>%
+  dplyr::select(-diff_freq) %>%
+  mutate(include = case_when(diff_perc > 5 ~ 'include'
+                         )) %>%
+  na.omit() 
 
 diff_summary %>% 
-  group_by(sample) %>% 
-  dplyr::summarise(count = count(mag))
+  group_by(sample, include) %>% 
+  dplyr::summarise(count = n())
+
+
+
   
 diff_summary %>% 
   print
 
-write.csv(diff_summary, "processed/ptddsummary.csv", row.names = FALSE)
+write.csv(diff_summary, "processed/ptddsummary2.csv", row.names = FALSE)
 
 
 # diff2 = before %>% 
@@ -409,7 +410,7 @@ g + theme_er() +
   #guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
   facet_wrap(sample~.)
 
-
+#OFFICIAL PLOTS FOR MANUSCRIPT-------------------------------------------
 
 tool %>% 
   filter(sample == "Core A, 16%") %>% 
@@ -429,10 +430,144 @@ ggplot(aes(x = breadth_um, y=freq, color = trmt))+
   scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
   scale_y_continuous(labels = (scales::percent),
                      limits = c(0.00,0.20),
-                     breaks = seq(0.00,0.20,0.05))
-  #scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) 
+                     breaks = seq(0.00,0.20,0.05))+
+  annotate(
+    geom = "curve", x = 35, y = 0.17, xend = 35, yend = 0.11,
+    curvature = 0.00, arrow = arrow(length = unit(3, "mm")), color = "black", size = 0.75)+
+  annotate(
+    geom = "curve", x = 65, y = 0.17, xend = 65, yend = 0.14,
+    curvature = 0.00, arrow = arrow(length = unit(3, "mm")), color = "black", size = 0.75)+
+  annotate(
+    geom = "curve", x = 85, y = 0.17, xend = 85, yend = 0.08,
+    curvature = 0.00, arrow = arrow(length = unit(3, "mm")), color = "black", size = 0.75)
+  #scale_fill_gradientn(colors = rev(soil_palette("redox", 3)))+
+  #scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete"))
 
- 
+tool %>% 
+  filter(sample == "Core A, 28%") %>% 
+  ggplot(aes(x = breadth_um, y=freq, color = trmt))+
+  #geom_point(size = 4) + 
+  geom_path(aes(group = trmt), size = 1)+ 
+  geom_area(aes(group = trmt, fill = trmt), alpha = 0.5, position = "identity")+
+  #geom_density(adjust=0.5)+
+  labs (#title = "Pore Throat Diameter Distribution",
+    #subtitle = "After Freeze/Thaw",
+    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    #tag = "Figure 6",
+    x = expression (bold ("Pore Throat Diameter, um")),
+    y = expression (bold ("frequency, %"))) + 
+  theme_er() + 
+  scale_color_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_y_continuous(labels = (scales::percent),
+                     limits = c(0.00,0.20),
+                     breaks = seq(0.00,0.20,0.05))+
+  annotate(
+    geom = "curve", x = 25, y = 0.17, xend = 25, yend = 0.11,
+    curvature = 0.00, arrow = arrow(length = unit(3, "mm")), color = "black", size = 0.75)+
+  annotate(
+    geom = "curve", x = 35, y = 0.17, xend = 35, yend = 0.13,
+    curvature = 0.00, arrow = arrow(length = unit(3, "mm")), color = "black", size = 0.75)
+  
+
+tool %>% 
+  filter(sample == "Core B, 16%") %>% 
+  ggplot(aes(x = breadth_um, y=freq, color = trmt))+
+  #geom_point(size = 4) + 
+  geom_path(aes(group = trmt), size = 1)+ 
+  geom_area(aes(group = trmt, fill = trmt), alpha = 0.5, position = "identity")+
+  #geom_density(adjust=0.5)+
+  labs (#title = "Pore Throat Diameter Distribution",
+    #subtitle = "After Freeze/Thaw",
+    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    #tag = "Figure 6",
+    x = expression (bold ("Pore Throat Diameter, um")),
+    y = expression (bold ("frequency, %"))) + 
+  theme_er() + 
+  scale_color_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_y_continuous(labels = (scales::percent),
+                     limits = c(0.00,0.20),
+                     breaks = seq(0.00,0.20,0.05))
+#scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) 
+
+tool %>% 
+  filter(sample == "Core B, 28%") %>% 
+  ggplot(aes(x = breadth_um, y=freq, color = trmt))+
+  #geom_point(size = 4) + 
+  geom_path(aes(group = trmt), size = 1)+ 
+  geom_area(aes(group = trmt, fill = trmt), alpha = 0.5, position = "identity")+
+  #geom_density(adjust=0.5)+
+  labs (#title = "Pore Throat Diameter Distribution",
+    #subtitle = "After Freeze/Thaw",
+    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    #tag = "Figure 6",
+    x = expression (bold ("Pore Throat Diameter, um")),
+    y = expression (bold ("frequency, %"))) + 
+  theme_er() + 
+  scale_color_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_y_continuous(labels = (scales::percent),
+                     limits = c(0.00,0.20),
+                     breaks = seq(0.00,0.20,0.05))+
+  annotate(
+    geom = "curve", x = 35, y = 0.2, xend = 35, yend = 0.18,
+    curvature = 0.00, arrow = arrow(length = unit(3, "mm")), color = "black", size = 0.75)+
+  annotate(
+    geom = "curve", x = 80, y = 0.2, xend = 62, yend = 0.2,
+    curvature = 0.00, arrow = arrow(length = unit(3, "mm")), color = "black", size = 0.75)+
+  annotate(
+    geom = "curve", x = 110, y = 0.2, xend = 110, yend = 0.07,
+    curvature = 0.00, arrow = arrow(length = unit(3, "mm")), color = "black", size = 0.75)
+
+
+tool %>% 
+  filter(sample == "Core C, 16%") %>% 
+  ggplot(aes(x = breadth_um, y=freq, color = trmt))+
+  #geom_point(size = 4) + 
+  geom_path(aes(group = trmt), size = 1)+ 
+  geom_area(aes(group = trmt, fill = trmt), alpha = 0.5, position = "identity")+
+  #geom_density(adjust=0.5)+
+  labs (#title = "Pore Throat Diameter Distribution",
+    #subtitle = "After Freeze/Thaw",
+    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    #tag = "Figure 6",
+    x = expression (bold ("Pore Throat Diameter, um")),
+    y = expression (bold ("frequency, %"))) + 
+  theme_er() + 
+  scale_color_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_y_continuous(labels = (scales::percent),
+                     limits = c(0.00,0.20),
+                     breaks = seq(0.00,0.20,0.05))
+#scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) 
+
+tool %>% 
+  filter(sample == "Core C, 28%") %>% 
+  ggplot(aes(x = breadth_um, y=freq, color = trmt))+
+  #geom_point(size = 4) + 
+  geom_path(aes(group = trmt), size = 1)+ 
+  geom_area(aes(group = trmt, fill = trmt), alpha = 0.5, position = "identity")+
+  #geom_density(adjust=0.5)+
+  labs (#title = "Pore Throat Diameter Distribution",
+    #subtitle = "After Freeze/Thaw",
+    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    #tag = "Figure 6",
+    x = expression (bold ("Pore Throat Diameter, um")),
+    y = expression (bold ("frequency, %"))) + 
+  theme_er() + 
+  scale_color_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_y_continuous(labels = (scales::percent),
+                     limits = c(0.00,0.20),
+                     breaks = seq(0.00,0.20,0.05))+
+  annotate(
+    geom = "curve", x = 60, y = 0.17, xend = 60, yend = 0.11,
+    curvature = 0.00, arrow = arrow(length = unit(3, "mm")), color = "black", size = 0.75)+
+  annotate(
+    geom = "curve", x = 95, y = 0.17, xend = 95, yend = 0.09,
+    curvature = 0.00, arrow = arrow(length = unit(3, "mm")), color = "black", size = 0.75)
+
 
 # 
 # diff %>% 
@@ -488,36 +623,6 @@ diff %>%
  # facet_wrap(.~sample)
 
 
-# Okay, time for some new graphs. We're doing pore shape factor/volume x pore throat dist by agg
-
-
-# alldat_csv = 
-#   alldat_csv %>% 
-#   mutate(sample = recode(sample, "40-50-16" = "Aggregate-1"))
-# 
-# alldat_csv = 
-#   alldat_csv %>% 
-#   mutate(sample = recode(sample, "40-50-28" = "Aggregate-2"))
-# 
-# alldat_csv = 
-#   alldat_csv %>% 
-#   mutate(sample = recode(sample, "28-38-12" = "Aggregate-3"))
-# 
-# alldat_csv = 
-#   alldat_csv %>% 
-#   mutate(sample = recode(sample, "28-38-28" = "Aggregate-4"))
-# 
-# alldat_csv = 
-#   alldat_csv %>% 
-#   mutate(sample = recode(sample, "41-50-16" = "Aggregate-5"))
-# 
-# alldat_csv = 
-#   alldat_csv %>% 
-#   mutate(sample = recode(sample, "41-50-28" = "Aggregate-6"))
-
-# alldat_csv = 
-#   alldat_csv %>% 
-#   mutate(sample = factor(sample, levels = c("Aggregate-1", "Aggregate-2", "Aggregate-3", "Aggregate-4", "Aggregate-5", "Aggregate-6")))
 
 #data processing for alldat_csv------------------------------
 
