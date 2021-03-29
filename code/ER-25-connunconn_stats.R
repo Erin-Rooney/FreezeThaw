@@ -200,5 +200,5 @@ compiled_csv %>%
 
 compiled_csv %>%
   group_by(sample, ftc) %>% 
-  dplyr::mutate(counts = stat(count)) 
+  dplyr::mutate(totalcount = stat(count)) 
   
