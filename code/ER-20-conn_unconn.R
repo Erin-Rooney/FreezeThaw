@@ -4,7 +4,8 @@
 
 # Load CSV ---------------------------------------------------------------------
 
-conn_csv = read.csv("processed/conn_unconn_aug52020.csv") 
+conn_csv = read.csv("processed/conn_unconn_aug52020.csv")
+conn_totals = read.csv("processed/conn_totals.csv")
 level_order <- c('before', 'after')
 plot(conn_csv)
 
@@ -34,7 +35,7 @@ tool = conn_csv %>%
 # ggplot set up----------------------------------------------------------------
 theme_er <- function() {  # this for all the elements common across plots
   theme_bw() %+replace%
-    theme(legend.position = "none",
+    theme(legend.position = "right",
           legend.key=element_blank(),
           legend.title = element_blank(),
           legend.text = element_text(size = 12),
@@ -85,6 +86,27 @@ tool_long = tool %>%
                        "unconn_pore_perc" = "Unconnected Air-Filled Pores",
                        "conn_water_perc" = "Connected Water-Filled Pores",
                        "unconn_water_perc" = "Unconnected Water-Filled Pores"))
+
+
+conntotals_long = conn_totals %>% 
+  mutate (trmt = factor(trmt, levels = c("before", "after"))) %>%
+  reshape2::melt(id = c('site', 'sample', 'trmt', 'water'),
+                 variable.name = "Type", value.name = "volume") %>% 
+  mutate(connected = case_when(grepl("unconn", Type)~"unconnected", 
+                               grepl("conn", Type)~"connected"),
+         filltype = case_when(grepl("water", Type)~"water", 
+                              grepl("air", Type)~"air")) %>% 
+  mutate(sample = recode(sample, "40_50_16" = "Aggregate-1", 
+                         "40_50_28" = "Aggregate-2",
+                         "28_38_12" = "Aggregate-3",
+                         "28_38_28" = "Aggregate-4",
+                         "41_50_16" = "Aggregate-5",
+                         "41_50_28" = "Aggregate-6"),
+         Type = recode(Type, "conn_air_rela" = "Connected Air-Filled Pores",
+                       "unconn_air_rela" = "Unconnected Air-Filled Pores",
+                       "conn_water_rela" = "Connected Water-Filled Pores",
+                       "unconn_water_rela" = "Unconnected Water-Filled Pores"))
+
 
 ggplot(data = tool_long, aes(x = trmt, y = volume)) + 
   geom_boxplot(aes(group = trmt), fill = "gray50", alpha = 0.2, width = 0.2) + 
@@ -152,6 +174,29 @@ tool_long %>%
   theme_er() +
   scale_color_manual(values = c("#c67b6f", "#5d74a5", "#efbc82", "#b0cbe7"))+
   scale_fill_manual(values = c("#c67b6f", "#5d74a5",  "#efbc82", "#b0cbe7"))
+
+conntotals_long %>% 
+  filter(sample == "Aggregate-6") %>% 
+  ggplot(aes(x = trmt, y = volume, color = Type)) + 
+  #geom_boxplot(aes(group = trmt), fill = "gray50", alpha = 0.2, width = 0.2) + 
+  geom_path(aes(group = Type, color = Type), size = 0.7, linetype = "dashed")+
+  geom_point(aes(fill = Type), size = 6, shape = 21, stroke = 1, color = "black") + 
+  #geom_text(data = gglabel, aes(x = trmt, y = volume, label = label), color = "black")+
+  #facet_wrap(. ~ sample)+
+  labs (#title = "Pore Volumes",
+    # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    # tag = "A",
+    x = expression (bold (" ")),
+    y = expression (bold ("Volume, %"))) +  
+  scale_y_continuous(labels = scales::label_percent(accuracy = 0.1),
+                     name = "Pore Volume, %"
+  ) +
+  expand_limits(y = 1)+
+  theme_er() +
+  scale_color_manual(values = c("#5d74a5", "#c67b6f", "#b0cbe7", "#efbc82"))+
+  scale_fill_manual(values = c("#5d74a5", "#c67b6f",  "#b0cbe7", "#efbc82"))
+
+
 
 #scale_color_manual(values = pnw_palette("Bay", 4)) +
 #scale_fill_manual(values = pnw_palette("Bay", 4)) 
@@ -368,11 +413,94 @@ b1+b2+b3+b4+ #combines the two plots
 # AOV ---------------------------------------------------------------------
 
 #correct anovas
-conn.aov <- aov(conn_water_perc ~ trmt, data = tool)
+#CONNECTED WATER
+conn.aov <- aov(conn_water_perc ~ trmt, data = conn_csv)
 summary.aov(conn.aov)
 
 trmt_hsd = HSD.test(conn.aov, "trmt")
 print(trmt_hsd)
+
+library(nlme)
+l = lme(conn_water_perc ~ trmt, random = ~1|water, na.action = na.omit, data = conn_csv)
+summary(l)
+print(l)
+anova(l)
+
+conn_rela = 
+  conn_csv %>% 
+  group_by(site, sample, trmt) %>% 
+  dplyr::mutate(total = sum(conn_water_perc, 
+                            conn_pore_perc, unconn_pore_perc, 
+                            unconn_water_perc)) %>% 
+  dplyr::mutate(conn_water_rela = conn_water_perc/total)
+
+conn.aov <- aov(conn_water_rela ~ trmt, data = conn_rela)
+summary.aov(conn.aov)
+
+l = lme(conn_water_rela ~ trmt, random = ~1|water, na.action = na.omit, data = conn_rela)
+summary(l)
+print(l)
+anova(l)
+
+#CONNECTED AIR
+
+conn_rela = 
+  conn_csv %>% 
+  group_by(site, sample, trmt) %>% 
+  dplyr::mutate(total = sum(conn_water_perc, 
+                            conn_pore_perc, unconn_pore_perc, 
+                            unconn_water_perc)) %>% 
+  dplyr::mutate(conn_water_rela = conn_water_perc/total,
+                conn_air_rela = conn_pore_perc/total,
+                unconn_water_rela = unconn_water_perc/total,
+                unconn_air_rela = unconn_pore_perc/total) 
+
+conn.aov2 <- aov(conn_air_rela ~ trmt, data = conn_rela)
+summary.aov(conn.aov2)
+
+l = lme(conn_air_rela ~ trmt, random = ~1|water, na.action = na.omit, data = conn_rela)
+summary(l)
+print(l)
+anova(l)
+
+#Unconn water
+
+conn.aov3 <- aov(unconn_water_rela ~ trmt, data = conn_rela)
+summary.aov(conn.aov3)
+
+l = lme(unconn_water_rela ~ trmt, random = ~1|water, na.action = na.omit, data = conn_rela)
+summary(l)
+print(l)
+anova(l)
+
+#Unconn water
+
+conn.aov4 <- aov(unconn_air_rela ~ trmt, data = conn_rela)
+summary.aov(conn.aov4)
+
+l = lme(unconn_air_rela ~ trmt, random = ~1|water, na.action = na.omit, data = conn_rela)
+summary(l)
+print(l)
+anova(l)
+
+#total pore volumes
+conn_totals = 
+  conn_rela %>% 
+  group_by(site, sample) %>% 
+  dplyr::mutate(sample_total = sum(total)) %>% 
+  group_by(site, sample, trmt) %>% 
+  dplyr::mutate(total_rela = total/sample_total)
+
+
+conn.aov5 <- aov(total_rela ~ trmt, data = conn_totals)
+summary.aov(conn.aov5)
+
+l = lme(total_rela ~ trmt, random = ~1|water, na.action = na.omit, data = conn_totals)
+summary(l)
+print(l)
+anova(l)
+
+write.csv(conn_totals,"processed/conn_totals.csv", row.names = FALSE)
 
 conn.aov2 <- aov(unconn_water_perc ~ trmt, data = tool)
 
@@ -383,6 +511,8 @@ conn.aov4 <- aov(unconn_pore_perc ~ trmt, data = tool)
 summary(conn.aov2)
 summary(conn.aov3)
 summary(conn.aov4)
+
+
 
 # conn_aov2 = aov(data = tool, unconn_pore_perc ~ trmt)
 # summary(conn_aov2)
