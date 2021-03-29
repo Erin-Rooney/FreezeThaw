@@ -1,0 +1,22 @@
+﻿site,sample,trmt,water,trmt_total,sample_total,total_rela
+tool,40_50_16,before,low,0.10793,0.198857,0.542751827
+tool,40_50_16,after,low,0.090927,0.198857,0.457248173
+tool,41_50_28,before,high,0.088428,0.132704,0.666355197
+tool,41_50_28,after,high,0.044276,0.132704,0.333644803
+tool,40_50_28,before,high,0.049555,0.094439,0.524730249
+tool,40_50_28,after,high,0.044884,0.094439,0.475269751
+tool,28_38_28,before,high,0.135661,0.319011,0.425254929
+tool,28_38_28,after,high,0.18335,0.319011,0.574745071
+tool,28_38_12,before,low,0.135577,0.253917,0.533942194
+tool,28_38_12,after,low,0.11834,0.253917,0.466057806
+tool,41_50_16,before,low,0.104217,0.141263,0.73775157
+tool,41_50_16,after,low,0.037046,0.141263,0.26224843
+,,,,,,
+,,,,,,
+,core,water content, before total pore volume,after total pore volume,,
+,A,low,,,,
+,B,low,0.10793,0.090927,,
+,C,low,,,,
+,A,high,0.135661,0.18335,,
+,B,high,0.049555,0.044884,,
+,C,high,0.088428,0.044276,,
