@@ -1,0 +1,204 @@
+#EC Rooney
+#3 24 2021
+# Conn Unconn stats
+
+
+conn_csv = read.csv("processed/conn_unconn_aug52020.csv")
+conn_totals = read.csv("processed/conn_totals.csv")
+compiled_csv=read.csv("processed/compiled_porethroatdata.csv")
+
+# Load packages ---------------------------------------------------------------------
+
+
+library(tidyverse)
+library(stats)
+library(base)
+library(soilpalettes)
+library(agricolae)
+library(PairedData)
+library(ggpubr)
+library(PNWColors)
+library(cowplot)
+
+# long processing--------------------------------------
+
+conntotals_long = conn_totals %>% 
+  mutate (trmt = factor(trmt, levels = c("before", "after"))) %>%
+  reshape2::melt(id = c('site', 'sample', 'trmt', 'water'),
+                 variable.name = "Type", value.name = "volume") %>% 
+  mutate(connected = case_when(grepl("unconn", Type)~"unconnected", 
+                               grepl("conn", Type)~"connected"),
+         filltype = case_when(grepl("water", Type)~"water", 
+                              grepl("air", Type)~"air")) %>% 
+  mutate(sample = recode(sample, "40_50_16" = "Aggregate-1", 
+                         "40_50_28" = "Aggregate-2",
+                         "28_38_12" = "Aggregate-3",
+                         "28_38_28" = "Aggregate-4",
+                         "41_50_16" = "Aggregate-5",
+                         "41_50_28" = "Aggregate-6"),
+         Type = recode(Type, "conn_air_rela" = "Connected Air-Filled Pores",
+                       "unconn_air_rela" = "Unconnected Air-Filled Pores",
+                       "conn_water_rela" = "Connected Water-Filled Pores",
+                       "unconn_water_rela" = "Unconnected Water-Filled Pores"))
+
+#correct anovas---------------------------------------
+#CONNECTED WATER---------------------------------------
+conn.aov <- aov(conn_water_perc ~ trmt, data = conn_csv)
+summary.aov(conn.aov)
+
+trmt_hsd = HSD.test(conn.aov, "trmt")
+print(trmt_hsd)
+
+library(nlme)
+l = lme(conn_water_perc ~ trmt, random = ~1|water, na.action = na.omit, data = conn_csv)
+summary(l)
+print(l)
+anova(l)
+
+conn_rela = 
+  conn_csv %>% 
+  group_by(site, sample, trmt) %>% 
+  dplyr::mutate(total = sum(conn_water_perc, 
+                            conn_pore_perc, unconn_pore_perc, 
+                            unconn_water_perc)) %>% 
+  dplyr::mutate(conn_water_rela = conn_water_perc/total)
+
+conn.aov <- aov(conn_water_rela ~ trmt, data = conn_rela)
+summary.aov(conn.aov)
+
+l = lme(conn_water_rela ~ trmt, random = ~1|water, na.action = na.omit, data = conn_rela)
+summary(l)
+print(l)
+anova(l)
+
+#CONNECTED AIR-------------------------------
+
+conn_rela = 
+  conn_csv %>% 
+  group_by(site, sample, trmt) %>% 
+  dplyr::mutate(total = sum(conn_water_perc, 
+                            conn_pore_perc, unconn_pore_perc, 
+                            unconn_water_perc)) %>% 
+  dplyr::mutate(conn_water_rela = conn_water_perc/total,
+                conn_air_rela = conn_pore_perc/total,
+                unconn_water_rela = unconn_water_perc/total,
+                unconn_air_rela = unconn_pore_perc/total) 
+
+conn.aov2 <- aov(conn_air_rela ~ trmt, data = conn_rela)
+summary.aov(conn.aov2)
+
+l = lme(conn_air_rela ~ trmt, random = ~1|water, na.action = na.omit, data = conn_rela)
+summary(l)
+print(l)
+anova(l)
+
+#Unconn water-------------------------
+
+conn.aov3 <- aov(unconn_water_rela ~ trmt, data = conn_rela)
+summary.aov(conn.aov3)
+
+l = lme(unconn_water_rela ~ trmt, random = ~1|water, na.action = na.omit, data = conn_rela)
+summary(l)
+print(l)
+anova(l)
+
+#Unconn air---------------------------
+
+conn.aov4 <- aov(unconn_air_rela ~ trmt, data = conn_rela)
+summary.aov(conn.aov4)
+
+l = lme(unconn_air_rela ~ trmt, random = ~1|water, na.action = na.omit, data = conn_rela)
+summary(l)
+print(l)
+anova(l)
+
+#total pore volumes----------------------
+conn_totals = 
+  conn_rela %>% 
+  group_by(site, sample) %>% 
+  dplyr::mutate(sample_total = sum(total)) %>% 
+  group_by(site, sample, trmt) %>% 
+  dplyr::mutate(total_rela = total/sample_total)
+
+
+conn.aov5 <- aov(total_rela ~ trmt, data = conn_totals)
+summary.aov(conn.aov5)
+
+l = lme(total_rela ~ trmt, random = ~1|water, na.action = na.omit, data = conn_totals)
+summary(l)
+print(l)
+anova(l)
+
+write.csv(conn_totals,"processed/conn_totals.csv", row.names = FALSE)
+
+########################################3
+
+
+###############--------------
+#connected vs unconnected
+
+connected = 
+  conntotals_long %>% 
+  rename(connectivity = connected) %>% 
+  group_by(site, sample, trmt, water, connectivity) %>% 
+  dplyr::mutate(total_conn = sum(volume)) 
+
+write.csv(connected,"processed/connected.csv", row.names = FALSE)
+
+# connected =
+#   connected %>% 
+#   filter(filltype == "air") %>% 
+#   dplyr::select(sample, trmt, connectivity, total_conn)
+
+connected2 = read.csv('processed/connected.csv')
+
+
+connected3 = connected2 %>% 
+  dplyr::mutate(total_conn = before_conn-after_conn,
+                total_unconn = before_unconn-after_unconn)
+
+# I am so lost.
+
+conn.aov6 <- aov(total_conn ~ trmt, data = connected)
+summary.aov(conn.aov6)
+
+trmt_hsd = HSD.test(conn.aov6, "trmt")
+print(trmt_hsd)
+
+library(nlme)
+l = lme(total_conn ~ trmt, random = ~1|water, na.action = na.omit, data = connected)
+summary(l)
+print(l)
+anova(l)
+
+# compiled stats-----------------------------------
+
+compiled_csv=read.csv("processed/fulldata_ftc_xct.csv")
+
+
+compiled_csv %>% 
+  #filter(breadth_mm3 > 0.25 & breadth_mm3 < 1.5) %>% 
+  ggplot(aes(x = (breadth_mm3*100), fill = ftc))+
+  geom_histogram(aes(y = stat(count)), 
+                 bindwidth=5, color = "black") +
+  #geom_smooth(size = 1)+
+  #geom_density(adjust=0.5)+
+  #annotate("segment", x = 50, xend = 50, y = 0.00, yend = 3.00, color = "red", size= 1) +
+  labs (#title = "Pore Throat Diameter Distribution",
+    #subtitle = "After Freeze/Thaw",
+    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    #tag = "Figure 6",
+    x = expression (bold ("Pore Throat Diameter, um, log10")),
+    y = expression (bold ("Count, log10"))) + 
+  theme_er1() + 
+  scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
+  scale_x_continuous(limits = c(0,150),
+                     breaks = seq(0,150,50))+
+  facet_grid(.~sample)+
+  scale_x_log10()+
+  scale_y_log10()
+
+compiled_csv %>%
+  group_by(sample, ftc) %>% 
+  dplyr::mutate(counts = stat(count)) 
+  
