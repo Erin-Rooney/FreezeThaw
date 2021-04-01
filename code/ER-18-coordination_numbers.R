@@ -1,6 +1,9 @@
 # Erin Rooney
 # Aug 3 2020
 
+source("code/0-packages.R")
+
+
 # load data---------------------------------------------------------------------
 #coornum_dat = read.csv("processed/coordination_number_aug32020.csv") 
 coornum_dat2 = read.csv("processed/porecoor_fixed.csv")
@@ -9,10 +12,6 @@ coornum_dat2 = read.csv("processed/porecoor_fixed.csv")
 
 str(coornum_dat2)
 levels(as.factor(coornum_dat2$trmt))
-library(tidyverse)
-library(agricolae)
-library(PairedData)
-library(ggpubr)
 
 
 #coornum_dat2 = 
@@ -75,6 +74,21 @@ allcombo_summary %>%
   print
 
 write.csv(allcombo_summary, "processed/pcnsummary.csv", row.names = FALSE)
+
+allcombo_five =
+  allcombo %>%
+  dplyr::select(-site) %>%
+  #dplyr::summarise(total = sum(diff_freq))
+  mutate(diff_perc = diff * 100) %>%
+  dplyr::select(-diff) %>%
+  mutate(include = case_when(diff_perc < 5 ~ 'include'
+  )) %>%
+  na.omit() 
+
+allcombo_five %>% 
+  print
+
+
 
 #low = coornum_dat[coornum_dat$water=="low",]
 #high = coornum_dat[coornum_dat$water=="high",]
@@ -239,6 +253,37 @@ tool %>%
         x = expression (bold ("pore coordination number")),
         y = expression (bold ("frequency, %"))) +
   guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
+
+#mixed model----------------------------------
+
+#filter by sample, randomize by pore coordination
+nlme::lme(log(freq) ~ trmt, random = ~1|as.character(pore_coor), data = tool %>% 
+            filter(sample == "Core C, 28%" & freq > 0)) %>% 
+  anova()
+
+# filter by pore coordination, randomize by sample
+nlme::lme(log(freq) ~ trmt, random = ~1|sample, data = tool %>% 
+            #filter(pore_coor == 1 & sample != "Core B, 28%")) %>% 
+            filter(pore_coor == 1)) %>% 
+  anova()
+
+
+
+aov(data = tool %>% 
+      filter(pore_coor == 1),
+    freq ~ trmt) %>% 
+  summary()
+
+
+# randomize by sample
+nlme::lme(diff ~ pore_coor, random = ~1|sample, data = allcombo) %>% 
+            #filter(sample == "Core C, 28%" & freq > 0)) %>% 
+  anova()
+  
+allcombo %>% 
+  ggplot(aes(x = pore_coor, y = diff, color = sample, group = sample))+
+  geom_path()+
+  geom_point()
 
 # boxplot + point + path 
 allcombo %>%

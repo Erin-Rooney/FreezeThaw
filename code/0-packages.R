@@ -14,6 +14,7 @@ library(base)
 library(soilpalettes)
 library(PNWColors)
 library(patchwork)
+library(cowplot)
 
 
 

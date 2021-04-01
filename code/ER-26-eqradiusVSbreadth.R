@@ -11,6 +11,7 @@ breadthdata_csv = read.csv("processed/5bin_breadth_nov22020.csv")
 eqradiusdata_csv = read.csv("processed/405016eqradius.csv")
 alldata_csv = read.csv("processed/405016_allmeasures.csv")
 compiled_csv=read.csv("processed/fulldata_ftc_xct.csv")
+feret=read.csv("processed/diameter_ferettest_longwidth.csv")
 
 plot(breadthdata_csv)
 
@@ -60,3 +61,11 @@ compiled_csv %>%
   geom_point()+
   theme_er1()+
   facet_grid(moisture~bottom)
+
+# manual test
+
+library(nlme)
+l = lme(um ~ type, random = ~1|pore_throat, na.action = na.omit, data = feret)
+summary(l)
+print(l)
+anova(l)

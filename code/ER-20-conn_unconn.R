@@ -12,15 +12,8 @@ plot(conn_csv)
 # Load packages ---------------------------------------------------------------------
 
 
-library(tidyverse)
-library(stats)
-library(base)
-library(soilpalettes)
-library(agricolae)
-library(PairedData)
-library(ggpubr)
-library(PNWColors)
-library(cowplot)
+source("code/0-packages.R")
+
 
 # Create Rep and Site Data frames ---------------------------------------------------------------------
 

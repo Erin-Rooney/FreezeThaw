@@ -2,6 +2,9 @@
 # August 3 2020
 # Pore throat statistics
 
+
+source("code/0-packages.R")
+
 breadthdata_csv = read.csv("processed/ftc_porethroatdist_july312020_2.csv") 
 plot(breadthdata_csv)
 rep_1 = breadthdata_csv[breadthdata_csv$sample=="40_50_16",]

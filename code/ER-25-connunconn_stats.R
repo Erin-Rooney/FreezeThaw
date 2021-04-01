@@ -10,15 +10,8 @@ compiled_csv=read.csv("processed/compiled_porethroatdata.csv")
 # Load packages ---------------------------------------------------------------------
 
 
-library(tidyverse)
-library(stats)
-library(base)
-library(soilpalettes)
-library(agricolae)
-library(PairedData)
-library(ggpubr)
-library(PNWColors)
-library(cowplot)
+source("code/0-packages.R")
+
 
 # long processing--------------------------------------
 
@@ -40,6 +33,18 @@ conntotals_long = conn_totals %>%
                        "unconn_air_rela" = "Unconnected Air-Filled Pores",
                        "conn_water_rela" = "Connected Water-Filled Pores",
                        "unconn_water_rela" = "Unconnected Water-Filled Pores"))
+
+
+# total - relas connectivity
+totalrela = conn_totals %>% 
+  mutate(connect_total = conn_air_rela + conn_water_rela)
+
+library(nlme)
+l = lme(connect_total ~ trmt, random = ~1|sample, na.action = na.omit, data = totalrela)
+summary(l)
+print(l)
+anova(l)
+
 
 #correct anovas---------------------------------------
 #CONNECTED WATER---------------------------------------
@@ -171,16 +176,17 @@ summary(l)
 print(l)
 anova(l)
 
-# compiled stats-----------------------------------
+# compiled stats, trying to do an LME on pore throat count-----------------------------------
 
 compiled_csv=read.csv("processed/fulldata_ftc_xct.csv")
 
 
-compiled_csv %>% 
+compiled_csv %>%
+  mutate(ftc = factor(ftc, levels = c("before", "after"))) %>% 
   #filter(breadth_mm3 > 0.25 & breadth_mm3 < 1.5) %>% 
   ggplot(aes(x = (breadth_mm3*100), fill = ftc))+
   geom_histogram(aes(y = stat(count)), 
-                 bindwidth=5, color = "black") +
+                 bins = 15, color = "black", position = 'identity') +
   #geom_smooth(size = 1)+
   #geom_density(adjust=0.5)+
   #annotate("segment", x = 50, xend = 50, y = 0.00, yend = 3.00, color = "red", size= 1) +
@@ -188,17 +194,22 @@ compiled_csv %>%
     #subtitle = "After Freeze/Thaw",
     #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
     #tag = "Figure 6",
-    x = expression (bold ("Pore Throat Diameter, um, log10")),
-    y = expression (bold ("Count, log10"))) + 
+    x = expression (bold ("Pore Throat Diameter, um")),
+    y = expression (bold ("Count"))) + 
   theme_er1() + 
   scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
   scale_x_continuous(limits = c(0,150),
                      breaks = seq(0,150,50))+
   facet_grid(.~sample)+
-  scale_x_log10()+
-  scale_y_log10()
+  coord_flip()
+
+
 
 compiled_csv %>%
   group_by(sample, ftc) %>% 
   dplyr::mutate(totalcount = stat(count)) 
+
+
+# compiled stats, want to do something with pore shape factor :( -----------------------------------
+
   
