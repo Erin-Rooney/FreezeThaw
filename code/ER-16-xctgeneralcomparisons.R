@@ -2,7 +2,7 @@
 # August 3 2020
 # Pore throat statistics
 
-setwd("~/R/R/R Datasets/introductoryR-master")
+#setwd("~/R/R/R Datasets/introductoryR-master")
 
 xct_alldat = read.csv("processed/xct_redo_aug32020.csv") 
 plot(xct_alldat)

@@ -279,6 +279,12 @@ aov(data = tool %>%
 nlme::lme(diff ~ pore_coor, random = ~1|sample, data = allcombo) %>% 
             #filter(sample == "Core C, 28%" & freq > 0)) %>% 
   anova()
+
+a = aov(diff ~ pore_coor, data = allcombo) 
+
+h = HSD.test(a, "pore_coor")
+
+h
   
 allcombo %>% 
   ggplot(aes(x = pore_coor, y = diff, color = sample, group = sample))+

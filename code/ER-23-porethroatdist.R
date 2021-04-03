@@ -206,35 +206,15 @@ str(breadthdata_csv)
 
 breadthdata_csv = 
   breadthdata_csv %>% 
-  mutate(sample = recode(sample, "40-50-16" = "Core B, 16%"))
-
-breadthdata_csv = 
-  breadthdata_csv %>% 
-  mutate(sample = recode(sample, "40-50-28" = "Core B, 28%"))
-
-breadthdata_csv = 
-  breadthdata_csv %>% 
-  mutate(sample = recode(sample, "28-38-12" = "Core A, 16%"))
-
-breadthdata_csv = 
-  breadthdata_csv %>% 
-  mutate(sample = recode(sample, "28-38-28" = "Core A, 28%"))
-
-breadthdata_csv = 
-  breadthdata_csv %>% 
-  mutate(sample = recode(sample, "41-50-16" = "Core C, 16%"))
-
-breadthdata_csv = 
-  breadthdata_csv %>% 
-  mutate(sample = recode(sample, "41-50-28" = "Core C, 28%"))
-         
-breadthdata_csv = 
-  breadthdata_csv %>% 
-  mutate(sample = factor(sample, levels = c("Core A, 16%", "Core A, 28%", "Core B, 16%", "Core B, 28%", "Core C, 16%", "Core C, 28%")))
- 
-breadthdata_csv = 
-  breadthdata_csv %>% 
+  mutate(sample = recode(sample, "40-50-16" = "Core B, 16%",
+                         "40-50-28" = "Core B, 28%",
+                         "28-38-12" = "Core A, 16%",
+                         "28-38-28" = "Core A, 28%",
+                         "41-50-16" = "Core C, 16%",
+                         "41-50-28" = "Core C, 28%",
+                         ))%>% 
   mutate(trmt = factor(trmt, levels = c("before", "after")))
+
 
 tool = breadthdata_csv %>% 
   filter(site=="tool")
@@ -287,7 +267,19 @@ diff_summary %>%
 
 write.csv(diff_summary, "processed/ptddsummary2.csv", row.names = FALSE)
 
+#statistics on pore throat diameter
 
+library(nlme)
+l = lme(diff_freq ~ breadth_um, random = ~1|sample, na.action = na.omit, data = diff)
+summary(l)
+print(l)
+anova(l)
+
+a = aov(diff_freq ~ breadth_um, data = diff)
+
+h = HSD.test(a, 'breadth_um')
+
+h
 # diff2 = before %>% 
 #   left_join(after %>% dplyr::select(after_freq, sample), by = c("sample", "breadth_um")) %>% 
 #   dplyr::mutate(diff_freq = (after_freq - before_freq))

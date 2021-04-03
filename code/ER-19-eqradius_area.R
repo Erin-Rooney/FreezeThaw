@@ -1,7 +1,7 @@
 # Erin Rooney
 # Aug 3 2020
 
-setwd("~/R/R/R Datasets/introductoryR-master")
+#setwd("~/R/R/R Datasets/introductoryR-master")
 
 ftc_dat2 = read.csv("processed/ftc_area_eqradius_aug32020.csv") 
 tool = ftc_dat2[ftc_dat2$site=="tool",]
@@ -28,3 +28,4 @@ p
 
 
 p = plot(as.numeric(tool$eqradius_mm), as.numeric(tool$area_mm2), main = "Eq Radius vs Area", xlab = "Eq Radius, mm", ylab = "Area, mm2", col=5)
+

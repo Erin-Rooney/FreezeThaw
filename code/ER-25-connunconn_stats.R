@@ -186,7 +186,7 @@ compiled_csv %>%
   #filter(breadth_mm3 > 0.25 & breadth_mm3 < 1.5) %>% 
   ggplot(aes(x = (breadth_mm3*100), fill = ftc))+
   geom_histogram(aes(y = stat(count)), 
-                 bins = 15, color = "black", position = 'identity') +
+                 bins = 40, color = "black", position = 'identity') +
   #geom_smooth(size = 1)+
   #geom_density(adjust=0.5)+
   #annotate("segment", x = 50, xend = 50, y = 0.00, yend = 3.00, color = "red", size= 1) +
@@ -197,18 +197,66 @@ compiled_csv %>%
     x = expression (bold ("Pore Throat Diameter, um")),
     y = expression (bold ("Count"))) + 
   theme_er1() + 
+  scale_x_log10()+
+  scale_y_log10()+
   scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
   scale_x_continuous(limits = c(0,150),
                      breaks = seq(0,150,50))+
-  facet_grid(.~sample)+
-  coord_flip()
+  facet_grid(.~sample)
+  #coord_flip()
 
 
 
-compiled_csv %>%
+
+# 2. pore size ----
+pores = read_csv("processed/fulldata_ftc_xct.csv")
+names(pores)
+
+# filter only pores 50-1500 um
+pores_long = 
+  pores %>% 
+  mutate(breadth_um = (breadth_mm3)*1000) %>% 
+  dplyr::select(sample, ftc, breadth_um) %>% 
+  filter(breadth_um>50 & breadth_um<=1500)
+  
+# pivot_longer(names_to = "sample",
+#          values_to = "breadth_mm3") %>% 
+#   mutate(breadth_um3 = (breadth_mm3)*1000)
+  
+
+
+# create summary table
+pores_summary = 
+  pores_long %>% 
   group_by(sample, ftc) %>% 
-  dplyr::mutate(totalcount = stat(count)) 
+  dplyr::summarise(mean_um = mean(breadth_um),
+                   median_um = median(breadth_um)) 
 
+bins = seq(0,1500, by = 100)
+
+before_pore = 
+  pores_summary %>% 
+  filter(ftc == 'before') 
+
+after_pore = 
+  pores_summary %>% 
+  filter(ftc == 'after')
+
+# where does the pull argument come in?
+
+before_scores = cut(before_pore,bins)
+after_scores = cut(after_pore,bins)
+
+freq_before = transform(table(before_scores))
+c = transform(freq_before,Cum_Freq=cumsum(Freq),Perc_Freq = prop.table(Freq)*100)
+c$scores = seq(0,1499,by = 100)
+
+freq_after = transform(table(after_scores))
+d = transform(freq_after,Cum_Freq=cumsum(Freq),Perc_Freq = prop.table(Freq)*100)
+d$scores = seq(0,1499,by = 100)
+
+combined_pore_freq = merge(c,d,by = "scores")
+combined_pore_freq = merge(combined_pore_freq,s,by = "scores")
 
 # compiled stats, want to do something with pore shape factor :( -----------------------------------
 

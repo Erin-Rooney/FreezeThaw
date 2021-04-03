@@ -11,11 +11,11 @@ breadthdata_csv = read.csv("processed/5bin_breadth_nov22020.csv")
 eqradiusdata_csv = read.csv("processed/405016eqradius.csv")
 alldata_csv = read.csv("processed/405016_allmeasures.csv")
 compiled_csv=read.csv("processed/fulldata_ftc_xct.csv")
-feret=read.csv("processed/diameter_ferettest_longwidth.csv")
+feret=read.csv("processed/diameter_ferettest_longthick.csv")
 
 plot(breadthdata_csv)
 
-eqradius_csv %>% 
+eqradiusdata_csv %>% 
   ggplot(aes(x= breadth_um, y=freq2))+
   geom_point()+
   geom_line()+
@@ -29,8 +29,8 @@ eqradius_csv %>%
 
 
 breadthdata_csv %>%
-  filter(sample == '40-50-16') %>% 
-  ggplot(aes(x= breadth_um, y=freq, color = trmt))+
+  filter(sample == '40-50-16' & trmt == "before") %>% 
+  ggplot(aes(x= breadth_um, y=freq))+
   geom_point()+
   geom_line()+
   theme_er1()+

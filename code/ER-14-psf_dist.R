@@ -2,9 +2,14 @@
 # August 3 2020
 # Pore throat statistics
 
+source("code/0-packages.R")
+
+
 # load data--------------------------------------------------------------------
 
 psfdata = read.csv("processed/ftc_poreshapefactor_july312020_2.csv") 
+psfdata = read.csv("processed/fulldata_ftc_xct.csv") 
+
 plot(psfdata)
 
 # create data frames----------------------------------------------------------
@@ -52,19 +57,33 @@ summary(psf_aov)
 
 
 # more gg plots---------------------------------------------------------------
-ggplot(rep_1, aes(x = psf, y=psf_dist, color = trmt ))+
-  geom_dotplot(binaxis='y', dotsize=0.5)+
-  scale_color_brewer(palette = "Set2")+
+
+psfdata %>%
+  mutate(sample = recode(sample, "40-50-16" = "Core B, 16%",
+                         "40-50-28" = "Core B, 28%",
+                         "28-38-12" = "Core A, 16%",
+                         "28-38-28" = "Core A, 28%",
+                         "41-50-16" = "Core C, 16%",
+                         "41-50-28" = "Core C, 28%",
+  ))%>% 
+  #mutate(trmt = recode(trmt, "before " = "before")) %>%
+  mutate(ftc = factor(ftc, levels = c("before", "after"))) %>% 
+  filter(breadth_mm3<0.05) %>% 
+  ggplot(aes(x = (breadth_mm3)*1000, y=shape_factor, color = sample ))+
+  geom_point()+
+  scale_color_manual(values = pnw_palette("Bay", 6)) +
   #geom_density(adjust=0.5)+
   
-  labs (title = "Impact of Freeze/Thaw Cycles on Pore Shape Factor",
-        subtitle = "40-50 cm, 16% moisture",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure 1",
-        x = expression (bold ("pore shape factor")),
-        y = expression (bold ("distribution, %")))
+  labs (#title = "Impact of Freeze/Thaw Cycles on Pore Shape Factor",
+        #subtitle = "40-50 cm, 16% moisture",
+        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+        #tag = "Figure 1",
+        x = expression (bold ("pore throat diameter, um")),
+        y = expression (bold ("pore shape factor")))+
+  theme_er()+
+  facet_grid(ftc~sample)
+  
 
-pl + theme_bw() 
 
 ###
 
