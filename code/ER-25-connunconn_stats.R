@@ -258,7 +258,44 @@ d = transform(freq_after,Cum_Freq=cumsum(Freq),Perc_Freq = prop.table(Freq)*100)
 d$scores = seq(0,1499,by = 100)
 
 combined_pore_freq = merge(c,d,by = "scores")
-combined_pore_freq = merge(combined_pore_freq, by = "scores")
+#combined_pore_freq = merge(combined_pore_freq, by = "scores")
+
+
+names(combined_pore_freq)
+
+# extracting only the % frequency columns and saving as a new file
+combined_pore_perc_freq = data.frame(combined_pore_freq$scores,
+                                     combined_pore_freq$Perc_Freq.x,
+                                     combined_pore_freq$Perc_Freq.y,
+                                     combined_pore_freq$before_scores)
+names(combined_pore_perc_freq) = c("pore_size","before","after", "bins")
+
+combined_pore_perc_freq2 = 
+  combined_pore_perc_freq %>% 
+  dplyr::mutate(bins = recode(bins, "(" = ""),
+                bins = recode(bins, "]" = ""))
+
+# I don't know what this stuff is for
+  # separate(bins, c("low","high"), ",") %>% 
+  # dplyr::mutate(low = as.numeric(low),
+  #               high = as.numeric(high),
+  #               bins = paste0(low,"-",high))
+
+
+#melting the three sites into a single column
+pores_melt = 
+  combined_pore_perc_freq2 %>% 
+  dplyr::select(bins, before, after) %>%
+  dplyr::rename(pore_size_um = bins) %>% 
+  melt(id = "pore_size_um",
+       value.name = "perc_freq",
+       variable.name="site") %>% 
+  dplyr::mutate(perc_freq = round(perc_freq,2))
+
+###OUTPUT
+write.csv(pores_melt,PORE_DISTRIBUTION, row.names = FALSE)
+
+
 
 # compiled stats, want to do something with pore shape factor :( -----------------------------------
 
