@@ -270,16 +270,15 @@ combined_pore_perc_freq = data.frame(combined_pore_freq$scores,
                                      combined_pore_freq$before_scores)
 names(combined_pore_perc_freq) = c("pore_size","before","after", "bins")
 
+library(stringi)
 combined_pore_perc_freq2 = 
   combined_pore_perc_freq %>% 
-  dplyr::mutate(bins = recode(bins, "(" = ""),
-                bins = recode(bins, "]" = ""))
-
-# I don't know what this stuff is for
-  # separate(bins, c("low","high"), ",") %>% 
-  # dplyr::mutate(low = as.numeric(low),
-  #               high = as.numeric(high),
-  #               bins = paste0(low,"-",high))
+  dplyr::mutate(bins = stri_replace_all_fixed(bins, "(", ""),
+                bins = stri_replace_all_fixed(bins, "]", "")) %>% 
+  separate(bins, c("low","high"), ",") %>%
+  dplyr::mutate(low = as.numeric(low),
+                high = as.numeric(high),
+                bins = paste0(low,"-",high))
 
 
 #melting the three sites into a single column
@@ -287,15 +286,17 @@ pores_melt =
   combined_pore_perc_freq2 %>% 
   dplyr::select(bins, before, after) %>%
   dplyr::rename(pore_size_um = bins) %>% 
-  melt(id = "pore_size_um",
+  reshape2::melt(id = "pore_size_um",
        value.name = "perc_freq",
-       variable.name="site") %>% 
+       variable.name="freeze/thaw") %>% 
   dplyr::mutate(perc_freq = round(perc_freq,2))
 
 ###OUTPUT
-write.csv(pores_melt,PORE_DISTRIBUTION, row.names = FALSE)
+write.csv(combined_pore_perc_freq2,'PORE_DISTRIBUTION1.csv', row.names = FALSE)
+write.csv(pores_melt,'PORE_DISTRIBUTION2.csv', row.names = FALSE)
 
-
+## stats
+#???
 
 # compiled stats, want to do something with pore shape factor :( -----------------------------------
 
