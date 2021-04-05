@@ -24,9 +24,9 @@ pores_long =
 pores_summary = 
   pores_long %>% 
   group_by(sample, ftc) %>%
-  mutate(count = stat(count)) %>% 
   dplyr::summarise(mean_um = mean(breadth_um),
-                   median_um = median(breadth_um))
+                   median_um = median(breadth_um),
+                   count = n())
 
 # frequency distribution tables for each site
 
@@ -87,6 +87,31 @@ pores_melt =
                  variable.name="freeze/thaw") %>% 
   dplyr::mutate(perc_freq = round(perc_freq,2))
 
+pores_summary %>% 
+  mutate(ftc = factor(ftc, levels = c("before", "after"))) %>% 
+  mutate(sample = recode(sample, "40_50_16" = "Core B, 16%", 
+                        "40_50_28" = "Core B, 28%",
+                        "28_38_12" = "Core A, 16%",
+                        "28_38_28" = "Core A, 28%",
+                        "41_50_16" = "Core C, 16%",
+                        "41_50_28" = "Core C, 28%"))  
+
+write.csv(pores_summary, "PORE_SUMMARY.csv", row.names = FALSE)
+
+
 ###OUTPUT
 write.csv(combined_pore_perc_freq2,'PORE_DISTRIBUTION1.csv', row.names = FALSE)
 write.csv(pores_melt,'PORE_DISTRIBUTION2.csv', row.names = FALSE)
+
+
+
+#stats
+
+library(nlme)
+
+a = lme(count ~ ftc, random = ~1|sample, data = pores_summary %>% 
+            #filter(pore_coor == 1 & sample != "Core B, 28%")) %>% 
+            filter(sample != '28-38-28')) 
+summary(a)
+print(a)
+anova(a)
