@@ -232,17 +232,19 @@ pores_summary =
   dplyr::summarise(mean_um = mean(breadth_um),
                    median_um = median(breadth_um)) 
 
+# frequency distribution tables for each site
+
 bins = seq(0,1500, by = 100)
 
 before_pore = 
   pores_long %>% 
-  filter(ftc == 'before') 
+  filter(ftc == 'before') %>% 
+  pull(breadth_um)
 
 after_pore = 
   pores_long %>% 
-  filter(ftc == 'after')
-
-# where does the pull argument come in?
+  filter(ftc == 'after') %>% 
+  pull(breadth_um)
 
 before_scores = cut(before_pore,bins)
 after_scores = cut(after_pore,bins)
@@ -256,7 +258,7 @@ d = transform(freq_after,Cum_Freq=cumsum(Freq),Perc_Freq = prop.table(Freq)*100)
 d$scores = seq(0,1499,by = 100)
 
 combined_pore_freq = merge(c,d,by = "scores")
-combined_pore_freq = merge(combined_pore_freq,s,by = "scores")
+combined_pore_freq = merge(combined_pore_freq, by = "scores")
 
 # compiled stats, want to do something with pore shape factor :( -----------------------------------
 
