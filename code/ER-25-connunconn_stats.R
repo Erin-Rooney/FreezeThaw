@@ -235,11 +235,11 @@ pores_summary =
 bins = seq(0,1500, by = 100)
 
 before_pore = 
-  pores_summary %>% 
+  pores_long %>% 
   filter(ftc == 'before') 
 
 after_pore = 
-  pores_summary %>% 
+  pores_long %>% 
   filter(ftc == 'after')
 
 # where does the pull argument come in?
