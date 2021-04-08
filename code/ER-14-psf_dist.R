@@ -1,5 +1,5 @@
 # Erin Rooney
-# August 3 2020
+# April 6 2020
 # Pore throat statistics
 
 source("code/0-packages.R")
@@ -7,56 +7,16 @@ source("code/0-packages.R")
 
 # load data--------------------------------------------------------------------
 
-psfdata = read.csv("processed/ftc_poreshapefactor_july312020_2.csv") 
+#psfdata = read.csv("processed/ftc_poreshapefactor_july312020_2.csv") 
 psfdata = read.csv("processed/fulldata_ftc_xct.csv") 
 
 plot(psfdata)
 
-# create data frames----------------------------------------------------------
-rep_1 = psfdata[psfdata$sample=="40_50_16",]
-psf ="psf"
-psf_dist = "psf_dist"
-tool = "tool"
-
-# ggplot-----------------------------------------------------------------------
-
-library(ggplot2)
-
-dotchart(rep_1, aes(x=psf, y=psf_dist)) 
-
-# failing at creating a table--------------------------------------------------
-
-print.data.frame(psfdata)
-
-rmarkdown::paged_table(psfdata)
-
-library(gt)
-library(kableExtra)
-library(tidyverse)
 
 # fit <- lm(psf_dist ~ )
 
 
-# creating more data frames----------------------------------------------------
-
-tool = psfdata[psfdata$site=="tool",]
-
-
-before = psfdata[psfdata$trmt=="before",]
-
-
-after = psfdata[psfdata$trmt=="after",]
-
-# more aov---------------------------------------------------------------------
-
-psf_aov = aov(data = tool, psf ~ trmt)
-summary(psf_aov)
-
-psf_aov = aov(data = tool, psf ~ sample)
-summary(psf_aov)
-
-
-# more gg plots---------------------------------------------------------------
+# ggplots---------------------------------------------------------------
 
 psfdata %>%
   mutate(sample = recode(sample, "40-50-16" = "Core B, 16%",
@@ -80,176 +40,174 @@ psfdata %>%
         #tag = "Figure 1",
         x = expression (bold ("pore throat diameter, um")),
         y = expression (bold ("pore shape factor")))+
-  theme_er()+
+  theme_er1()+
+  facet_grid(ftc~sample)
+
+
+psfdata %>%
+  mutate(sample = recode(sample, "40-50-16" = "Core B, 16%",
+                         "40-50-28" = "Core B, 28%",
+                         "28-38-12" = "Core A, 16%",
+                         "28-38-28" = "Core A, 28%",
+                         "41-50-16" = "Core C, 16%",
+                         "41-50-28" = "Core C, 28%",
+  ))%>% 
+  #mutate(trmt = recode(trmt, "before " = "before")) %>%
+  mutate(ftc = factor(ftc, levels = c("before", "after"))) %>% 
+  #filter(breadth_mm3<0.05) %>% 
+  ggplot(aes(x = (breadth_mm3)*1000, y=volume_mm3, color = sample ))+
+  geom_point()+
+  scale_color_manual(values = pnw_palette("Bay", 6)) +
+  #geom_density(adjust=0.5)+
+  
+  labs (#title = "Impact of Freeze/Thaw Cycles on Pore Shape Factor",
+    #subtitle = "40-50 cm, 16% moisture",
+    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    #tag = "Figure 1",
+    x = expression (bold ("pore throat diameter, um")),
+    y = expression (bold ("volume")))+
+  theme_er1()+
   facet_grid(ftc~sample)
   
 
+# Quadratic model
+# 
+# linear.model <-lm(shape_factor ~ ftc, data = psfdata)
+# summary(linear.model)
+# 
+# psfdata2 = psfdata %>% 
+#   mutate(breadth2 = breadth_mm3^2)
+# 
+# quadratic.model <-lm(shape_factor ~ ftc + breadth_mm3, data = psfdata2)
+# summary(quadratic.model)
+# 
+# shape_factor_values <- seq(0, 1, 0.2)
+# predictedcounts <- predict(quadratic.model)
+# 
+# list(shape_factor_values)
+# list(predictedcounts)
+# head(predictedcounts)
+# 
+# psfdata2 %>% 
+# ggplot(aes(y = shape_factor, x = breadth_mm3))+
+#   geom_point()
+# 
+# psfdata2 %>% 
+# lines(shape_factor_values, predictedcounts, col = "darkgreen", lwd = 3)
+# 
+# plot(shape_factor, predictedcounts, data = psfdata2
+#      )
 
-###
-
-p = plot(as.numeric(before$psf), as.numeric(before$psf_dist), ylim=c(0,0.07), main = "PORE SHAPE FACTOR: BEFORE", xlab = "Pore Shape Factor", ylab = "Dist, %", col="#996633")
-
-p
-
-p = plot(as.numeric(after$psf), as.numeric(after$psf_dist), main = "PORE SHAPE FACTOR: AFTER", xlab = "Pore Shape Factor", ylab = "Dist, %", col="#00FFFF")
+#Binning for Pore shape factor by breadth_mm (convert to um)--------------------------------
 
 
-###
+psfdata2 = 
+  psfdata %>%
+  mutate(sample = recode(sample, "40-50-16" = "Core B, 16%",
+                         "40-50-28" = "Core B, 28%",
+                         "28-38-12" = "Core A, 16%",
+                         "28-38-28" = "Core A, 28%",
+                         "41-50-16" = "Core C, 16%",
+                         "41-50-28" = "Core C, 28%",
+  ))%>% 
+  #mutate(trmt = recode(trmt, "before " = "before")) %>%
+  mutate(ftc = factor(ftc, levels = c("before", "after"))) %>% 
+  rename(breadth_mm = breadth_mm3) %>% 
+  mutate(breadth_um = (breadth_mm)*1000,
+         breadth_um_max = ceiling(breadth_um/5)*5,
+         breadth_um_min = floor(breadth_um/5)*5,
+         breadth_range = paste0(breadth_um_min, "_", breadth_um_max)
+  ) %>% 
+  group_by(sample, ftc, breadth_range, breadth_um_min, breadth_um_max) %>% 
+  dplyr::summarise(factor = mean(shape_factor, na.rm = TRUE))
 
-ggplot(before, aes(x = sample, y=psf, fill = sample))+
-  geom_boxplot()+
-  ylim(0, 1.0) +
-  scale_color_brewer(palette = "Set2")+
-  #geom_density(adjust=0.5)+
+psfdata2 %>% 
+  filter(breadth_um_min < 150) %>% 
+  ggplot(aes(x = breadth_um_min, y = factor, color = ftc)) + 
+  geom_line(aes(group = ftc), size = 1) + 
+  facet_grid(.~ sample)+
+  theme_er2()+
+  scale_color_manual(values = c("#b0986c", "#72e1e1"))+
+  labs(y = "Pore Shape Factor",
+       x = "Pore Throat Diameter, um")
   
-  labs (title = "Impact of Freeze/Thaw Cycles on Pore Shape Factor",
-        subtitle = "Before Freeze/Thaw",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure 1",
-        x = expression (bold ("samples")),
-        y = expression (bold ("pore shape factor")))
+psfdata3 =
+  psfdata2 %>%
+  ungroup() %>% 
+  dplyr::select(-breadth_um_min, -breadth_um_max) %>% 
+  pivot_wider(values_from = 'factor', names_from = 'breadth_range') %>% 
+  pivot_longer(-c(sample, ftc), names_to = 'breadth_range', values_to = 'factor') %>% 
+  replace(is.na(.),0)
 
 
 
-ggplot(after, aes(x = sample, y=psf, fill = sample))+
-  geom_boxplot()+
-  ylim(0, 1.0) +
-  scale_color_brewer(palette = "Set2")+
-  #geom_density(adjust=0.5)+
+before =
+  psfdata3 %>% 
+  filter(ftc == 'before') %>% 
+  rename(before_factor = factor) %>% 
+  dplyr::select(-ftc)
+
+after =
+  psfdata3 %>% 
+  filter(ftc == 'after') %>% 
+  rename(after_factor = factor) %>% 
+  dplyr::select(-ftc)
+
+psfdata4 = 
+  before %>% 
+  left_join(after) %>% 
+  mutate(diff = after_factor - before_factor)
+
+
+
+# randomize by sample
+nlme::lme(diff ~ breadth_range, random = ~1|sample, data = psfdata4) %>% 
+  #filter(sample == "Core C, 28%" & freq > 0)) %>% 
+  anova()
+
+a = aov(diff ~ breadth_range, data = psfdata4) 
+
+h = HSD.test(a, "breadth_range")
+
+h
+
+# more processing
+
+psfdata5 = 
+  psfdata2 %>% 
+  filter(breadth_um_min <99) %>% 
+  ungroup()
+
+before2 =
+  psfdata5 %>% 
+  filter(ftc == 'before') %>% 
+  rename(before_factor = factor) %>% 
+  dplyr::select(-ftc)
+
+after2 =
+  psfdata5 %>% 
+  filter(ftc == 'after') %>% 
+  rename(after_factor = factor) %>% 
+  dplyr::select(-ftc)
+
+psfdata6 = 
+  before2 %>% 
+  left_join(after2) %>% 
+  mutate(diff = after_factor - before_factor) %>% 
+  replace(is.na(.),0)
+
+psfdata7 = 
+  psfdata6 %>% 
+  dplyr::select(-breadth_range, -before_factor, -after_factor) %>% 
+  pivot_wider(names_from = "sample", values_from = "diff") 
   
-  labs (title = "Impact of Freeze/Thaw Cycles on Pore Shape Factor",
-        subtitle = "After Freeze/Thaw",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure X",
-        x = expression (bold ("samples")),
-        y = expression (bold ("pore shape factor")))
+#ggplot--------------------------
 
-
-
-###
-
-ggplot(before, aes(x = sample, y=psf, fill = sample))+
-  geom_boxplot()+
-  scale_color_brewer(palette = "Set2")+
-  #geom_density(adjust=0.5)+
-  
-  labs (title = "Impact of Freeze/Thaw Cycles on Pore Shape Factor",
-        subtitle = "Before Freeze/Thaw",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure X",
-        x = expression (bold ("samples")),
-        y = expression (bold ("pore shape factor")))
-
-
-
-ggplot(after, aes(x = sample, y=psf, fill = sample))+
-  geom_boxplot()+
-  scale_color_brewer(palette = "Set2")+
-  #geom_density(adjust=0.5)+
-  
-  labs (title = "Impact of Freeze/Thaw Cycles on Pore Shape Factor",
-        subtitle = "After Freeze/Thaw",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure X",
-        x = expression (bold ("samples")),
-        y = expression (bold ("pore shape factor")))
-
-pl + theme_bw() 
-
-
-###
-
-rep_2 = psfdata[psfdata$sample=="40_50_28",]
-
-ggplot(rep_2, aes(x = psf, y=psf_dist, color = trmt ))+
-  geom_boxplot()+
-  scale_color_brewer(palette = "Set2")+
-  #geom_density(adjust=0.5)+
-  
-  labs (title = "Impact of Freeze/Thaw Cycles on Pore Shape Factor",
-        subtitle = "40-50 cm, 28% moisture",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure 2",
-        x = expression (bold ("pore shape factor")),
-        y = expression (bold ("distribution, %")))
-
-
-###
-
-rep_3 = psfdata_csv[psfdata_csv$sample=="28_38_28",]
-
-ggplot(rep_3, aes(x = psf, y=psf_dist, color = trmt ))+
+psfdata6 %>% 
+  ggplot(aes(x = breadth_um_min, y = diff, color = sample)) +
   geom_line(size = 1)+
-  scale_color_brewer(palette = "Set2")+
-  #geom_density(adjust=0.5)+
+  theme_er1()+
+  scale_color_manual(values = pnw_palette("Bay", 6)) +
+  labs(x = "Pore Throat Diameter, um", 
+       y = "Difference in Pore Shape Factor, after-before")
   
-  labs (title = "Impact of Freeze/Thaw Cycles on Pore Shape Factor",
-        subtitle = "28-38 cm, 28% moisture",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure 3",
-        x = expression (bold ("pore shape factor")),
-        y = expression (bold ("distribution, %")))
-
-###
-
-rep_4 = psfdata_csv[psfdata_csv$sample=="28_38_12",]
-
-ggplot(rep_4, aes(x = psf, y=psf_dist, color = trmt ))+
-  geom_line(size = 1)+
-  scale_color_brewer(palette = "Set2")+
-  #geom_density(adjust=0.5)+
-  
-  labs (title = "Impact of Freeze/Thaw Cycles on Pore Shape Factor",
-        subtitle = "28-38 cm, 16% moisture",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure 4",
-        x = expression (bold ("pore shape factor")),
-        y = expression (bold ("distribution, %")))
-
-###
-
-rep_5 = psfdata_csv[psfdata_csv$sample=="41_50_16",]
-
-ggplot(rep_5, aes(x = psf, y = psf_dist, color = trmt ))+
-  geom_line(size = 1)+
-  scale_color_brewer(palette = "Set2")+
-  #geom_density(adjust=0.5)+
-  
-  labs (title = "Impact of Freeze/Thaw Cycles on Pore Shape Factor",
-        subtitle = "41-50 cm, 16% moisture",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure 5",
-        x = expression (bold ("pore shape factor")),
-        y = expression (bold ("distribution, %")))
-
-###
-
-# Old code/consider deleting----------------------------------------------------
-
-low = psfdata_csv["psfdata_csv$moist"=="low"]
-
-high = psfdata_csv["psfdata_csv$moist"=="high"]
-
-
-ggplot(low, aes(x = psf, y = psf_dist, color = "trmt" ))+
-  geom_line(size = 1)+
-  scale_color_brewer(palette = "Set1")+
-  #geom_density(adjust=0.5)+
-  
-  labs (title = "Impact of Freeze/Thaw Cycles on Pore Size Distribution",
-        subtitle = "Low Moisture",
-        caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        tag = "Figure 6",
-        x = expression (bold ("pore shape factor")),
-        y = expression (bold ("distribution, %")))
-
-###
-
-#Not working
-
-trmt = "trmt"
-
-rep4_aov1 = aov(data=rep_4, psf_dist*psf ~ trmt)
-summary(rep4_aov1)
-
-
