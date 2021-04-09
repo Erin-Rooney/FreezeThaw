@@ -66,14 +66,19 @@ allcombo_summary =
   #dplyr::summarise(total = sum(diff_freq))
   mutate(diff_perc = diff * 100) %>%
   dplyr::select(-diff) %>%
-  mutate(include = case_when(diff_perc > 10 ~ 'include'
-  )) %>%
+  #mutate(include = case_when(diff_perc > 10 ~ 'include'
+  #)) %>%
   na.omit() 
 
-allcombo_summary %>% 
+pcn_table = 
+  allcombo_summary %>% 
+  pivot_wider(names_from = "pore_coor", values_from = diff_perc) %>% 
   print
 
 write.csv(allcombo_summary, "processed/pcnsummary.csv", row.names = FALSE)
+
+write.csv(pcn_table, "processed/pcnsummary.csv", row.names = FALSE)
+
 
 allcombo_five =
   allcombo %>%

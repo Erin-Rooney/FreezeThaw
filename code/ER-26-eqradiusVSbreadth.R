@@ -11,7 +11,10 @@ breadthdata_csv = read.csv("processed/5bin_breadth_nov22020.csv")
 eqradiusdata_csv = read.csv("processed/405016eqradius.csv")
 alldata_csv = read.csv("processed/405016_allmeasures.csv")
 compiled_csv=read.csv("processed/fulldata_ftc_xct.csv")
-feret=read.csv("processed/diameter_ferettest_longthick.csv")
+feret_width=read.csv("processed/diameter_ferettest_longwidth.csv")
+feret_breadth=read.csv("processed/diameter_ferettest_longbreadth.csv")
+
+
 
 plot(breadthdata_csv)
 
@@ -69,3 +72,56 @@ l = lme(um ~ type, random = ~1|pore_throat, na.action = na.omit, data = feret)
 summary(l)
 print(l)
 anova(l)
+
+# multiple linear regression example
+
+breadth_wider = 
+  feret_breadth %>% 
+  pivot_wider(values_from = 'um', names_from = 'type')
+
+fit <- lm(Expected ~ Breadth, data = breadth_wider)
+
+anova(fit)
+
+plot(Expected ~ Breadth, data = breadth_wider)+
+  abline(lm(Expected ~ Breadth, data = breadth_wider))
+
+library(ggpmisc)
+
+
+ggscatter(
+  breadth_wider, x = 'Expected', y = 'Breadth', 
+  add = 'reg.line'
+  )+
+  stat_cor(label.y = 400)+
+  stat_regline_equation(label.y = 420)+
+  labs(x = "Manually calculated pore throat diameter, um",
+       y = "Feret Breadth, um")
+  
+  
+
+
+
+width_wider = 
+  feret_width %>% 
+  pivot_wider(values_from = 'um', names_from = 'type')
+
+fit <- lm(Expected ~ Width, data = width_wider)
+
+anova(fit)
+
+plot(Expected ~ Width, data = width_wider)+
+  abline(lm(Expected ~ Width, data = width_wider))
+
+
+ggscatter(
+  width_wider, x = 'Expected', y = 'Width', 
+  add = 'reg.line'
+)+
+  stat_cor(label.y = 400)+
+  stat_regline_equation(label.y = 420)+
+  labs(x = "Manually calculated pore throat diameter, um",
+       y = "Feret Width, um")
+  
+
+
