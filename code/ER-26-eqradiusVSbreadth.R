@@ -79,9 +79,9 @@ breadth_wider =
   feret_breadth %>% 
   pivot_wider(values_from = 'um', names_from = 'type')
 
-fit <- lm(Expected ~ Breadth, data = breadth_wider)
+fit_breadth <- lm(Expected ~ Breadth, data = breadth_wider)
 
-anova(fit)
+summary(fit_breadth)
 
 plot(Expected ~ Breadth, data = breadth_wider)+
   abline(lm(Expected ~ Breadth, data = breadth_wider))
@@ -106,9 +106,9 @@ width_wider =
   feret_width %>% 
   pivot_wider(values_from = 'um', names_from = 'type')
 
-fit <- lm(Expected ~ Width, data = width_wider)
+fit_width <- lm(Expected ~ Width, data = width_wider)
 
-anova(fit)
+summary(fit_width)
 
 plot(Expected ~ Width, data = width_wider)+
   abline(lm(Expected ~ Width, data = width_wider))

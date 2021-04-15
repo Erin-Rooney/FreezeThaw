@@ -57,7 +57,7 @@ allcombo =
   tool %>% 
   dplyr::select(-count) %>% 
   spread(trmt, freq) %>% 
-  dplyr::mutate(diff = abs(after - before)) %>% 
+  dplyr::mutate(diff = (after - before)) %>% 
   dplyr::select(-before, -after)
 
 allcombo_summary =

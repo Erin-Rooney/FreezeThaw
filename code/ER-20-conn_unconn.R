@@ -9,6 +9,8 @@ conn_totals = read.csv("processed/conn_totals.csv")
 level_order <- c('before', 'after')
 plot(conn_csv)
 
+scale_x_continuous(labels = scales::number_format(accuracy = 1))
+
 # Load packages ---------------------------------------------------------------------
 
 
@@ -152,7 +154,7 @@ tool_long %>%
   ggplot(aes(x = trmt, y = volume, color = Type)) + 
   #geom_boxplot(aes(group = trmt), fill = "gray50", alpha = 0.2, width = 0.2) + 
   geom_path(aes(group = Type, color = Type), size = 0.7, linetype = "dashed")+
-  geom_point(aes(fill = Type), size = 6, shape = 21, stroke = 1, color = "black") + 
+  geom_point(aes(fill = Type, shape = connected), size = 6, stroke = 1) + 
   #geom_text(data = gglabel, aes(x = trmt, y = volume, label = label), color = "black")+
   #facet_wrap(. ~ sample)+
   labs (#title = "Pore Volumes",
