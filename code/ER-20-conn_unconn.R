@@ -181,8 +181,8 @@ conntotals_long %>%
   ggplot(aes(x = trmt, y = volume, color = Type)) + 
   #geom_boxplot(aes(group = trmt), fill = "gray50", alpha = 0.2, width = 0.2) + 
   geom_path(aes(group = Type, color = Type), size = 0.7, linetype = "dashed")+
-  geom_point(aes(fill = Type, shape = filltype), size = 6, stroke = 1, color = "black") +
-  scale_shape_manual(values = c(21,22))+
+  geom_point(aes(fill = Type, shape = Type), size = 6, stroke = 1, color = "black") +
+  scale_shape_manual(values = c(21,21, 22, 22))+
   theme_er() +
   #geom_text(data = gglabel, aes(x = trmt, y = volume, label = label), color = "black")+
   #facet_wrap(. ~ sample)+
