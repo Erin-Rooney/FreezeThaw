@@ -154,7 +154,7 @@ tool_long %>%
   ggplot(aes(x = trmt, y = volume, color = Type)) + 
   #geom_boxplot(aes(group = trmt), fill = "gray50", alpha = 0.2, width = 0.2) + 
   geom_path(aes(group = Type, color = Type), size = 0.7, linetype = "dashed")+
-  geom_point(aes(fill = Type, shape = connected), color = "black", size = 6, stroke = 1) + 
+  geom_point(aes(fill = Type, shape = filltype), color = "black", size = 6, stroke = 1) + 
   scale_shape_manual(values = c(21, 22))+
   #geom_text(data = gglabel, aes(x = trmt, y = volume, label = label), color = "black")+
   #facet_wrap(. ~ sample)+
@@ -170,6 +170,8 @@ tool_long %>%
   theme_er() +
   scale_color_manual(values = c("#c67b6f", "#5d74a5", "#efbc82", "#b0cbe7"))+
   scale_fill_manual(values = c("#c67b6f", "#5d74a5",  "#efbc82", "#b0cbe7"))
+
+
 
 conntotals_long %>% 
   filter(sample == "Aggregate-6") %>% 
