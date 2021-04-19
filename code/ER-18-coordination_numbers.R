@@ -157,7 +157,7 @@ library(soilpalettes)
 library(PNWColors)
 theme_er <- function() {  # this for all the elements common across plots
   theme_bw() %+replace%
-    theme(legend.position = "none",
+    theme(legend.position = "right",
           #legend.key=element_blank(),
           legend.title = element_blank(),
           #legend.text = element_blank(),
@@ -242,22 +242,23 @@ tool %>%
   filter(sample == "Core C, 28%") %>% 
   mutate(pore_coor = as.numeric(pore_coor)) %>% 
   ggplot(aes(x = pore_coor, y = freq, color = trmt)) +
-  geom_path(aes(group = trmt), size = 1)+ 
+  geom_path(aes(group = trmt), size = 1, show.legend = FALSE)+ 
   geom_point(size = 3.5, alpha = 0.5) + 
   scale_x_continuous(limits = c(0,16), 
                      breaks = seq(0,16,4)) +
   scale_y_continuous(labels = (scales::percent),
                      limits = c(0.0,0.6),
                      breaks = seq(0,0.6,0.2))+
-  theme_er() +
+  theme_er1() +
   #facet_wrap(~ sample) +
   scale_color_manual(values = c("#b0986c", "#72e1e1"))+
   labs (#title = "Pore Coordination Number Frequency",
         #caption = "Caption",
         #tag = "A",
         x = expression (bold ("pore coordination number")),
-        y = expression (bold ("frequency, %"))) +
-  guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
+        y = expression (bold ("frequency, %"))) 
+  
+  #guides(fill = guide_legend(reverse = TRUE, title = NULL)) 
 
 #mixed model----------------------------------
 

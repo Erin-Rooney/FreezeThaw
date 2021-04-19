@@ -28,8 +28,8 @@ psfdata %>%
   ))%>% 
   #mutate(trmt = recode(trmt, "before " = "before")) %>%
   mutate(ftc = factor(ftc, levels = c("before", "after"))) %>% 
-  filter(breadth_mm3<0.05) %>% 
-  ggplot(aes(x = (breadth_mm3)*1000, y=shape_factor, color = sample ))+
+  filter(breadth_mm3<0.150) %>% 
+  ggplot(aes(x = (breadth_mm3)*1000, y=shape_factor, color = ftc ))+
   geom_point()+
   scale_color_manual(values = pnw_palette("Bay", 6)) +
   #geom_density(adjust=0.5)+
@@ -41,7 +41,11 @@ psfdata %>%
         x = expression (bold ("pore throat diameter, um")),
         y = expression (bold ("pore shape factor")))+
   theme_er1()+
-  facet_grid(ftc~sample)
+  facet_grid(ftc~sample)+
+  ylim(0,1)+
+  xlim(0,150)+
+  scale_color_manual(values = c("#b0986c", "#72e1e1"))
+  
 
 
 psfdata %>%
@@ -129,7 +133,9 @@ psfdata2 %>%
   theme_er2()+
   scale_color_manual(values = c("#b0986c", "#72e1e1"))+
   labs(y = "Pore Shape Factor",
-       x = "Pore Throat Diameter, um")
+       x = "Pore Throat Diameter, um")+
+  ylim(0,1)+
+  xlim(0,150)
   
 psfdata3 =
   psfdata2 %>%
@@ -210,4 +216,6 @@ psfdata6 %>%
   scale_color_manual(values = pnw_palette("Bay", 6)) +
   labs(x = "Pore Throat Diameter, um", 
        y = "Difference in Pore Shape Factor, after-before")
+
+
   
