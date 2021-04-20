@@ -115,3 +115,39 @@ a = lme(count ~ ftc, random = ~1|sample, data = pores_summary %>%
 summary(a)
 print(a)
 anova(a)
+
+b = lme(count ~ sample, random = ~1|ftc, data = pores_summary)
+summary(b)
+print(b)
+anova(b)
+
+
+median = lme(median_um ~ ftc, random = ~1|sample, data = pores_summary)
+
+summary(median)
+print(median)
+anova(median)
+
+mean = lme(mean_um ~ ftc, random = ~1|sample, data = pores_summary)
+
+summary(mean)
+print(mean)
+anova(mean)
+
+median_sample = lme(median_um ~ sample, random = ~1|ftc, data = pores_summary)
+
+summary(median_sample)
+print(median_sample)
+anova(median_sample)
+
+mean_sample = lme(mean_um ~ sample, random = ~1|ftc, data = pores_summary)
+
+summary(mean_sample)
+print(mean_sample)
+anova(mean_sample)
+
+count_sample = lme(count ~ sample, random = ~1|ftc, data = pores_summary)
+
+summary(count_sample)
+print(count_sample)
+anova(count_sample)
