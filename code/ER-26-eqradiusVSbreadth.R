@@ -20,29 +20,34 @@ plot(breadthdata_csv)
 
 eqradiusdata_csv %>% 
   ggplot(aes(x= breadth_um, y=freq2))+
-  geom_point()+
-  geom_line()+
-  theme_er1()+
+  geom_point(alpha = 0.5, size = 4, color = "blue")+
+  geom_line(color = "gray30")+
   scale_fill_manual(values = c("#b0986c")) +
   scale_y_continuous(labels = (scales::percent),
                      limits = c(0.00,0.20),
                      breaks = seq(0.00,0.20,0.05))+
-  labs(y = "frequency, %",
-       x = "Eq Radius, um")
+  labs(y = "frequency",
+       x = "Eq Radius, um")+
+  ylim(0, 0.15)+
+  theme_er1()
+  
+  
 
 
 breadthdata_csv %>%
   filter(sample == '40-50-16' & trmt == "before") %>% 
   ggplot(aes(x= breadth_um, y=freq))+
-  geom_point()+
-  geom_line()+
-  theme_er1()+
+  geom_point(alpha = 0.5, size = 4, color = "purple")+
+  geom_line(color = "gray30")+
   #scale_fill_manual(values = c("#b0986c")) +
   scale_y_continuous(labels = (scales::percent),
                      limits = c(0.00,0.20),
                      breaks = seq(0.00,0.20,0.05))+
-  labs(y = "frequency, %",
-       x = "Breadth, um")
+  labs(y = "frequency",
+       x = "Breadth, um")+
+  ylim(0, 0.15)+
+theme_er1()
+  
 
 alldata_csv %>%
   ggplot(aes(x= area_um, y=eqradius_um))+
