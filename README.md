@@ -19,7 +19,7 @@ Hypotheses: We hypothesized that freeze-thaw would increase pore connectivity ac
 
 We provide a pore-scale perspective on changes to the pore network occurring at this incipient stage of permafrost warming, specifically within the first five freeze-thaw cycles following thaw. Our work contributes to the current understanding of freeze-thaw deformation while providing data needed for future predictions of how climate warming will alter the physical properties of globally important Arctic landscapes.
 
-###### PERMAFROST AGGREGATES
+#### PERMAFROST AGGREGATES
 
 <img src="https://user-images.githubusercontent.com/61806923/138951247-dbe004ce-afd6-492b-8769-801593f8766a.png" width="600" />
  
