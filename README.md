@@ -1,11 +1,4 @@
-# XCT-FreezeThaw
-Erin Rooney
-
-Aug-06-2020
-X-ray Computer Tomography
-
-
-### Soil pore network response to freeze-thaw cycles in permafrost aggregates
+## Soil pore network response to freeze-thaw cycles in permafrost aggregates
 
 ##### Authors: Erin C. Rooney, Vanessa L. Bailey, Kaizad F. Patel, Maria Dragila, Anil K. Battu, Alexander C. Buchko, Adrian C. Gallo, Jeffery Hatten, Angela R. Possinger, Odeta Qafoku, Loren R. Reno, Michael SanClements, Tamas Varga, Rebecca A. Lybrand
 
