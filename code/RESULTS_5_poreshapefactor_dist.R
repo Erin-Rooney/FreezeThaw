@@ -18,6 +18,8 @@ plot(psfdata)
 
 # ggplots---------------------------------------------------------------
 
+#the below plot is the only one from this script used in the manuscript
+
 psfdata %>%
   mutate(sample = recode(sample, "40-50-16" = "Core B, 16%",
                          "40-50-28" = "Core B, 28%",
@@ -46,7 +48,7 @@ psfdata %>%
   xlim(0,150)+
   scale_color_manual(values = c("#b0986c", "#72e1e1"))
   
-
+########
 
 psfdata %>%
   mutate(sample = recode(sample, "40-50-16" = "Core B, 16%",

@@ -4,6 +4,8 @@
 
 source("code/0-packages.R")
 
+#FIGURES FOR MANUSCRIPT line 405
+
 # Load Data ---------------------------------------------------------------------
 
 # breadthdata_csv = read.csv("processed/ftc_porethroatdist_july312020_2.csv") 
@@ -383,24 +385,24 @@ h
 
 #trying to create a two panel figure featuring two rows for before/after.
 
-g = ggplot(tool, aes(x = breadth_um, y=freq, color = trmt))+
-  geom_point()+
-  geom_area(aes(group = trmt, fill = trmt, alpha = 0.5, position = "identity"))+
-  #geom_density(adjust=0.5)+
-  
-  labs (title = "Pore Throat Diameter Distribution",
-        #subtitle = "After Freeze/Thaw",
-        #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
-        #tag = "Figure 6",
-        x = expression (bold ("Pore Throat Diameter, um")),
-        y = expression (bold ("Distribution, %")))
-
-g + theme_er() + 
-  scale_color_manual(values = c("#b0986c", "#72e1e1"))+
-  scale_fill_manual(values = c("#b0986c", "#72e1e1"))+
-  #scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
-  #guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
-  facet_wrap(sample~.)
+# g = ggplot(tool, aes(x = breadth_um, y=freq, color = trmt))+
+#   geom_point()+
+#   geom_area(aes(group = trmt, fill = trmt, alpha = 0.5, position = "identity"))+
+#   #geom_density(adjust=0.5)+
+#   
+#   labs (title = "Pore Throat Diameter Distribution",
+#         #subtitle = "After Freeze/Thaw",
+#         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+#         #tag = "Figure 6",
+#         x = expression (bold ("Pore Throat Diameter, um")),
+#         y = expression (bold ("Distribution, %")))
+# 
+# g + theme_er() + 
+#   scale_color_manual(values = c("#b0986c", "#72e1e1"))+
+#   scale_fill_manual(values = c("#b0986c", "#72e1e1"))+
+#   #scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) +
+#   #guides(fill = guide_legend(reverse = TRUE, title = NULL)) +
+#   facet_wrap(sample~.)
 
 #OFFICIAL PLOTS FOR MANUSCRIPT-------------------------------------------
 

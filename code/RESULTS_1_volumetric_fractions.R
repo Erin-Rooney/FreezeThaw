@@ -177,7 +177,7 @@ tool_long %>%
 # MANUSCRIPT FIGURE
 
 conntotals_long %>% 
-  filter(sample == "Aggregate-4") %>% 
+  filter(sample == "Aggregate-6") %>% 
   ggplot(aes(x = trmt, y = volume, color = Type)) + 
   #geom_boxplot(aes(group = trmt), fill = "gray50", alpha = 0.2, width = 0.2) + 
   geom_path(aes(group = Type, color = Type), size = 0.7, linetype = "dashed", show.legend = FALSE)+
@@ -190,9 +190,9 @@ conntotals_long %>%
     # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
     # tag = "A",
     x = expression (bold (" ")),
-    y = expression (bold ("Volume, %"))) +  
-  scale_y_continuous(labels = scales::label_percent(accuracy = 0.1),
-                     name = "Pore Volume, %",
+    y = expression (bold ("volumetric fraction, %"))) +  
+  scale_y_continuous(labels = scales::label_percent(accuracy = 1.0),
+                     name = "volumetric fraction, %",
                      limits = c(0,1)
   ) +
   #guides(fill=guide_legend(override.aes=list(shape=21)))+

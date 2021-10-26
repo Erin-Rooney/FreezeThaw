@@ -295,9 +295,3 @@ pores_melt =
 write.csv(combined_pore_perc_freq2,'PORE_DISTRIBUTION1.csv', row.names = FALSE)
 write.csv(pores_melt,'PORE_DISTRIBUTION2.csv', row.names = FALSE)
 
-## stats
-#???
-
-# compiled stats, want to do something with pore shape factor :( -----------------------------------
-
-  
