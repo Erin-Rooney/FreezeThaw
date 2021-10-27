@@ -194,7 +194,7 @@ compiled_csv %>%
     #subtitle = "After Freeze/Thaw",
     #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
     #tag = "Figure 6",
-    x = expression (bold ("Pore Throat Diameter, um")),
+    x = expression (bold ("Pore Throat Diameter, μm")),
     y = expression (bold ("Count"))) + 
   theme_er1() + 
   scale_x_log10()+

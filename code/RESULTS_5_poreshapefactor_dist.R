@@ -40,7 +40,7 @@ psfdata %>%
         #subtitle = "40-50 cm, 16% moisture",
         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
         #tag = "Figure 1",
-        x = expression (bold ("pore throat diameter, um")),
+        x = expression (bold ("pore throat diameter, μm")),
         y = expression (bold ("pore shape factor")))+
   theme_er1()+
   facet_grid(ftc~sample)+

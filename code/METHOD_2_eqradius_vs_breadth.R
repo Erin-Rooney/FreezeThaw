@@ -27,7 +27,7 @@ eqradiusdata_csv %>%
                      limits = c(0.00,0.20),
                      breaks = seq(0.00,0.20,0.05))+
   labs(y = "frequency",
-       x = "Eq Radius, um")+
+       x = "Eq Radius, μm")+
   ylim(0, 0.15)+
   theme_er1()
   
@@ -44,7 +44,7 @@ breadthdata_csv %>%
                      limits = c(0.00,0.20),
                      breaks = seq(0.00,0.20,0.05))+
   labs(y = "frequency",
-       x = "Breadth, um")+
+       x = "Breadth, μm")+
   ylim(0, 0.15)+
 theme_er1()
   
@@ -100,8 +100,8 @@ ggscatter(
   )+
   stat_cor(label.y = 400)+
   stat_regline_equation(label.y = 420)+
-  labs(x = "Manually calculated pore throat diameter, um",
-       y = "Feret Breadth, um")
+  labs(x = "Manually calculated pore throat diameter, μm",
+       y = "Feret Breadth, μm")
   
   
 
@@ -125,8 +125,8 @@ ggscatter(
 )+
   stat_cor(label.y = 400)+
   stat_regline_equation(label.y = 420)+
-  labs(x = "Manually calculated pore throat diameter, um",
-       y = "Feret Width, um")
+  labs(x = "Manually calculated pore throat diameter, μm",
+       y = "Feret Width, μm")
   
 
 

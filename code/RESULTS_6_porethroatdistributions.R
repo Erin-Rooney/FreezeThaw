@@ -417,12 +417,12 @@ ggplot(aes(x = breadth_um, y=freq, color = trmt))+
         #subtitle = "After Freeze/Thaw",
         #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
         #tag = "Figure 6",
-        x = expression (bold ("Pore Throat Diameter, um")),
+        x = expression (bold ("Pore Throat Diameter, μm")),
         y = expression (bold ("frequency, %"))) + 
   theme_er() + 
   scale_color_manual(values = c("#b0986c", "#72e1e1")) +
   scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
-  scale_y_continuous(labels = (scales::percent),
+  scale_y_continuous(labels = scales::label_percent(accuracy = 1.0),
                      limits = c(0.00,0.20),
                      breaks = seq(0.00,0.20,0.05))+
   annotate(
@@ -448,12 +448,12 @@ tool %>%
     #subtitle = "After Freeze/Thaw",
     #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
     #tag = "Figure 6",
-    x = expression (bold ("Pore Throat Diameter, um")),
+    x = expression (bold ("Pore Throat Diameter, μm")),
     y = expression (bold ("frequency, %"))) + 
   theme_er() + 
   scale_color_manual(values = c("#b0986c", "#72e1e1")) +
   scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
-  scale_y_continuous(labels = (scales::percent),
+  scale_y_continuous(labels = scales::label_percent(accuracy = 1.0),
                      limits = c(0.00,0.20),
                      breaks = seq(0.00,0.20,0.05))+
   annotate(
@@ -475,12 +475,12 @@ tool %>%
     #subtitle = "After Freeze/Thaw",
     #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
     #tag = "Figure 6",
-    x = expression (bold ("Pore Throat Diameter, um")),
+    x = expression (bold ("Pore Throat Diameter, μm")),
     y = expression (bold ("frequency, %"))) + 
   theme_er() + 
   scale_color_manual(values = c("#b0986c", "#72e1e1")) +
   scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
-  scale_y_continuous(labels = (scales::percent),
+  scale_y_continuous(labels = scales::label_percent(accuracy = 1.0),
                      limits = c(0.00,0.20),
                      breaks = seq(0.00,0.20,0.05))
 #scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) 
@@ -496,12 +496,12 @@ tool %>%
     #subtitle = "After Freeze/Thaw",
     #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
     #tag = "Figure 6",
-    x = expression (bold ("Pore Throat Diameter, um")),
+    x = expression (bold ("Pore Throat Diameter, μm")),
     y = expression (bold ("frequency, %"))) + 
   theme_er() + 
   scale_color_manual(values = c("#b0986c", "#72e1e1")) +
   scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
-  scale_y_continuous(labels = (scales::percent),
+  scale_y_continuous(labels = scales::label_percent(accuracy = 1.0),
                      limits = c(0.00,0.20),
                      breaks = seq(0.00,0.20,0.05))+
   annotate(
@@ -526,12 +526,12 @@ tool %>%
     #subtitle = "After Freeze/Thaw",
     #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
     #tag = "Figure 6",
-    x = expression (bold ("Pore Throat Diameter, um")),
+    x = expression (bold ("Pore Throat Diameter, μm")),
     y = expression (bold ("frequency, %"))) + 
   theme_er() + 
   scale_color_manual(values = c("#b0986c", "#72e1e1")) +
   scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
-  scale_y_continuous(labels = (scales::percent),
+  scale_y_continuous(labels = scales::label_percent(accuracy = 1.0),
                      limits = c(0.00,0.20),
                      breaks = seq(0.00,0.20,0.05))
 #scale_color_manual(values = pnw_palette("Anemone", 2, type = "discrete")) 
@@ -547,12 +547,12 @@ tool %>%
     #subtitle = "After Freeze/Thaw",
     #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
     #tag = "Figure 6",
-    x = expression (bold ("Pore Throat Diameter, um")),
+    x = expression (bold ("Pore Throat Diameter, μm")),
     y = expression (bold ("frequency, %"))) + 
   theme_er() + 
   scale_color_manual(values = c("#b0986c", "#72e1e1")) +
   scale_fill_manual(values = c("#b0986c", "#72e1e1")) +
-  scale_y_continuous(labels = (scales::percent),
+  scale_y_continuous(labels = scales::label_percent(accuracy = 1.0),
                      limits = c(0.00,0.20),
                      breaks = seq(0.00,0.20,0.05))+
   annotate(
