@@ -5,6 +5,7 @@
 ##### Authors: Erin C. Rooney, Vanessa L. Bailey, Kaizad F. Patel, Maria Dragila, Anil K. Battu, Alexander C. Buchko, Adrian C. Gallo, Jeffery Hatten, Angela R. Possinger, Odeta Qafoku, Loren R. Reno, Michael SanClements, Tamas Varga, Rebecca A. Lybrand
 
 ##### *In review with Geoderma, July 2021*
+##### *Accepted in Geoderma, December 2021*
 
 Research Objective: Measure the impact of repeated freeze-thaw cycles on the physical structure of permafrost aggregates using non-destructive, high resolution imaging capabilities (XCT) at resolutions of 20 µm. 
 
