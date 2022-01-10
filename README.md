@@ -1,5 +1,5 @@
 [![DOI](https://zenodo.org/badge/279685632.svg)](https://zenodo.org/badge/latestdoi/279685632)
-Rooney E (2022): Soil pore network response to freeze-thaw cycles in permafrost aggregates. Soil Carbon Biogeochemistry, ESS-DIVE repository. Dataset. doi:10.15485/1838886
+###### Rooney E (2022): Soil pore network response to freeze-thaw cycles in permafrost aggregates. Soil Carbon Biogeochemistry, ESS-DIVE repository. Dataset. doi:10.15485/1838886
 
 ## Soil pore network response to freeze-thaw cycles in permafrost aggregates
 
