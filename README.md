@@ -1,6 +1,7 @@
 [![DOI](https://zenodo.org/badge/279685632.svg)](https://zenodo.org/badge/latestdoi/279685632)
 ###### Rooney E et al., (2022): Soil pore network response to freeze-thaw cycles in permafrost aggregates. Geoderma. https://doi.org/10.1016/j.geoderma.2021.115674
-###### Rooney E (2022): Soil pore network response to freeze-thaw cycles in permafrost aggregates. Soil Carbon Biogeochemistry, ESS-DIVE repository. Dataset. doi:10.15485/1838886 ![(https://img.shields.io/badge/Published-Geoderma-Red.svg)](https://img.shields.io/badge/Published-Geoderma-Red.svg)
+###### Rooney E (2022): Soil pore network response to freeze-thaw cycles in permafrost aggregates. Soil Carbon Biogeochemistry, ESS-DIVE repository. Dataset. doi:10.15485/1838886 
+![(https://img.shields.io/badge/Published-Geoderma-Red.svg)](https://img.shields.io/badge/Published-Geoderma-Red.svg)
 
 
 ## Soil pore network response to freeze-thaw cycles in permafrost aggregates
