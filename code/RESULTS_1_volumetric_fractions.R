@@ -544,3 +544,48 @@ summary(conn.aov4)
 # Stray Code ---------------------------------------------------------------------
 
 #p + scale_fill_manual(values=c("#00FFFF", "#996633"))
+
+###
+
+#NRCS presentation figs
+
+# MANUSCRIPT FIGURE
+
+nrcs_fig_volfrac =
+conntotals_long %>% 
+  filter(sample == "Aggregate-5") %>% 
+  ggplot(aes(x = trmt, y = volume, color = Type)) + 
+  #geom_boxplot(aes(group = trmt), fill = "gray50", alpha = 0.2, width = 0.2) + 
+  geom_path(aes(group = Type, color = Type), size = 0.7, linetype = "dashed", show.legend = FALSE)+
+  geom_point(aes(fill = Type, shape = Type), size = 6, stroke = 1, color = "black") +
+  scale_shape_manual(values = c(22,21, 22, 21))+
+  scale_color_manual(values = c("#3638A5", "#CE5332", "#858BC5", "#E5DBD3"))+
+  scale_fill_manual(values = c("#3638A5", "#CE5332",  "#858BC5", "#E5DBD3"))+
+
+  #geom_text(data = gglabel, aes(x = trmt, y = volume, label = label), color = "black")+
+  #facet_wrap(. ~ sample)+
+  labs (#title = "Pore Volumes",
+    # caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    # tag = "A",
+    x = expression (bold (" ")),
+    y = expression (bold ("volumetric fraction, %")),
+    color = "",
+    fill = "",
+    shape = "") +  
+  scale_y_continuous(labels = scales::label_percent(accuracy = 1.0),
+                     name = "volumetric fraction, %",
+                     limits = c(0,1)
+  ) +
+  theme_er() +
+  #guides(fill=guide_legend(override.aes=list(shape=21)))+
+  theme(legend.position = "none",
+    # legend.position = c(.95, 0.95),
+    #     legend.justification = c("right", "top"),
+    #     legend.box.just = "right",legend.title = element_text(face = "bold"),
+    #     legend.margin = margin(6, 6, 6, 6), 
+        panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                panel.background = element_blank(), panel.border = element_rect(color="gray",size=0.25, fill = NA))
+  
+ggsave("output/nrcs_fig_volfrac.png", nrcs_fig_volfrac, height = 4, width = 4)
+
+

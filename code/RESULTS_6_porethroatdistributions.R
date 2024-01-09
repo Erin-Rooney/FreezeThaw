@@ -1147,7 +1147,7 @@ ggplot (aes(x = breadth_um, y = freq, color = sample, group = trmt)) +
 
 #unofficial plot not for manuscript
 
-nrcspresentation_fig =
+nrcspresentation_fig_before =
 tool %>% 
   filter(sample == "Core A, 28%" & trmt %in% "before") %>% 
   ggplot(aes(x = breadth_um, y=freq, color = trmt))+
@@ -1172,5 +1172,31 @@ tool %>%
 
 # ggsave("output/nrcs_figure.png", nrcspresentation_fig, height = 5, width = 6)
   
-ggsave("output/nrcs_figure.png", nrcspresentation_fig, height = 3, width = 4)
+ggsave("output/nrcs_figure_before.png", nrcspresentation_fig_before, height = 3, width = 4)
 
+nrcspresentation_fig_after =
+  tool %>% 
+  filter(sample == "Core A, 28%" & trmt %in% "after") %>% 
+  ggplot(aes(x = breadth_um, y=freq, color = trmt))+
+  #geom_point(size = 4) + 
+  geom_path(aes(group = trmt), size = 1)+ 
+  geom_area(aes(group = trmt, fill = trmt), alpha = 0.5, position = "identity")+
+  #geom_density(adjust=0.5)+
+  labs (#title = "Pore Throat Diameter Distribution",
+    #subtitle = "After Freeze/Thaw",
+    #caption = "Permafrost Soil Aggregate from Toolik, Alaska",
+    #tag = "Figure 6",
+    x = expression (bold ("Pore Throat Diameter, μm")),
+    y = expression (bold ("frequency, %"))) + 
+  scale_color_manual(values = c("#9b2226")) +
+  scale_fill_manual(values = c("#ca6702")) +
+  scale_y_continuous(labels = scales::label_percent(accuracy = 1.0),
+                     limits = c(0.00,0.20),
+                     breaks = seq(0.00,0.20,0.05))+
+  theme_er() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), panel.border = element_rect(color="gray",size=0.25, fill = NA))
+
+# ggsave("output/nrcs_figure.png", nrcspresentation_fig, height = 5, width = 6)
+
+ggsave("output/nrcs_figure_after.png", nrcspresentation_fig_after, height = 3, width = 4)

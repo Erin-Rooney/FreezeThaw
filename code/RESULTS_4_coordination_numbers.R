@@ -455,6 +455,61 @@ p + scale_fill_manual(values=c("#56B4E9", "#E69F00"))
 
 
 #########
+before_fig_pcn=
+tool %>%
+  filter(sample %in% "Core C, 16%", trmt %in% "before") %>% 
+  mutate(pore_coor = as.numeric(pore_coor)) %>% 
+  ggplot(aes(x = pore_coor, y = freq, color = trmt)) +
+  geom_path(aes(group = trmt), size = 1, show.legend = FALSE)+ 
+  geom_area(aes(group = trmt, fill = trmt), alpha = 0.5, position = "identity")+
+  #geom_point(size = 3.5, alpha = 0.5) + 
+  scale_x_continuous(limits = c(0,16), 
+                     breaks = seq(0,16,4)) +
+  scale_y_continuous(labels = (scales::percent),
+                     limits = c(0.0,0.6),
+                     breaks = seq(0,0.6,0.2))+
+  #facet_wrap(~ sample) +
+  scale_color_manual(values = c("#023e8a")) +
+  scale_fill_manual(values = c("#48cae4")) +
+  labs (#title = "Pore Coordination Number Frequency",
+    #caption = "Caption",
+    #tag = "A",
+    x = expression (bold ("pore coordination number")),
+    y = expression (bold ("frequency, %"))) +
+  theme_er() +
+  theme(legend.position = "none", panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), panel.border = element_rect(color="gray",size=0.25, fill = NA))
+
+
+ggsave("output/before_fig_pcn.png", before_fig_pcn, height = 3, width = 4)
+
+after_fig_pcn =
+tool %>%
+  filter(sample %in% "Core C, 16%", trmt %in% "after") %>% 
+  mutate(pore_coor = as.numeric(pore_coor)) %>% 
+  ggplot(aes(x = pore_coor, y = freq, color = trmt)) +
+  geom_path(aes(group = trmt), size = 1, show.legend = FALSE)+ 
+  geom_area(aes(group = trmt, fill = trmt), alpha = 0.5, position = "identity")+
+  #geom_point(size = 3.5, alpha = 0.5) + 
+  scale_x_continuous(limits = c(0,16), 
+                     breaks = seq(0,16,4)) +
+  scale_y_continuous(labels = (scales::percent),
+                     limits = c(0.0,0.6),
+                     breaks = seq(0,0.6,0.2))+
+  #facet_wrap(~ sample) +
+  scale_color_manual(values = c("#9b2226")) +
+  scale_fill_manual(values = c("#ca6702")) +
+  labs (#title = "Pore Coordination Number Frequency",
+    #caption = "Caption",
+    #tag = "A",
+    x = expression (bold ("pore coordination number")),
+    y = expression (bold ("frequency, %"))) +
+  theme_er() +
+  theme(legend.position = "none", panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+        panel.background = element_blank(), panel.border = element_rect(color="gray",size=0.25, fill = NA))
+
+
+ggsave("output/after_fig_pcn.png", after_fig_pcn, height = 3, width = 4)
 
 
 
